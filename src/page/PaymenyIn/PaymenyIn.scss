@@ -1,0 +1,84 @@
+.payment-in-section{
+    h2{
+        padding-bottom: 20px;
+        padding-top: 10px;
+    }
+    .inner-section{
+        background: var(--bgwhite);
+        border-radius: 10px;
+        
+        margin-top: 10px;
+        // display: flex;
+        // gap: 84px;
+        .party-name{
+            color: rgba(0, 0, 0, 0.6);
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+
+        }
+        input{
+            border-radius: 5px;
+        }
+        label{
+            color: rgba(0, 0, 0, 0.6);
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+        }
+        textarea{
+            
+        background-color: var(--inputbg-color);
+        border: none;
+        border-radius: 10px;
+        // border-color: #42c2f5;
+        font-size: 16px;
+        width: 100%;
+        padding: 12px 12px;
+        outline: none;
+        margin-top: 4px;
+        }
+        .leftsectioninputs{
+            label{
+                font-size: 16px;
+            }
+        }
+    }
+    .table{
+        border-radius: 10px;
+        
+        margin-top: 10px;
+        padding: 10px;
+        background: var(--bgwhite);
+        overflow: auto;
+        .MuiPaper-root{
+            margin: 0px !important;
+        }
+    }
+    // .header-of-receipt{
+    //     display: flex;
+    //     margin-top: 10px;
+    //     margin-bottom: 30px;
+    //     img{te
+    //         height: 100px;
+    //      }
+    //     .address{
+    //         text-align: center;
+    //         display: flex;
+    //         flex-direction: column;
+    //         margin-left: calc(30% - 100px);
+    //     }
+    // }
+    // .resceipt-text{
+    //     text-align: center;
+    //     margin-bottom: 30px;   
+    //  }
+    // .date-no{
+    //     display: flex;
+    //     justify-content: space-between;
+    //     margin-bottom: 30px;
+    // }
+}

@@ -1,0 +1,41 @@
+.add-client-page-container{
+  margin-top: 20px;
+  .add-client-page {
+    border-radius: 10px;
+    padding: 20px;
+  background: var(--bgwhite);
+ 
+  h2{
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+h4{
+    padding-bottom: 35px;
+    // margin-top: 10px;
+
+}
+h5{
+  padding-left: 18px;
+}
+  .add_plan {
+    display: flex;
+    text-align: start;
+    margin-top: 14px;
+    height: 55px;
+    // padding-top: ;
+    justify-content: space-between;
+  }
+//   button{
+// background: #000;
+//   }
+}
+.input-name{
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.4375em;
+  letter-spacing: 0.00938em;
+  padding-left: 10px;
+}
+}

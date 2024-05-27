@@ -1,0 +1,30 @@
+.add-staff-page-container{
+
+    margin-top: 20px;
+    .add-staff-page{
+        background: var(--bgwhite);
+        border-radius: 10px;
+        padding: 20px;
+        h2{
+            padding-bottom: 20px;
+            padding-top: 10px;
+        }
+        h4{
+            padding-bottom: 35px;
+    }
+    .header{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: self-start;
+        justify-content: space-between;
+        .MuiBox-root {
+            width: 300px;
+            
+        }
+        input{
+            width: 300px;
+        }
+    }
+}
+}

@@ -1,0 +1,89 @@
+.expence-page {
+    h2 {
+      padding-bottom: 20px;
+      padding-top: 10px;
+    }
+    .inner-section {
+      background: var(--bgwhite);
+      border-radius: 10px;
+  // padding: 10px;
+      margin-top: 10px;
+      .top-section{
+          display: flex;
+          padding: 15px;
+          justify-content: space-between;
+          // .rightinputs{
+          //     width: 30%;
+          // }
+      }
+      .middle-section{
+          padding: 15px;
+         .products-name{
+            color: rgba(0, 0, 0, 0.6);
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+  padding-bottom: 8px;
+        }
+      }
+      .bottom-section{
+  
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        label{
+          color: rgba(0, 0, 0, 0.6);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 800;
+  line-height: 1.4375em;
+  letter-spacing: 0.00938em;
+      }
+      textarea{
+          
+          background-color: var(--inputbg-color);
+          border: none;
+          border-radius: 10px;
+          // border-color: #42c2f5;
+          font-size: 16px;
+          // width: 100%;
+          padding: 12px 12px;
+          outline: none;
+          margin-top: 4px;
+          }
+      }
+    }
+    .css-12q4t13-MuiSwitch-root{
+      border: 1px solid black;
+      border-radius: 20px;
+    }
+    
+    .product-name{
+      color: rgba(0, 0, 0, 0.6);
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.4375em;
+      letter-spacing: 0.00938em;
+      padding-bottom: 10px;
+     
+
+    }
+    .css-g6k71e-MuiAutocomplete-root {
+      width:100% ;
+      input{
+    background-color: var(--inputbg-color);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    padding-left: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    margin-top: 4px;
+// width: 97%;     
+ }
+    }
+
+  }
+  

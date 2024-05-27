@@ -1,0 +1,38 @@
+#demo-customized-select{
+    width: 280px !important;
+    border-radius: 10px !important;
+
+    
+}
+label{
+    font-weight: 800 !important;
+}
+.MuiInputBase-root{
+width: 100%;
+}
+.css-1tfpnag {
+    display: flex !important;
+}
+.select-label{
+width: 100%;
+    select
+    {
+        position: relative;
+        background-color: var(--inputbg-color);
+        border: none;
+        border-radius: 10px;
+        // border-color: #42c2f5;
+        font-size: 16px;
+        width: 100%;
+        padding: 12px 12px;
+        outline: none;
+        margin-top: 4px;
+    }
+    label{
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 1.4375em;
+        letter-spacing: 0.00938em;
+    }
+}

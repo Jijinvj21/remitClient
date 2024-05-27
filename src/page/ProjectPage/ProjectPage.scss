@@ -1,0 +1,28 @@
+
+.client-page-section{
+    .add-product{
+        cursor: pointer;
+        display: flex;
+        justify-content: end;
+        .add-project-section{
+            display: flex;
+            align-items: center;
+            gap:10px;
+            font-weight: 600;
+        }
+    }
+    .project-inner-section{
+        background: var(--bgwhite);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        .project-data-card{
+padding: 10px;
+border-radius: 10px;
+background: var(--product-card);
+        }
+    }
+}

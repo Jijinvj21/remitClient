@@ -1,0 +1,65 @@
+.creaditnotepage{
+    h2{
+        padding-bottom: 20px;
+        padding-top: 10px;
+    }
+    border-radius: 10px;
+
+    height: 90%;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+   
+      }
+    .inner-section{
+        border-radius: 10px;
+        background: var(--bgwhite);
+        margin-top: 10px;
+        .party-name{
+            color: rgba(0, 0, 0, 0.6);
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+padding-bottom: 8px;
+        }
+        input{
+            border-radius: 5px;
+            border: none;
+            // background: var(--inputbg-color);
+            
+        }
+        label{
+            color: rgba(0, 0, 0, 0.6);
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 800;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+        }
+        textarea{
+            
+            background-color: var(--inputbg-color);
+            border: none;
+            border-radius: 10px;
+            // border-color: #42c2f5;
+            font-size: 16px;
+            width: 100%;
+            padding: 12px 12px;
+            outline: none;
+            margin-top: 4px;
+            }
+            .top-section{
+                .right{
+                    input{
+                                    background: var(--inputbg-color);
+
+                    }
+                }
+            }
+    }
+    .offscreen {
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+      }
+}

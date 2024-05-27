@@ -1,0 +1,82 @@
+.stockjournl-page{
+
+    border-radius: 10px;
+    padding: 2px;
+    margin-top: 1px;
+      h2{
+          padding-bottom: 20px;
+          padding-top: 10px;
+      }
+      h4{
+          padding-bottom: 5px;
+      }
+      .input-box{
+        background: var(--bgwhite);
+        width: 100%;
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+    flex-direction: column;
+    gap: 15px;
+    .MuiAutocomplete-root {
+        input{
+            height: 40px;
+            border-radius: 10px !important;
+            background-color: #F3F6F9;
+            border: none;
+            font-size: 16px;
+            // width: 100%;
+            // padding: 10px 12px;
+            padding-left: 10px;
+width: 98.5%;
+            // margin-left: -10px;
+            &::after{
+    outline: none;
+    border: none;
+}
+&:hover{
+    outline: none;
+    border: none;   
+}
+        }
+        width: 100%;
+
+    height: 40px !important;
+    &::after{
+        outline: none;
+        border: none;
+    }
+    }
+    .product-name{
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 900;
+        font-size: 14px;
+        line-height: 1.4375em;
+        letter-spacing: 0.00938em;
+        padding-bottom: 10px;
+       
+    
+    }
+    }
+    .added-item{
+        padding-top: 10px;
+        font-weight: 800;
+
+    }
+    .image-add-box{
+    // background: #f3f6f9;
+    border-radius: 15px;
+    height: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.base-Popper-root{
+    margin:100px !important;
+}
+.css-yz9k0d-MuiInputBase-input.Mui-disabled{
+    opacity: 100%;
+    -webkit-text-fill-color:black;
+}
+}

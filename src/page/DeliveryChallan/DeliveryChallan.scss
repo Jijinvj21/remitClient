@@ -1,0 +1,68 @@
+.deliverychallan-page {
+  h2 {
+    padding-bottom: 20px;
+    padding-top: 10px;
+  }
+  .inner-section {
+    background: var(--bgwhite);
+    border-radius: 10px;
+// padding: 10px;
+    margin-top: 10px;
+    .top-section{
+        display: flex;
+        padding: 15px;
+        .rightinputs{
+            width: 30%;
+        }
+        .party-name{
+          color: rgba(0, 0, 0, 0.6);
+          font-weight: 800;
+          font-size: 12px;
+          line-height: 1.4375em;
+          letter-spacing: 0.00938em;
+        padding-bottom: 8px;
+        }
+    }
+    .middle-section{
+        padding: 15px;
+       .products-name{
+          color: rgba(0, 0, 0, 0.6);
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.4375em;
+  letter-spacing: 0.00938em;
+padding-bottom: 8px;
+      }
+    }
+    .bottom-section{
+
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      label{
+        color: rgba(0, 0, 0, 0.6);
+font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+font-weight: 800;
+line-height: 1.4375em;
+letter-spacing: 0.00938em;
+    }
+    textarea{
+        
+        background-color: var(--inputbg-color);
+        border: none;
+        border-radius: 10px;
+        // border-color: #42c2f5;
+        font-size: 16px;
+        // width: 100%;
+        padding: 12px 12px;
+        outline: none;
+        margin-top: 4px;
+        }
+    }
+  }
+  .offscreen {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+  }
+}

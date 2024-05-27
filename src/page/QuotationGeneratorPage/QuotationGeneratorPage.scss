@@ -1,0 +1,70 @@
+
+  @font-face {
+    font-family: "OPTITimesRoman";
+    src: local("OPTITimesRoman"),
+    url('../../assets/Fonts/OPTITimes-Roman.otf') format("opentype");
+    font-weight: normal;
+  }
+  #quatationgenerator{
+      
+      font-weight: 600;
+    }
+    #ALLPRODUCTtable{
+    tr{
+      
+        font-family: "OPTITimesRoman" !important;
+    }
+    font-weight: 600;
+}
+.quotation-generator-page{
+    font-family: "Inter" !important;
+    // background: var(--bgwhite);
+  border-radius: 10px;
+  padding: 2px;
+  margin-top: 1px;
+    h2{
+        padding-bottom: 20px;
+        padding-top: 10px;
+    }
+    h4{
+        padding-bottom: 35px;
+    }
+    .input-box{
+        background: var(--bgwhite);
+        width: 100%;
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+    flex-direction: column;
+    gap: 15px;
+    }
+    .added-item{
+        padding-top: 10px;
+        font-weight: 800;
+
+    }
+    .Terms-label{
+        color: rgba(0, 0, 0, 0.6);
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 800;
+        font-size: 12px;
+        line-height: 1.4375em;
+        letter-spacing: 0.00938em;
+        padding: 0;
+        position: relative;
+        display: block;
+        transform-origin: top left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 133%;
+        
+    }
+    .offscreen {
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+      }
+      
+    
+}
