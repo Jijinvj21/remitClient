@@ -8,7 +8,7 @@ function App() {
         {/* Root layout */}
           <Route path="/" element={<p>test</p>}>
           
-        
+          <Route path="about" element={<p>about</p>} />
 
 
         </Route>
