@@ -1,0 +1,47 @@
+.right_side_header_componet {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  .name_with_desigination {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
+  }
+  .functional_icons_with_name {
+    display: flex;
+    gap: 15px;
+
+    .icon {
+      background: whitesmoke;
+      padding: 5px;
+      border-radius: 15px;
+    }
+    .user_data {
+      display: flex;
+      height: 33px;
+      align-items: center;
+      gap: 9px;
+      img{
+        border-radius: 18px;
+        margin-bottom: 2px;
+      }
+      .user_img {
+        font-size: 20px;
+        background: whitesmoke;
+        border-radius: 15px;
+        padding: 5px;
+        margin: 0px;
+      }
+      p {
+        font-size: 12px;
+      }
+
+      .user_name_with_time {
+        .user_name {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

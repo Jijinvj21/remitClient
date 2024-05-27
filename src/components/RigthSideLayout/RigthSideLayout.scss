@@ -1,0 +1,15 @@
+.right_side_layout_components{
+    background: var(--bgblue);
+    width: 100%;
+    color: rgb(0, 0, 0);
+    margin: 25px;
+    border-radius: 50px;
+    padding-left: 40px;
+    padding-top: 20px;
+    padding-right: 40px;
+    overflow: auto;
+    padding-bottom: 10px;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
