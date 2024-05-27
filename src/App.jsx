@@ -26,7 +26,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Root layout */}
-          <Route path="/"  element={<Layout />}>
+          <Route   element={<Layout />}>
           <Route path="admin" element={<RigthSideLayout />}>
           <Route path="employees" element={<EmployesPage/>} />
           <Route path="sales" element={<SalesPage/>} />
