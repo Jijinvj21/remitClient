@@ -6,13 +6,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Root layout */}
-        <Route>
           <Route path="/admin" element={<p>test</p>}>
           
         
 
 
-          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
