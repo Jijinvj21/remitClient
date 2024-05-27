@@ -6,7 +6,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Root layout */}
-          <Route path="/admin" element={<p>test</p>}>
+          <Route path="/" element={<p>test</p>}>
           
         
 
