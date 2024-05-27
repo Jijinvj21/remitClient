@@ -1,0 +1,102 @@
+.ps-menu-root {
+  
+  ul {
+    padding-right: 10px;
+    // padding-left: 20px;
+    .active {
+      a{
+        border-radius: 35px;
+        // color:var(--sidebar-hovertext) !important;
+        color:var(--sidebar-hovertext) !important;
+        background:var(--custom-green) !important;
+        &:hover {
+          background:var(--custom-green) !important;
+          border-radius: 35px;
+          color:var(--sidebar-hovertext) !important;
+        }
+      }
+    }
+    .menu1 {
+      padding-top: 25px;
+      padding-bottom: 25px;
+      
+        a{
+          
+          &:hover {
+            background: black !important;  
+            color: white !important;
+            border-radius: 35px;
+          }
+          .ps-menu-icon{
+            &:hover {
+              background:black !important;
+              border-radius: 35px;
+              color: white !important;
+            }
+          }
+
+        
+      }
+    }
+    
+    a {
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+      height: 40px !important;
+      
+      .ps-menu-icon{
+        // min-width: 20px;
+          min-width: 20px ;
+          padding-left: 5px;
+      }
+      
+      &:hover {
+        background:transparent !important;
+        border-radius: 35px;
+        color: var(--custom-green) !important;
+      }
+      
+      
+      
+      
+    }
+    .sub_menus{
+      padding-top: 25px;
+      // padding-bottom: 25px;
+      font-size: 15px;
+      display: flex;
+      span{
+        word-wrap: break-word;
+        white-space:pre-wrap;
+        color:"white" !important;
+      
+      }
+      
+      a{
+        &:hover {
+          background: transparent !important;
+          border-radius: 35px;
+          cursor: default;
+          color: white;
+        }
+
+      }
+    }
+    .navelink{
+      &:hover {
+        color: white !important;
+        border-radius: 35px;
+        cursor: default;
+      }
+    }
+  }
+}
+
+.css-1wvake5.ps-collapsed {
+  width: 80px;
+  min-width: 95px !important;
+}
+.css-1t8x7v1 {
+  width: 88% !important;
+}

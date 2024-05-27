@@ -1,0 +1,59 @@
+.w-max-content {
+  width: max-content;
+}
+
+.no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+  }
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+* {
+  &::-webkit-scrollbar {
+    // display: none;
+    height: 5px;
+    max-width: 10px;
+    &-track {
+      border-radius: 10rem;
+      background-color: var(--primary-light);
+      margin-inline: 10dvw;
+    }
+
+    &-thumb {
+      border-radius: 10rem;
+      background-color: var(--primary-bg);
+    }
+  }
+}
+
+.fs-14,
+.fs-sm {
+  font-size: 14px;
+}
+
+.fs-xs {
+  font-size: 12px;
+}
+
+.cbg-light {
+  background-color: var(--primary-light);
+}
+
+.css-dip3t8 {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: white !important;
+  z-index: 3;
+  background-color:var(--sidebar-bgcolor)!important;
+  // a{color: var(--sidebar-color) !important;}
+  
+}
+// 
+.css-1wvake5{
+  border-right-style:none !important;
+}
