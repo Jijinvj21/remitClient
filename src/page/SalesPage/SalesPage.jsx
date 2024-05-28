@@ -348,7 +348,7 @@ const transformedData = groupByHSN(rows);
       product_id: item.id,
       quantity: item.qty,
       Price:item.rate,
-      unit:item.unit_id,
+      unit:parseInt(item.unit_id),
       discount: parseFloat(item?.descountvalue||0),
       tax_rate:{id:item?.taxId?item?.taxId:item?.tax_id}
       
