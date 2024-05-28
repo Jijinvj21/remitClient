@@ -48,7 +48,7 @@ function App() {
             <Route path="projects/add-projects" element={<AddClient />} />
             <Route path="stocks" element={<ManageProductsPage />} />
             <Route path="quotation-generator" element={<QuotationGeneratorPage/>} />
-            <Route path="stock-journal" element={<StockJournalPage/>} />
+            <Route path="stocks/stock-journal" element={<StockJournalPage/>} />
 
 
           

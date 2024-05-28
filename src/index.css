@@ -32,24 +32,7 @@
   --button-hover:#424141;
   --inputbg-color:#F3F6F9; */
 }
-:root {
-  --primary-color: #000000; /* Black */
-  --primary-bg: #ffffff; /* White */
-  --primary-light: #b4b4b440; /* Slightly transparent black */
-  --custom-green: #85d61c; /* Custom green */
-  --text-muted: #8b8989; /* Muted text color */
-  --product-card: #e9e9e9; /* Product card background */ 
-  --bgblue: #e1e5eb; /* Blue background */
-  --bgwhite: #ffffff; /* White background */
-  --black-button: #000000; /* Black button text */
-  --button-hover: #424141; /* Button hover color */
-  --inputbg-color: #F3F6F9; /* Input background color */
-  --sidebar-bgcolor:white;
-  --sidebar-hovertext:black;
 
-
-}
-@media (prefers-color-scheme: dark) {
   :root {
     --primary-color: #000000;
   --primary-bg: #000000;
@@ -68,7 +51,6 @@
 
 
   }
-}
 
 
 

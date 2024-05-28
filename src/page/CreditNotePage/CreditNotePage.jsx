@@ -640,7 +640,7 @@ const handleStateOfSupplyChange = (e) => {
 
   return (
     <div className="creaditnotepage">
-      <h2>Creadit Note</h2>
+      <h2>Credit Note</h2>
       <div className="inner-section">
         <div
           style={{

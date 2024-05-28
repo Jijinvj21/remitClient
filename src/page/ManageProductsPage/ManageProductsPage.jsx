@@ -458,7 +458,7 @@ getDataFromAPI()
             </Typography>
           </Button>
           <Link
-            to={"/admin/stock-journal"}
+            to={"/admin/stocks/stock-journal"}
             style={{display: "flex",
               textDecoration: "none",fontSize:"14px",marginLeft:"9px",marginTop:"10px",fontWeight:500}}
           >
