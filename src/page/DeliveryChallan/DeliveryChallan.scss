@@ -11,8 +11,16 @@
     .top-section{
         display: flex;
         padding: 15px;
+        gap: 25px;
+      justify-content: space-between;
+      .css-12drop8-MuiAutocomplete-root{
+        width: 100%;
+        input{
+          border-radius: 10px;
+        }
+      }
         .rightinputs{
-            width: 30%;
+            width: 40%;
         }
         .party-name{
           color: rgba(0, 0, 0, 0.6);
@@ -70,6 +78,9 @@ letter-spacing: 0.00938em;
 }
 .css-1enjc7z {
   width: 100% !important;
+  input{
+    border-radius: 10px;
+  }
 }
 .css-1cl7idg-MuiAutocomplete-root{
   width: 100%;

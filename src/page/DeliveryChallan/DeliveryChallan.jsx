@@ -621,7 +621,7 @@ const handleImageChange = (e) => {
       <h2>Delivery Challan</h2>
       <div className="inner-section">
         <div className="top-section">
-          <Box sx={{ width: "100%", marginBottom: "10px" }}>
+          <Box sx={{ width: "40%", marginBottom: "10px" }}>
             <p className="party-name">Party</p>
 
             <Autocomplete
@@ -664,9 +664,26 @@ const handleImageChange = (e) => {
                 </div>
               )}
             />
+          <div>
+          {topleftinput.slice(0,1).map((input, index) => {
+              return (
+                <InputComponent
+                  key={index}
+                  label={input.label}
+                  type={input.type}
+                  handleChange={input.handleChange}
+                  intputName={input.intputName}
+                  inputOrSelect={input.inputOrSelect}
+                  value={input.value}
+                  disabled={input.disabled}
+                  options={input.options}
+                />
+              );
+            })}
+          </div>
           </Box>
           <div className="rightinputs">
-            {topleftinput.map((input, index) => {
+            {topleftinput.slice(1).map((input, index) => {
               return (
                 <InputComponent
                   key={index}
