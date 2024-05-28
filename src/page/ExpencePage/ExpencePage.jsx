@@ -26,6 +26,9 @@ import jsPDF from "jspdf";
 import { renderToString } from "react-dom/server";
 // import ExpenceTable from "../../components/ExpenceTable/ExpenceTable";
 import SalesTable from "../../components/SalesTable/SalesTable";
+import { Link } from "react-router-dom";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+
 
 
 function ExpencePage() {
@@ -722,6 +725,20 @@ function ExpencePage() {
           />
         </div> */}
       </div>
+        {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+      <Link
+            to={"/admin/expense/expense-view"}
+            style={{display: "flex",
+              textDecoration: "none",fontSize:"14px",marginLeft:"9px",marginTop:"10px",fontWeight:500}}
+          >
+            <RemoveRedEyeOutlinedIcon style={{color:"black"}} />
+            <Typography
+              variant="string"
+              sx={{ color: "black", fontWeight: "700 ", paddingLeft: 1,paddingTop:"2px" }}
+            >
+              Expense View
+            </Typography>
+          </Link>      </div> */}
       <div className="inner-section">
         <div className="top-section">
           <div style={{ display: "flex", gap: "10px" }}>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import InputComponent from "../../components/InputComponent/InputComponent";
 // import TransactionTable from "../../components/TransactionTable/TransactionTable";
 import SalesTable from "../../components/SalesTable/SalesTable";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 
 import {
   categeryGetAPI,
@@ -20,6 +21,7 @@ import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer
 import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { Link } from "react-router-dom";
 
 function DeliveryChallan() {
   const [partyOptions, setPartyOptions] = useState([]);
@@ -619,6 +621,21 @@ const handleImageChange = (e) => {
   return (
     <div className="deliverychallan-page">
       <h2>Delivery Challan</h2>
+      {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+      <Link
+            to={"/admin/delivery-challan/delivery-challan-view"}
+            style={{display: "flex",
+              textDecoration: "none",fontSize:"14px",marginLeft:"9px",marginTop:"10px",fontWeight:500}}
+          >
+            <RemoveRedEyeOutlinedIcon style={{color:"black"}} />
+            <Typography
+              variant="string"
+              sx={{ color: "black", fontWeight: "700 ", paddingLeft: 1,paddingTop:"2px" }}
+            >
+              {" "}
+              Delivery Challan View
+            </Typography>
+          </Link>      </div> */}
       <div className="inner-section">
         <div className="top-section">
           <Box sx={{ width: "40%", marginBottom: "10px" }}>

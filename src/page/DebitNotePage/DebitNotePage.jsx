@@ -10,6 +10,9 @@ import { categeryGetAPI, debitDataAddAPI, gstOptionsGetAPI, partyDataGetAPI, pro
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { Link } from "react-router-dom";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+
 
 function DebitNotePage() {
   const [partyOptions, setPartytOptions] = useState([]);
@@ -633,6 +636,21 @@ const handleSelectedPartyChange=(event, newValue)=>{
   return (
     <div className="debitnotepage">
       <h2>Debit Note</h2>
+      {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+      <Link
+            to={"/admin/debit-note/debit-note-view"}
+            style={{display: "flex",
+              textDecoration: "none",fontSize:"14px",marginLeft:"9px",marginTop:"10px",fontWeight:500}}
+          >
+            <RemoveRedEyeOutlinedIcon style={{color:"black"}} />
+            <Typography
+              variant="string"
+              sx={{ color: "black", fontWeight: "700 ", paddingLeft: 1,paddingTop:"2px" }}
+            >
+              {" "}
+             Debit Note View
+            </Typography>
+          </Link>      </div> */}
       <div className="inner-section">
         <div
           style={{

@@ -9,7 +9,6 @@ import { useEffect, useRef, useState } from "react";
 import React from "react";
 
 import {
-  categeryGetAPI,
   categoryDataAddAPI,
   categoryDataGetAPI,
   clientDataGetAPI,
@@ -23,7 +22,6 @@ import {
 // import { useNavigate } from "react-router-dom";
 import { renderToString } from "react-dom/server";
 import AddClientDrawer from "../../components/AddClientDrawer/AddClientDrawer";
-import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import AddStockJournalDrawer from "../../components/AddStockJournalDrawer/AddStockJournalDrawer";
 
 const style = {
@@ -488,17 +486,28 @@ function QuotationGeneratorPage() {
     // handleAddData()
   };
   const handleAddData = () => {
-    console.log("firsttest");
+    console.log("firsttest",areaOfWorkCategorySelected);
     const productDatas = {
       ...leftInputs,
       accessorieslist: accessoriesList,
       product: `${selectedProduct.selectedOptionObject?.value}`,
       productname: selectedProduct.selectedOptionObject?.label,
       productunit: selectedProduct.selectedOptionObject?.unit,
-      category:`${areaOfWorkCategorySelected?.value}`
+      category:`${areaOfWorkCategorySelected?.value}`,
+      categoryName:areaOfWorkCategorySelected?.label
     };
     console.log("handleAddData", selectedProduct);
     setProductData([...productData, productDatas]);
+    setAccessoriesList([])
+    setSelectedProduct({})
+    setLeftInputs({
+      quantity: "",
+      amount: "",
+      description: "",
+      hardware: "",
+      installation: "",
+      accessories: "",
+    });
   };
   const handlerightIputsChange = (e) => {
     const { name, value } = e.target;
@@ -569,10 +578,6 @@ function QuotationGeneratorPage() {
   };
 
   const handleAddAccessory = async () => {
-    console.log(
-      "selectedAccessoryselectedOptionObject",
-      selectedAccessory.selectedOptionObject
-    );
     if (selectedAccessory.selectedOptionObject?.value !== "") {
       const accessory = {
         accessories: `${selectedAccessory.selectedOptionObject?.value}`,
@@ -583,13 +588,16 @@ function QuotationGeneratorPage() {
         image: selectedAccessory.selectedOptionObject.image,
         unit_id: selectedAccessory.selectedOptionObject.unit_id,
       };
-      console.log("accessory", [...accessoriesList, accessory]);
       setAccessoriesList([...accessoriesList, accessory]);
-      setSelectedAccessory();
+      setSelectedAccessory({});
       setQuantity(1);
-      // handleAddData()
     }
   };
+  
+  useEffect(() => {
+    console.log("selectedAccessory after updating:", selectedAccessory);
+  }, [selectedAccessory]);
+  
   const handleProductNameChange = (event) => {
     const selectedOptionObject = productsOptions.find(
       (option) => option.value == event.target.value
@@ -643,63 +651,52 @@ function QuotationGeneratorPage() {
   const leftArrOfInputs = [
     {
       handleChange: handleAreaOfWorkCategoryChange,
-      intputName: "AreaOfWorkCategory",
+      inputName: "AreaOfWorkCategory",
       label: "Area Of Work / Category",
       inputOrSelect: "select",
-      // value: areaOfWorkCategorySelected,
+      value: areaOfWorkCategorySelected,
       options: categoryOptions,
     },
     {
-      // handleChange:handleProductNameChange,
-      intputName: "productname",
+      handleChange: handleProductNameChange,
+      inputName: "productname",
       label: " Product Name",
       inputOrSelect: "select",
       options: productsOptions,
     },
-    // {
-    //   intputName: "quantity",
-    //   label: " Quantity",
-    //   type: "number",
-    // },
     {
-      intputName: "amount",
+      inputName: "amount",
       label: " Amount",
       type: "number",
     },
     {
-      intputName: "description",
+      inputName: "description",
       label: "Description",
       type: "text",
     },
     {
-      intputName: "hardware",
+      inputName: "hardware",
       label: " Hardware",
       type: "number",
     },
     {
-      intputName: "installation",
+      inputName: "installation",
       label: " Installation",
       type: "number",
     },
     {
-      intputName: "accessories",
+      inputName: "accessories",
       label: " Accessories",
       type: "number",
     },
     {
       handleChange: handleAccessoryChange,
-      intputName: " accessorieslist",
+      inputName: "accessorieslist",
       label: " Accessories list",
       inputOrSelect: "select",
       value: selectedAccessory,
       options: accessoriesProductsOptions,
     },
-    // {
-    //   handleChange:handleQuantityChange,
-    //   intputName: "accessoriesQuantity",
-    //   label: " Quantity",
-    //   type: "number",
-    // },
   ];
   const RightArrOfInputs = [
     {
@@ -1511,21 +1508,20 @@ function QuotationGeneratorPage() {
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {leftArrOfInputs.slice(7, 9).map((input, index) => {
-              console.log(input);
-              return (
-                <InputComponent
-                  key={index} // Ideally, you should use a unique identifier instead of index if available
-                  handleChange={input.handleChange}
-                  label={input.label}
-                  type={input.type}
-                  value={input?.selectedOptionObject?.value} // Ensure the value is correctly passed
-                  intputName={input.intputName}
-                  inputOrSelect={input.inputOrSelect}
-                  options={input.options}
-                />
-              );
-            })}
+          {leftArrOfInputs.slice(7, 9).map((input, index) => {
+    return (
+      <InputComponent
+        key={index}
+        handleChange={input.handleChange}
+        label={input.label}
+        type={input.type}
+        value={input.value.selectedOptionObject?.value || ""} // Ensure the value is correctly passed
+        intputName={input.intputName}
+        inputOrSelect={input.inputOrSelect}
+        options={input.options}
+      />
+    );
+  })}
 
             <Button
               type="submit"
@@ -1589,7 +1585,49 @@ function QuotationGeneratorPage() {
             flexFlow: "row wrap",
           }}
         >
-          <Box
+          {/* <Box
+            sx={{
+              height: "57vh", // Height of the inner container, larger than the outer container
+              overflowY: "auto", // Enable scrolling
+              width: "100%", // Ensure full width
+              flexGrow: 1,
+            }}
+          >
+            {accessoriesList?.map((product, productIndex) => {
+              console.log("firstproduct", product);
+              return (
+                <div key={productIndex}>
+                  <Grid
+                    md={4}
+                    item
+                    sx={{
+                      mx: "auto",
+                      px: "10px",
+                      py: 1,
+                    }}
+                  >
+                    <ProductInputCard
+                      handleDelete={handleDelete}
+                      heading={product?.name}
+                      image={product?.img} // Assuming you have an image property in product?Data
+                      qty={product?.quantity}
+                      unit={product?.unit}
+                      rate={product?.price}
+                      amount={product?.price}
+                    />
+                  </Grid>
+
+           
+                </div>
+              );
+            })}
+          </Box> */}
+
+
+
+          
+
+{ productData.length!==0 ?<Box
             sx={{
               height: "57vh", // Height of the inner container, larger than the outer container
               overflowY: "auto", // Enable scrolling
@@ -1649,7 +1687,43 @@ function QuotationGeneratorPage() {
                 </div>
               );
             })}
-          </Box>
+          </Box>:<Box
+            sx={{
+              height: "57vh", // Height of the inner container, larger than the outer container
+              overflowY: "auto", // Enable scrolling
+              width: "100%", // Ensure full width
+              flexGrow: 1,
+            }}
+          >
+            {accessoriesList?.map((product, productIndex) => {
+              console.log("firstproduct", product);
+              return (
+                <div key={productIndex}>
+                  <Grid
+                    md={4}
+                    item
+                    sx={{
+                      mx: "auto",
+                      px: "10px",
+                      py: 1,
+                    }}
+                  >
+                    <ProductInputCard
+                      handleDelete={handleDelete}
+                      heading={product?.name}
+                      image={product?.img} // Assuming you have an image property in product?Data
+                      qty={product?.quantity}
+                      unit={product?.unit}
+                      rate={product?.price}
+                      amount={product?.price}
+                    />
+                  </Grid>
+
+           
+                </div>
+              );
+            })}
+          </Box>}
         </Box>
       </Box>
       {/* <p className="added-item"> Added Items</p> */}
@@ -1752,9 +1826,33 @@ function QuotationGeneratorPage() {
                 </th>
               </tr>
               <tr>
-                <td style={{ textAlign: "center" }} rowspan="4">
+                <td style={{ textAlign: "center" }} rowspan="5">
+                  {item.categoryName}
+                </td>
+                
+                
+                <td
+                  style={{
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                    paddingBottom: "5px",
+                    paddingTop: "5px",
+                  }}
+                >
                   {item.productname}
                 </td>
+                <td
+                  style={{
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
+                    paddingBottom: "5px",
+                    paddingTop: "5px",
+                  }}
+                >
+                  {item.amount}
+                </td>
+              </tr>
+              <tr>
                 <td
                   style={{
                     paddingLeft: "5px",
@@ -1773,7 +1871,7 @@ function QuotationGeneratorPage() {
                     paddingTop: "5px",
                   }}
                 >
-                  {item.amount}
+                  {/* {item.hardware} */}
                 </td>
               </tr>
               <tr>
@@ -1893,7 +1991,7 @@ function QuotationGeneratorPage() {
                       colSpan="12"
                     >
                       {" "}
-                      ACCESSORIES LIST OF {item.productname.toUpperCase()}{" "}
+                      ACCESSORIES LIST OF {item.categoryName?.toUpperCase()}{" "}
                     </td>
                   </tr>
                   <tr style={{ backgroundColor: "#FFFF00" }}>

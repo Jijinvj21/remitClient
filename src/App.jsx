@@ -19,6 +19,10 @@ import QuotationView from "./page/QuotationView/QuotationView";
 import DebitNotePage from "./page/DebitNotePage/DebitNotePage";
 import ExpencePage from "./page/ExpencePage/ExpencePage";
 import DeliveryChallan from "./page/DeliveryChallan/DeliveryChallan";
+import DeliveryChallanView from "./page/DeliveryChallanView/DeliveryChallanView";
+import ExpenseView from "./page/ExpenseView/ExpenseView";
+import DebitNoteView from "./page/DebitNoteView/DebitNoteView";
+import CreaditNoteView from "./page/CreaditNoteView/CreaditNoteView";
 
 
 function App() {
@@ -40,6 +44,14 @@ function App() {
           <Route path="Quotation-View" element={<QuotationView />} />
           <Route path="expense" element={<ExpencePage />} />
           <Route path="delivery-challan" element={<DeliveryChallan />} />
+          <Route path="delivery-challan/delivery-challan-view" element={<DeliveryChallanView />} />
+          <Route path="expense/expense-view" element={<ExpenseView />} />
+          <Route path="debit-note/debit-note-view" element={<DebitNoteView />} />
+          <Route path="creadit-note/creadit-note-view" element={<CreaditNoteView />} />
+
+
+
+
 
 
 

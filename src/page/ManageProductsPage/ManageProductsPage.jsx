@@ -411,8 +411,9 @@ getDataFromAPI()
           setSelectedValue("");
           setTaxRateValue({value: '0%', label: 'IGST@ 0%', taxlabel: '0%', id: 3})     
           setProjectValue({}) 
-          setCategoryValue({})
-               alert("Product added successfully");
+          setImagePreview(null);
+          setImg(null);
+                         alert("Product added successfully");
           getDataFromAPI();
         }
       })
