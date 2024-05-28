@@ -90,7 +90,13 @@ function AddProductDrawer({
             </Typography>
             <input type="file" hidden onChange={handleImageChange} />
           </Button>}
+        
         </Grid>
+        <div style={{
+          display:"flex",
+          justifyContent:"start"
+        }}>
+
         { updatetrue ?<Button
           type="submit"
           variant="contained"
@@ -102,11 +108,11 @@ function AddProductDrawer({
             bgcolor: "var(--black-button)",
           }}
           onClick={handleUpdateData}
-        >
+          >
           Update Product
         </Button>
 :
-        <Button
+<Button
           type="submit"
           variant="contained"
           color="primary"
@@ -117,7 +123,7 @@ function AddProductDrawer({
             bgcolor: "var(--black-button)",
           }}
           onClick={handleAdd}
-        >
+          >
           Add Product
         </Button>}
 
@@ -130,13 +136,13 @@ function AddProductDrawer({
             mx: 2,
             textTransform: "none",
             color: "var(--black-button)",
-
+            
             "&:hover": {
               background: "transparent",
             },
           }}
           component="label"
-        >
+          >
           {/* <FileUploadOutlinedIcon /> */}
           <img src={bulkUpload} alt="bulkUpload" />
           <Typography
@@ -144,12 +150,13 @@ function AddProductDrawer({
             sx={{
               paddingLeft: 1,
             }}
-          >
+            >
             {" "}
             Bulk Upload
           </Typography>
           <input type="file" hidden onChange={handleImageChange} />
         </Button>
+            </div>
       </form>
     </Box>
   );
