@@ -511,7 +511,7 @@ getDataFromAPI()
           // overflow: "hidden", // Hide the scrollbar
         }}
       >
-{/* <Box
+<Box
   sx={{
     // The height is commented out; uncomment if needed
     // height: 500, // Height of the inner container, larger than the outer container
@@ -573,9 +573,9 @@ getDataFromAPI()
       )})
     )
   }
-</Box> */}
+</Box>
 
-<Grid container  spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12,  lg:12, xl:12 }}>
+{/* <Grid container  spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12,  lg:12, xl:12 }}>
   { myArray?.map((data, index) => (
     <Grid sx={{display:"flex", justifyContent:"center"}} item xs={2} sm={6} md={6}  lg={4} xl={2} key={index}>
       <ProductDataCard
@@ -590,7 +590,7 @@ getDataFromAPI()
           />
     </Grid>
   ))}
-</Grid>
+</Grid> */}
 
         <Box
           sx={{
