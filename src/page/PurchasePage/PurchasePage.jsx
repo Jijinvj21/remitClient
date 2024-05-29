@@ -27,6 +27,7 @@ import {
   createPurchaseAPI,
   gstOptionsGetAPI,
   partyDataGetAPI,
+  paymentTypeDataGetAPI,
   productAddAPI,
   productGetAPI,
   projectGetAPI,
@@ -97,7 +98,7 @@ function PurchasePage() {
   const [taxOptions,setTaxOptions]=useState([])
   const [isDesabled, setIsDesabled] = useState(true);
   const [clientData,setclientData]= useState({});
-  // const [paymentOptions,setPaymentOptions]= useState([]);
+  const [paymentOptions,setPaymentOptions]= useState([]);
 
 
   const groupByHSN = (data) => {
@@ -225,6 +226,18 @@ function PurchasePage() {
 
 
   useEffect(() => {
+    paymentTypeDataGetAPI().then((res)=>{
+      const paymentType = res.data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+      }));
+  console.log(paymentType)
+  paymentType.unshift({ value: -2, label: "Select" })
+  setPaymentOptions(paymentType)
+    })
+    .catch((err)=>{
+  console.log(err)
+    })
     partyDataGet()
     getTaxOptionsFormAPI()
     getCategeryOptionsFormAPI()
@@ -901,14 +914,16 @@ partyDataGet()
           >
             <p>Payment Method:</p>
             <select
-              style={{ width: "50%" }}
-              value={selectedOption}
-              onChange={(e) => setSelectedOption(e.target.value)}
-            >
-              <option value="none" label="None"></option>
-              <option value="cash" label="Cash"></option>
-              <option value="upi" label="UPI"></option>
-            </select>
+      style={{ width: "50%" }}
+      value={selectedOption}
+      onChange={(e) => setSelectedOption(e.target.value)}
+    >
+      {paymentOptions.map((data, index) => (
+        <option key={index} value={data.value}>
+          {data.label}
+        </option>
+      ))}
+    </select>
           </Box>
           <Box
             sx={{

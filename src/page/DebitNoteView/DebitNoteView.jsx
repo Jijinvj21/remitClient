@@ -61,7 +61,7 @@ function DebitNoteView() {
               <TableCell>{row.party}</TableCell>
               <TableCell>{new Date(row?.invoice_date)?.toLocaleDateString()}</TableCell>
               <TableCell>{row.billing_address}</TableCell>
-              <TableCell>{row.product_details.map((data)=>(
+              <TableCell>{row.product_details?.map((data)=>(
                 data.product
               ))}</TableCell>
               <TableCell>{ row.total_amount}</TableCell>

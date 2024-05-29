@@ -36,7 +36,7 @@ function CreaditNoteView() {
   
   return (
     <div className="delivery_challan_view">
-       <h2>Creadit Note</h2>
+       <h2>Credit Note</h2>
       <div className="inner-section">
       <TableContainer component={Paper} sx={{margin:"0px !important"}}>
       <Table aria-label="simple table">

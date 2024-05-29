@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Pagination, Stack, Typography } from "@mui/material";
 import "./ManageProductsPage.scss";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { useEffect, useState } from "react";
@@ -511,7 +511,7 @@ getDataFromAPI()
           // overflow: "hidden", // Hide the scrollbar
         }}
       >
-<Box
+{/* <Box
   sx={{
     // The height is commented out; uncomment if needed
     // height: 500, // Height of the inner container, larger than the outer container
@@ -573,7 +573,24 @@ getDataFromAPI()
       )})
     )
   }
-</Box>
+</Box> */}
+
+<Grid container  spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12,  lg:12, xl:12 }}>
+  { myArray?.map((data, index) => (
+    <Grid sx={{display:"flex", justifyContent:"center"}} item xs={2} sm={6} md={6}  lg={4} xl={2} key={index}>
+      <ProductDataCard
+            handleUpdate={handleUpdate}
+            handleDelete={(e) => handleDelete(e, data.id)}
+            heading={data.name}
+            image={data.Image}
+            qty={data.quantity}
+            unit={data.unit}
+            rate={data.rate}
+            amount={data.amount}
+          />
+    </Grid>
+  ))}
+</Grid>
 
         <Box
           sx={{

@@ -409,3 +409,14 @@ export const debitDataGetAPI = async () => {
     throw error.response.data;
   }
 }
+
+export const expensesDataGetAPI = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/voucher/expenses/getall`,{});
+    console.log(response)
+    return response
+  } catch (error) {
+    console.error(error);
+    throw error.response.data;
+  }
+}

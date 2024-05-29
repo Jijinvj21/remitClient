@@ -397,15 +397,16 @@ function ExpencePage() {
     if (e.target.value === "-2") {
       handleOpen();
     }
-    // const selectedOptionObject = expenseOPtions.find(
-    //   (option) => option.value == e.target.value
-    // );
-    // console.log("event.target", e.target.value, selectedOptionObject);
+    const selectedOptionObject = expenseOPtions.find(
+      (option) => option.value == e.target.value
+    );
+    console.log("event.target", e.target.value, selectedOptionObject);
 
-    // setSelectedExpence({ selectedOptionObject });
-
-    const selectedOption = expenseOPtions.find(option => option.value === event.target.value);
-    setSelectedExpence(selectedOption);
+    setSelectedExpence({ selectedOptionObject });
+// console.log("setSelectedExpence",e.target.value,expenseOPtions)
+// const selectedOption = expenseOPtions.find(option => option.value === e.target.value);
+// console.log("setSelectedExpence",selectedOption)
+//     setSelectedExpence(selectedOption);
   };
 
   const handlePartyName = (e) => {
@@ -671,12 +672,12 @@ function ExpencePage() {
       product_id: item.id,
       unit_id: item.unit_id,
       quantity: item.qty,
-      tax_rate_id: item.taxId,
+      tax_rate_id: item.tax_id,
       rate: item.rate,
       discount:parseInt(item.descountvalue)
     }));
 
-    console.log(rows);
+    console.log(selectedExpence);
 
     const formData = new FormData();
     formData.append("project_id", selectedExpence.selectedOptionObject.value);

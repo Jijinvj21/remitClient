@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import Deleteicon from "../../assets/sideBar/RedDelete.svg";
 import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 
@@ -38,11 +38,15 @@ function ProductInputCard({
       }}
     >
       <Box sx={{ display: "flex",justifyContent:"space-around", alignItems: "center",width:"20%" }}>
-        {
+        {/* {
           image?<img src={`https://drive.google.com/thumbnail?id=${image}&sz=w30`} alt="" />:<img src={ImageAdd} alt="add" />
-        }
+        } */}
 
-        
+ <Avatar
+  alt="Remy Sharp"
+  src={`https://drive.google.com/thumbnail?id=${image}&sz=w30`}
+  sx={{ width: 56, height: 56, }}
+/>
 
 
       </Box>

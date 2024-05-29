@@ -23,6 +23,7 @@ import {
   clientDataGetAPI,
   createVoucherAPI,
   gstOptionsGetAPI,
+  paymentTypeDataGetAPI,
   productAddAPI,
   productGetAPI,
   projectGetAPI,
@@ -81,6 +82,8 @@ function SalesPage() {
   const [taxOptions, setTaxOptions] = useState([]);
 const [clientData,setclientData]= useState({});
 const [isDesabled, setIsDesabled] = useState(true);
+const [paymentOptions,setPaymentOptions]= useState([]);
+
 
 
 const groupByHSN = (data) => {
@@ -185,6 +188,18 @@ const transformedData = groupByHSN(rows);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
+    paymentTypeDataGetAPI().then((res)=>{
+      const paymentType = res.data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+      }));
+  console.log(paymentType)
+  paymentType.unshift({ value: -2, label: "Select" })
+  setPaymentOptions(paymentType)
+    })
+    .catch((err)=>{
+  console.log(err)
+    })
     getTaxOptionsFormAPI();
     getUnitOptionsFormAPI();
     getClientOptionsFormAPI();
@@ -700,21 +715,16 @@ const transformedData = groupByHSN(rows);
           >
             <p>Payment Method:</p>
             <select
-              style={{ width: "50%" }}
-              value={selectedOption}
-              onChange={(e) => setSelectedOption(event.target.value)}
-            >
-              {/* {
-              .map((_, index) => {
-                const option = { value: index, label: `Option ${index}` }; // Define your options here
-                return ( */}
-              <option value="none" label="None"></option>
-              <option value="cash" label="Cash"></option>
-              <option value="upi" label="UPI"></option>
-
-              {/* {/* //   ); */}
-              {/* // })} */}
-            </select>
+      style={{ width: "50%" }}
+      value={selectedOption}
+      onChange={(e) => setSelectedOption(e.target.value)}
+    >
+      {paymentOptions.map((data, index) => (
+        <option key={index} value={data.value}>
+          {data.label}
+        </option>
+      ))}
+    </select>
           </Box>
           <Box
             sx={{
