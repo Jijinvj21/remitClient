@@ -20,6 +20,7 @@ import {
   partyDataGetAPI,
   paymentDataGetAPI,
   paymentInAPI,
+  paymentTypeDataGetAPI,
 } from "../../service/api/admin";
 import { generateRandom6Digit } from "../../utils/randomWithDate";
 import jsPDF from "jspdf";
@@ -36,6 +37,7 @@ function PaymentOut() {
   const [ReceptNo, setReceptNo] = useState("");
   const [paymentData, setPaymenData] = useState([]);
   const [isDesabled, setIsDesabled] = useState(true);
+  const [paymentOptions,setPaymentOptions]= useState([]);
 
 
   const getpaymentDataGetAPI = () => {
@@ -50,6 +52,18 @@ function PaymentOut() {
   };
 
   useEffect(() => {
+    paymentTypeDataGetAPI().then((res)=>{
+      const paymentType = res.data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+      }));
+  console.log(paymentType)
+  paymentType.unshift({ value: -2, label: "Select" })
+  setPaymentOptions(paymentType)
+    })
+    .catch((err)=>{
+  console.log(err)
+    })
     const currentDate = new Date();
     const random6Digit = generateRandom6Digit(currentDate);
     console.log(random6Digit);
@@ -442,11 +456,7 @@ function PaymentOut() {
                 label="Payment type"
                 inputOrSelect="select"
                 handleChange={handlepaymenttype}
-                options={[
-                  { value: "None", label: "None" },
-                  { value: "5", label: "Cash" },
-                  { value: "23", label: "UPI" },
-                ]}
+                options={paymentOptions}
               />
             </Box>
             <div

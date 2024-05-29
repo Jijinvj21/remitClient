@@ -386,3 +386,26 @@ export const paymentTypeDataGetAPI = async () => {
     throw error.response.data;
   }
 }
+
+export const creditDataGetAPI = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/voucher/creditnote/getall`,{});
+    console.log(response)
+    return response
+  } catch (error) {
+    console.error(error);
+    throw error.response.data;
+  }
+}
+
+
+export const debitDataGetAPI = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/voucher/debitnote/getall`,{});
+    console.log(response)
+    return response
+  } catch (error) {
+    console.error(error);
+    throw error.response.data;
+  }
+}

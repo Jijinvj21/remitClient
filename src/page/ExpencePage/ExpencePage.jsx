@@ -18,6 +18,7 @@ import {
   expensesDataAddAPI,
   expensesTypeAddAPI,
   partyDataGetAPI,
+  paymentTypeDataGetAPI,
   productGetAPI,
   projectGetAPI,
 } from "../../service/api/admin";
@@ -59,6 +60,8 @@ function ExpencePage() {
   const [totalValues, setTotalValues] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [isDesabled, setIsDesabled] = useState(true);
+  const [paymentOptions,setPaymentOptions]= useState([]);
+
   
 
 
@@ -163,6 +166,18 @@ function ExpencePage() {
     setProductOptions(options);
   };
   useEffect(() => {
+    paymentTypeDataGetAPI().then((res)=>{
+      const paymentType = res.data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+      }));
+  console.log(paymentType)
+  paymentType.unshift({ value: -2, label: "Select" })
+  setPaymentOptions(paymentType)
+    })
+    .catch((err)=>{
+  console.log(err)
+    })
     fetchData();
     // setProductOptions([{ value: -2, label: "Add" }]);
   }, []);
@@ -848,11 +863,7 @@ function ExpencePage() {
                 label="Payment type"
                 inputOrSelect="select"
                 handleChange={handlepaymenttype}
-                options={[
-                  { value: "None", label: "None" },
-                  { value: "Cash", label: "Cash" },
-                  { value: "UPI", label: "UPI" },
-                ]}
+                options={paymentOptions}
               />
             </div>
             <div

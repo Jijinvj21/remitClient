@@ -97,6 +97,8 @@ function PurchasePage() {
   const [taxOptions,setTaxOptions]=useState([])
   const [isDesabled, setIsDesabled] = useState(true);
   const [clientData,setclientData]= useState({});
+  // const [paymentOptions,setPaymentOptions]= useState([]);
+
 
   const groupByHSN = (data) => {
     const groupedData = data.reduce((acc, curr) => {

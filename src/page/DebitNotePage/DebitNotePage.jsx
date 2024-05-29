@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 // import { AiOutlineFileAdd } from "react-icons/ai";
 import TransactionTable from "../../components/TransactionTable/TransactionTable";
-import { categeryGetAPI, debitDataAddAPI, gstOptionsGetAPI, partyDataGetAPI, productAddAPI, productGetAPI, projectGetAPI, unitsDataGetAPI } from "../../service/api/admin";
+import { categeryGetAPI, debitDataAddAPI, gstOptionsGetAPI, partyDataGetAPI, paymentTypeDataGetAPI, productAddAPI, productGetAPI, projectGetAPI, unitsDataGetAPI } from "../../service/api/admin";
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -55,6 +55,8 @@ function DebitNotePage() {
   const [isChecked, setIsChecked] = useState(false);
   const [isDesabled, setIsDesabled] = useState(true);
   const [clientData,setclientData]= useState({});
+  const [paymentOptions,setPaymentOptions]= useState([]);
+
 
   const groupByHSN = (data) => {
     const groupedData = data.reduce((acc, curr) => {
@@ -169,6 +171,15 @@ function DebitNotePage() {
     });
   }
 useEffect(() => {
+  paymentTypeDataGetAPI().then((res)=>{
+    const paymentType = res.data.responseData.map((entry) => ({
+      value: entry.id,
+      label: entry.name,
+    }));
+console.log(paymentType)
+paymentType.unshift({ value: -2, label: "Select" })
+setPaymentOptions(paymentType)
+  })
   partyDataGet()
 }, [])
 const handleTextChange = (event) => {
@@ -865,11 +876,7 @@ const handleSelectedPartyChange=(event, newValue)=>{
                   label="Payment type"
                   inputOrSelect="select"
                   handleChange={handlepaymenttype}
-                  options={[
-                    { value: "None", label: "None" },
-                    { value: "Cash", label: "Cash" },
-                    { value: "UPI", label: "UPI" },
-                  ]}
+                  options={paymentOptions}
                 />
               </div>
               
