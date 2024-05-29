@@ -357,6 +357,7 @@ console.log(err)
       label: entry.name,
     }));
 console.log(paymentType)
+paymentType.unshift({ value: -2, label: "Select" })
 setPaymentOptions(paymentType)
   })
   .catch((err)=>{
