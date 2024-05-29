@@ -375,3 +375,14 @@ export const stateDataGetAPI = async () => {
     throw error.response.data;
   }
 }
+
+export const paymentTypeDataGetAPI = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/master/paymenttype/list`);
+    console.log(response)
+    return response
+  } catch (error) {
+    console.error(error);
+    throw error.response.data;
+  }
+}

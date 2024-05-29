@@ -26,7 +26,6 @@ function StockJournalPage() {
   const [selectedProject, setSelectedProject] = useState(); // State to hold selected product
 
   const [selectedProduct, setSelectedProduct] = useState("None"); // State to hold selected product
-  const [selectedProductDetails, setSelectedProductDetails] = useState(null); // State to hold selected product
   const [totalAmout, setTotalAmout] = useState(0); // State to hold selected product
   const [quantity, setQuantity] = useState(0); // State to hold quantity
   const [myArray, setMyArray] = useState([]);
@@ -228,6 +227,10 @@ function StockJournalPage() {
     // Set the state with the updated array
     setMyArray(updatedArray);
   };
+  useEffect(() => {
+    console.log(myArray)
+  }, [myArray])
+  
   
   // handle right input change
   const handleRightInputChange = (e) => {

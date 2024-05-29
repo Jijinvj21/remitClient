@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Modal, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Modal, Typography } from "@mui/material";
 import "./QuotationGeneratorPage.scss";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import ProductInputCard from "../../components/ProductInputCard/ProductDataCard";
@@ -119,6 +119,8 @@ function QuotationGeneratorPage() {
   const [categoryValue, setCategoryValue] = useState("");
   const [img, setImg] = useState(null);
   const [taxOptions, setTaxOptions] = useState([]);
+  const [isCategoryDesabled, setIsCategoryDesabled] = useState(true);
+
 
   const getTaxOptionsFormAPI = () => {
     gstOptionsGetAPI()
@@ -245,9 +247,9 @@ function QuotationGeneratorPage() {
     }
     setState2({ ...state2, [anchor]: open });
   };
-
   const handleAccessoryChange = (event) => {
-    const selectedOptionObject = productsOptions.find(
+    console.log("event.target",productsOptions)
+    const selectedOptionObject = accessoriesProductsOptions.find(
       (option) => option.value == event.target.value
     );
     console.log("event.target", event.target.value, selectedOptionObject);
@@ -383,9 +385,11 @@ function QuotationGeneratorPage() {
       .then((data) => {
         console.log("productGetAPI:", data);
         // setTaxOptions(data);
-
+        const filteredData = data.responseData.filter(
+          (entry) => entry.is_master_product === true
+        );
         // Transform data and set it to state
-        const productsData = data.responseData.map((entry) => ({
+        const productsData =filteredData.map((entry) => ({
           value: entry.id,
           label: entry.name,
           unit: entry.unit,
@@ -578,15 +582,16 @@ function QuotationGeneratorPage() {
   };
 
   const handleAddAccessory = async () => {
+    console.log(selectedAccessory)
     if (selectedAccessory.selectedOptionObject?.value !== "") {
       const accessory = {
         accessories: `${selectedAccessory.selectedOptionObject?.value}`,
-        name: selectedAccessory.selectedOptionObject.label,
+        name: selectedAccessory.selectedOptionObject?.label,
         quantity: quantity,
-        price: `${selectedAccessory.selectedOptionObject.amount}`,
-        unit: selectedAccessory.selectedOptionObject.unit,
-        image: selectedAccessory.selectedOptionObject.image,
-        unit_id: selectedAccessory.selectedOptionObject.unit_id,
+        price: `${selectedAccessory.selectedOptionObject?.amount}`,
+        unit: selectedAccessory.selectedOptionObject?.unit,
+        image: selectedAccessory.selectedOptionObject?.image,
+        unit_id: selectedAccessory.selectedOptionObject?.unit_id,
       };
       setAccessoriesList([...accessoriesList, accessory]);
       setSelectedAccessory({});
@@ -633,6 +638,7 @@ function QuotationGeneratorPage() {
   };
 
   const handleAddAreaOfWorkCategory = () => {
+    setIsCategoryDesabled(false)
     const createData = {
       project_id: selectedClient?.selectedOptionObject?.value,
       name: areaOfWorkCategoryInput,
@@ -641,11 +647,16 @@ function QuotationGeneratorPage() {
       ? categoryDataAddAPI(createData)
           .then((data) => {
             console.log(data);
+            setIsCategoryDesabled(true)
+            alert("Category Added");
           })
           .catch((err) => {
             console.log(err);
+            setIsCategoryDesabled(true)
+            alert("Problem Category Adding");
           })
       : alert("Client not Selected");
+      setIsCategoryDesabled(true)
   };
 
   const leftArrOfInputs = [
@@ -694,7 +705,7 @@ function QuotationGeneratorPage() {
       inputName: "accessorieslist",
       label: " Accessories list",
       inputOrSelect: "select",
-      value: selectedAccessory,
+      // value: selectedAccessory,
       options: accessoriesProductsOptions,
     },
   ];
@@ -1515,7 +1526,7 @@ function QuotationGeneratorPage() {
         handleChange={input.handleChange}
         label={input.label}
         type={input.type}
-        value={input.value.selectedOptionObject?.value || ""} // Ensure the value is correctly passed
+        // value={input.value.selectedOptionObject?.value || ""} // Ensure the value is correctly passed
         intputName={input.intputName}
         inputOrSelect={input.inputOrSelect}
         options={input.options}
@@ -2233,11 +2244,17 @@ function QuotationGeneratorPage() {
                   "&:hover": {
                     background: "var(--button-hover)",
                   },
+                  '&:disabled': {
+                    bgcolor: "var(--black-button)",
+                    color: 'white', },
+
                 }}
                 onClick={handleAddAreaOfWorkCategory}
+                disabled={!isCategoryDesabled}
               >
-                Add
-              </Button>
+               {isCategoryDesabled? "Save":
+            <CircularProgress style={{color:"white",marginBottom:"15px",marginTop:"15px"}} size={20} />
+          }</Button>
             </Box>
           </Box>
         </Modal>

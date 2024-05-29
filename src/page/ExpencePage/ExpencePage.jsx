@@ -725,7 +725,7 @@ function ExpencePage() {
           />
         </div> */}
       </div>
-        {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+        <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
       <Link
             to={"/admin/expense/expense-view"}
             style={{display: "flex",
@@ -738,7 +738,7 @@ function ExpencePage() {
             >
               Expense View
             </Typography>
-          </Link>      </div> */}
+          </Link>      </div>
       <div className="inner-section">
         <div className="top-section">
           <div style={{ display: "flex", gap: "10px" }}>

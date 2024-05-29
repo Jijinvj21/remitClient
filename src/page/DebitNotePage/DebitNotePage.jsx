@@ -636,7 +636,7 @@ const handleSelectedPartyChange=(event, newValue)=>{
   return (
     <div className="debitnotepage">
       <h2>Debit Note</h2>
-      {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+      <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
       <Link
             to={"/admin/debit-note/debit-note-view"}
             style={{display: "flex",
@@ -650,7 +650,7 @@ const handleSelectedPartyChange=(event, newValue)=>{
               {" "}
              Debit Note View
             </Typography>
-          </Link>      </div> */}
+          </Link>      </div>
       <div className="inner-section">
         <div
           style={{

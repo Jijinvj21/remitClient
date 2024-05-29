@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 // import { AiOutlineFileAdd } from "react-icons/ai";
 import TransactionTable from "../../components/TransactionTable/TransactionTable";
-import { categeryGetAPI, creditDataAddAPI, gstOptionsGetAPI, partyDataGetAPI, productAddAPI, productGetAPI, projectGetAPI, stateDataGetAPI, unitsDataGetAPI } from "../../service/api/admin";
+import { categeryGetAPI, creditDataAddAPI, gstOptionsGetAPI, partyDataGetAPI, paymentTypeDataGetAPI, productAddAPI, productGetAPI, projectGetAPI, stateDataGetAPI, unitsDataGetAPI } from "../../service/api/admin";
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -58,6 +58,8 @@ function CreditNotePage() {
     const [roundOff, setRoundOff] = useState(0);
     const [isDesabled, setIsDesabled] = useState(true);
     const [clientData,setclientData]= useState({});
+    const [paymentOptions,setPaymentOptions]= useState([]);
+
 
     const groupByHSN = (data) => {
       const groupedData = data.reduce((acc, curr) => {
@@ -99,6 +101,7 @@ function CreditNotePage() {
       setImgCredit(file);
     };
     const handlepaymenttype = (e) => {
+      console.log("setPaymentSelect",e.target)
       setPaymentSelect(e.target.value);
     };
 
@@ -347,6 +350,18 @@ useEffect(() => {
   }).catch((err)=>{
 console.log(err)
   })
+
+  paymentTypeDataGetAPI().then((res)=>{
+    const paymentType = res.data.responseData.map((entry) => ({
+      value: entry.id,
+      label: entry.name,
+    }));
+console.log(paymentType)
+setPaymentOptions(paymentType)
+  })
+  .catch((err)=>{
+console.log(err)
+  })
   partyDataGet()
   fetchData();
   setProductOptions([{ value: -2, label: "Add" }])
@@ -585,6 +600,7 @@ const handleStateOfSupplyChange = (e) => {
         product_id: item.id,
         quantity: item.qty,
         Price: item.qty * item.rate,
+        unit_id:parseInt(item.unitid),
         discount: parseFloat(item?.descountvalue || 0),
         tax_rate_id: (item.taxId || 1) 
     }));
@@ -644,7 +660,7 @@ const handleStateOfSupplyChange = (e) => {
   return (
     <div className="creaditnotepage">
       <h2>Credit Note</h2>
-      {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+      <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
       <Link
             to={"/admin/creadit-note/creadit-note-view"}
             style={{display: "flex",
@@ -658,7 +674,7 @@ const handleStateOfSupplyChange = (e) => {
               {" "}
              Credit Note View
             </Typography>
-          </Link>      </div> */}
+          </Link>      </div>
       <div className="inner-section">
         <div
           style={{
@@ -889,11 +905,7 @@ const handleStateOfSupplyChange = (e) => {
                   inputOrSelect="select"
                   handleChange={handlepaymenttype}
 
-                  options={[
-                    { value: "None", label: "None" },
-                    { value: "Cash", label: "Cash" },
-                    { value: "UPI", label: "UPI" },
-                  ]}
+                  options={paymentOptions}
                 />
               </div>
               

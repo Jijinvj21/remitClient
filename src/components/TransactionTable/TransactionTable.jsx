@@ -445,12 +445,13 @@ export default function TransactionTable({
 
   React.useEffect(() => {
     if (selectedProductData) {
-      console.log(selectedProductData);
+      console.log("selectedProductData",selectedProductData);
       const newRow = {
         id: selectedProductData.id,
         itemCode: selectedProductData.itemCode,
         name: selectedProductData.name,
         unit: selectedProductData.unit,
+        unitid:selectedProductData.unit_id,
         rate: selectedProductData.rate,
         taxApplied: ` ${selectedProductData.tax_rate?.name} ${selectedProductData.tax_rate?.percentage}`,
         qty: 1, 

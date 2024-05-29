@@ -621,7 +621,7 @@ const handleImageChange = (e) => {
   return (
     <div className="deliverychallan-page">
       <h2>Delivery Challan</h2>
-      {/* <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
+      <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
       <Link
             to={"/admin/delivery-challan/delivery-challan-view"}
             style={{display: "flex",
@@ -635,7 +635,7 @@ const handleImageChange = (e) => {
               {" "}
               Delivery Challan View
             </Typography>
-          </Link>      </div> */}
+          </Link>      </div>
       <div className="inner-section">
         <div className="top-section">
           <Box sx={{ width: "40%", marginBottom: "10px" }}>
