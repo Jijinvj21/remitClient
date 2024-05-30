@@ -407,6 +407,7 @@ function PaymenyIn() {
                       ),
                   },
                 }}
+                disablePortal
                 id="custom-input-demo"
                 options={partyOptions}
                 //   value={selectedProduct}

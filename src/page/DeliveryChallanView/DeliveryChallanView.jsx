@@ -1,26 +1,38 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import "./DeliveryChallanView.scss"
+import { useEffect, useState } from 'react';
+import { debitDataGetAPI } from '../../service/api/admin';
 function DeliveryChallanView() {
-  const data = [
-    {
-      dueDate: '2024-06-01',
-      invoiceDate: '2024-05-01',
-      challanNo: '12345',
-      stateOfSupply: 'California',
-      partySelect: 'Party A',
-      description: 'Product delivery',
-      products: "Product"
-    },
-    {
-      dueDate: '2024-06-15',
-      invoiceDate: '2024-05-15',
-      challanNo: '67890',
-      stateOfSupply: 'New York',
-      partySelect: 'Party B',
-      description: 'Product shipment',
-      products: "Product"
-    }
-  ];
+  // const data = [
+  //   {
+  //     dueDate: '2024-06-01',
+  //     invoiceDate: '2024-05-01',
+  //     challanNo: '12345',
+  //     stateOfSupply: 'California',
+  //     partySelect: 'Party A',
+  //     description: 'Product delivery',
+  //     products: "Product"
+  //   },
+  //   {
+  //     dueDate: '2024-06-15',
+  //     invoiceDate: '2024-05-15',
+  //     challanNo: '67890',
+  //     stateOfSupply: 'New York',
+  //     partySelect: 'Party B',
+  //     description: 'Product shipment',
+  //     products: "Product"
+  //   }
+  // ];
+  const [data,setData]=useState([]);
+  useEffect(() => {
+    debitDataGetAPI().then((res)=>{
+      console.log(res.data.responseData)
+      setData(res.data.responseData)
+    }).catch((err)=>{
+  console.log(err)
+    })
+   
+  }, [])
   return (
     <div className="delivery_challan_view">
        <h2>Delivery Challan</h2>

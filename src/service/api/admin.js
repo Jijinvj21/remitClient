@@ -420,3 +420,14 @@ export const expensesDataGetAPI = async () => {
     throw error.response.data;
   }
 }
+
+export const deliveryChallanDataGetAPI = async () => {
+  try {
+    const response = await axios.post(`${BASE_URL}/voucher/delivery-challan/getall`,{});
+    console.log(response)
+    return response
+  } catch (error) {
+    console.error(error);
+    throw error.response.data;
+  }
+}

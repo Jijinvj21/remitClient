@@ -44,24 +44,26 @@ function ExpenseView() {
         <TableHead>
           <TableRow>
             <TableCell>Challan No</TableCell>
-            <TableCell>Due Date</TableCell>
-            <TableCell>Invoice Date</TableCell>
-            <TableCell>State of Supply</TableCell>
+            <TableCell>Project</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Category</TableCell>
             <TableCell>Party</TableCell>
             <TableCell>Description</TableCell>
-            <TableCell>Products</TableCell>
+            <TableCell>Total</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell>{row.challanNo}</TableCell>
-              <TableCell>{row.dueDate}</TableCell>
-              <TableCell>{row.invoiceDate}</TableCell>
-              <TableCell>{row.stateOfSupply}</TableCell>
-              <TableCell>{row.partySelect}</TableCell>
+              <TableCell>{row.serial_no}</TableCell>
+              <TableCell>{row.project}</TableCell>
+              <TableCell>{ new Date(row?.date)?.toLocaleDateString()}</TableCell>
+              <TableCell>{row.expenses_category}</TableCell>
+              <TableCell>{row.party}</TableCell>
               <TableCell>{row.description}</TableCell>
-              <TableCell>{ row.products}</TableCell>
+              <TableCell>{ row.total}</TableCell>
+
             </TableRow>
           ))}
         </TableBody>

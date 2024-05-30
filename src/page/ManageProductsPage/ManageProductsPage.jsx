@@ -511,7 +511,7 @@ getDataFromAPI()
           // overflow: "hidden", // Hide the scrollbar
         }}
       >
-<Box
+{/* <Box
   sx={{
     // The height is commented out; uncomment if needed
     // height: 500, // Height of the inner container, larger than the outer container
@@ -573,12 +573,50 @@ getDataFromAPI()
       )})
     )
   }
-</Box>
-
-{/* <Grid container   spacing={{ xs: 2, md: 3,lg:5, xl:5 }} columns={{ xs: 4, sm: 8, md: 12,  lg:12, xl:12 }}>
-  { myArray?.map((data, index) => (
-    <Grid sx={{display:"flex", justifyContent:"center"}} item xs={2} sm={6} md={6}  lg={4} xl={3} key={index}>
-      <ProductDataCard
+</Box> */}
+<Box
+  sx={{
+    my: 2,
+    mx: "auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  }}
+>
+  {loader ? (
+    <CircularProgress color="inherit" />
+  ) : myArray.length === 0 ? (
+    // Show a message when no products are available
+    <Box
+      sx={{
+        my: 2,
+        mx: "auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+      }}
+    >
+      <PlaylistAddRoundedIcon sx={{ mx: "auto" }} style={{ fontSize: "40px" }} />
+      <p style={{ textAlign: "center" }}>No products available</p>
+    </Box>
+  ) : (
+    <Grid
+      container
+      spacing={{ xs: 2, md: 3, lg: 5, xl: 5 }}
+      columns={{ xs: 4, sm: 8, md: 12, lg: 12, xl: 12 }}
+    >
+      {myArray?.map((data, index) => (
+        <Grid
+          sx={{ display: "flex", justifyContent: "center" }}
+          item
+          xs={2}
+          sm={6}
+          md={6}
+          lg={4}
+          xl={3}
+          key={index}
+        >
+          <ProductDataCard
             handleUpdate={handleUpdate}
             handleDelete={(e) => handleDelete(e, data.id)}
             heading={data.name}
@@ -588,10 +626,11 @@ getDataFromAPI()
             rate={data.rate}
             amount={data.amount}
           />
+        </Grid>
+      ))}
     </Grid>
-  ))}
-</Grid> */}
-
+  )}
+</Box>
         <Box
           sx={{
             mt: 2,
