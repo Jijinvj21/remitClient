@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import "./DeliveryChallanView.scss"
 import { useEffect, useState } from 'react';
-import { debitDataGetAPI } from '../../service/api/admin';
+import {  deliveryChallanDataGetAPI } from '../../service/api/admin';
 function DeliveryChallanView() {
   // const data = [
   //   {
@@ -25,7 +25,7 @@ function DeliveryChallanView() {
   // ];
   const [data,setData]=useState([]);
   useEffect(() => {
-    debitDataGetAPI().then((res)=>{
+    deliveryChallanDataGetAPI().then((res)=>{
       console.log(res.data.responseData)
       setData(res.data.responseData)
     }).catch((err)=>{
