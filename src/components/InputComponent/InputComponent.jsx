@@ -41,6 +41,7 @@ function InputComponent({
   disabled
 
 }) {
+  console.log("inputvalue",intputName)
   return (
     <>
       {/* Text Input */}

@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import "./PaymenyIn.scss";
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ import { generateRandom6Digit } from "../../utils/randomWithDate";
 import jsPDF from "jspdf";
 import { renderToString } from "react-dom/server";
 import PlaylistAddRoundedIcon from '@mui/icons-material/PlaylistAddRounded';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 
 function PaymenyIn() {
@@ -407,7 +409,6 @@ function PaymenyIn() {
                       ),
                   },
                 }}
-                disablePortal
                 id="custom-input-demo"
                 options={partyOptions}
                 //   value={selectedProduct}
@@ -434,7 +435,63 @@ function PaymenyIn() {
                   </div>
                 )}
               />
+            {/* <Autocomplete
+  disablePortal
+  id="combo-box-demo"
+  options={partyOptions}
+  onChange={handleSetParty}
+  selectOnFocus={false}
+  popupIcon={<KeyboardArrowDownIcon  sx={{ 
+    color: 'black', 
+    fontSize: 16,
+    fontWeight: 'bold',
+    stroke: "black",
+    marginLeft:"20px"
+    
+    
+  }} />}
+  renderInput={(params) => (
+    <TextField 
+      {...params} 
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          backgroundColor: 'var(--inputbg-color)',
+          borderRadius:"10px",
+          '& fieldset': {
+            border: 'none',
+          },
+          '&:hover fieldset': {
+            border: 'none',
+          },
+          '&.Mui-focused fieldset': {
+            border: 'none',
+          },
+          '& .MuiAutocomplete-endAdornment': {
+            visibility: 'visible', // Ensures the arrow is always visible
+            right:"0px"
+          },
+          "& .css-plolib-MuiAutocomplete-endAdornment button": {
+            visibility: 'visible', // Ensures the arrow is always visible
+            right:"0px "
+          },
+          height:"38px"
+        },
+        "& .css-plolib-MuiAutocomplete-endAdornment button": {
+          visibility: 'visible', // Ensures the arrow is always visible
+          right: "0px"
+      },
+      "& .css-z0g2be-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicatior": {
+        visibility: 'visible', // Ensures the arrow is always visible
+        right: "0px"
+    },
+      
+      }}
+    />
+  )}
+/> */}
             </Box>
+
+
             {/* <p style={{ color: "red", fontSize: "12px", fontWeight: "600" }}>
               BAL: 63660
             </p> */}

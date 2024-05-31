@@ -299,7 +299,7 @@ function AddStockJournalDrawer({
       formData.append("is_master_product", journalCreate.product.is_master_product);
       formData.append("name", journalCreate.product.name);
       formData.append("unit_id", journalCreate.product.unit_id);
-
+  
       formData.append("materials_used", JSON.stringify(journalCreate.materials_used));
       formData.append("image", productImage);
   
@@ -315,12 +315,14 @@ function AddStockJournalDrawer({
       });
       setMyArray([]);
       setSelectedProduct("None");
-      setSelectedProject("None");
+      setSelectedProject(null);
       setSelectedTax(0);
+      setSelectedValue("");  // Resetting selectedValue
     } catch (error) {
       console.error("Error creating product:", error);
     }
   };
+  
   
 
   

@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Grid, Modal, Typography } from "@mui/material";
+import { Box, Button, Chip, CircularProgress, Grid, Modal, Typography } from "@mui/material";
 import "./QuotationGeneratorPage.scss";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import ProductInputCard from "../../components/ProductInputCard/ProductDataCard";
@@ -52,10 +52,12 @@ function QuotationGeneratorPage() {
   const [drawerImg, setDrawerImg] = useState("");
   const [projectImg, setProjectImg] = useState("");
 
-  const [inputs, setInputs] = useState([""]); // State to store  Terms and Conditions values
-  const [inputsExclusion, setInputsExclusion] = useState([""]); // State to store  Terms and Conditions values
+  const [inputs, setInputs] = useState([""]); 
+    const [inputsExclusion, setInputsExclusion] = useState([""]); 
   const [selectedClient, setSelectedClient] = useState({});
   const [selectedProduct, setSelectedProduct] = useState({});
+  // const [productSelectData, setProductSelectData] = useState({});
+
   
 
   const [leftInputs, setLeftInputs] = useState({
@@ -72,7 +74,6 @@ function QuotationGeneratorPage() {
     startdate: "",
   });
   // const [formData, setFormData] = useState([]);
-  // adding data form local storage
   const [selectedAccessory, setSelectedAccessory] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [accessoriesList, setAccessoriesList] = useState([]);
@@ -126,9 +127,7 @@ function QuotationGeneratorPage() {
     gstOptionsGetAPI()
       .then((data) => {
         console.log("tax:", data);
-        // setTaxOptions(data);
 
-        // Transform data and set it to state
         const transformedData = data.map((entry) => ({
           value: entry.percentage,
           label: entry.name ? `${entry.name} ${entry.percentage}` : "none",
@@ -148,13 +147,12 @@ function QuotationGeneratorPage() {
       .then((data) => {
         console.log("category:", data.data?.responseData);
 
-        // Transform data and set it to state
         const categoryOptions = data.data?.responseData.map((entry) => ({
           value: entry.id,
           label: `${entry.name}`,
         }));
         categoryOptions.unshift(
-          { value: 0, label: "None" },
+          { value: 0, label: "Select" },
           { value: -2, label: "Add" }
         );
 
@@ -164,31 +162,12 @@ function QuotationGeneratorPage() {
       .catch((err) => {
         console.log(err);
         setCategoryOptions(
-          { value: 0, label: "None" },
+          { value: 0, label: "Select" },
           { value: -2, label: "Add" }
         );
       });
   };
-  // const getClientOptionsFormAPI = () => {
-  //   projectGetAPI()
-  //     .then((data) => {
-  //       console.log("projects:", data);
 
-  //       // Transform data and set it to state
-  //       const projectdData = data?.responseData.map(entry => ({
-  //         value: entry.id,
-  //         label:`${entry.name} ( ${entry.client_name} )`,
-
-  //       }));
-  //       projectdData.unshift({ value: 0, label: "None" });
-
-  //       console.log("projectdData",projectdData);
-  //       setProjectOptions(projectdData);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
   const getUnitOptionsFormAPI = () => {
     unitsDataGetAPI()
       .then((data) => {
@@ -199,7 +178,7 @@ function QuotationGeneratorPage() {
           value: entry.id,
           label: entry.name,
         }));
-        unitsdData.unshift({ value: 0, label: "None" });
+        unitsdData.unshift({ value: 0, label: "Select" });
         console.log("unitsdData", unitsdData);
         setUnitOptions(unitsdData);
       })
@@ -336,16 +315,14 @@ function QuotationGeneratorPage() {
     clientDataGetAPI()
       .then((data) => {
         console.log("clientData:", data);
-        // setTaxOptions(data);
 
-        // Transform data and set it to state
         const partyData = data.responseData.map((entry) => ({
           value: entry.id,
           label: entry.name,
           project: entry.project_name,
         }));
         partyData.unshift({ value: -2, label: "Add" });
-        partyData.unshift({ value: -1, label: "None" });
+        partyData.unshift({ value: -1, label: "Select" });
 
         console.log(partyData);
         setClientOptions(partyData);
@@ -354,7 +331,7 @@ function QuotationGeneratorPage() {
         console.log("err", err);
       });
     setClientOptions([
-      { value: -1, label: "None" },
+      { value: -1, label: "Select" },
       { value: -2, label: "Add" },
     ]);
   };
@@ -362,15 +339,13 @@ function QuotationGeneratorPage() {
     projectGetAPI()
       .then((data) => {
         console.log("getProjectData:", data);
-        // setTaxOptions(data);
 
-        // Transform data and set it to state
         const projectData = data.responseData.map((entry) => ({
           value: entry.id,
           label: entry.name,
         }));
         projectData.unshift({ value: -2, label: "Add" });
-        projectData.unshift({ value: -1, label: "None" });
+        projectData.unshift({ value: -1, label: "Select" });
 
         console.log(projectData);
         setProjectOptions(projectData);
@@ -384,21 +359,19 @@ function QuotationGeneratorPage() {
     productGetAPI()
       .then((data) => {
         console.log("productGetAPI:", data);
-        // setTaxOptions(data);
         const filteredData = data.responseData.filter(
           (entry) => entry.is_master_product === true
         );
-        // Transform data and set it to state
         const productsData =filteredData.map((entry) => ({
           value: entry.id,
           label: entry.name,
           unit: entry.unit,
           amount: entry.rate,
-          image: entry.image,
+          image: entry.Image,
           unit_id: entry.unit_id,
         }));
-        productsData.unshift({ value: -1, label: "None" });
         productsData.unshift({ value: -2, label: "Add" });
+        productsData.unshift({ value: -1, label: "Select" });
 
         console.log("productsData", data.responseData);
         setProductsOptions(productsData);
@@ -407,7 +380,7 @@ function QuotationGeneratorPage() {
         console.log(err);
       });
     setProductsOptions([
-      { value: -1, label: "None" },
+      { value: -1, label: "Select" },
       { value: -2, label: "Add" },
     ]);
   };
@@ -416,15 +389,13 @@ function QuotationGeneratorPage() {
     categoryDataGetAPI()
       .then((data) => {
         console.log("CatogarytGetAPI:", data);
-        // setTaxOptions(data);
-
-        // Transform data and set it to state
+       
         const productsData = data.responseData.map((entry) => ({
           value: entry.id,
           label: entry.name,
           unit_id: entry.unit_id,
         }));
-        productsData.unshift({ value: -1, label: "None" });
+        productsData.unshift({ value: -1, label: "Select" });
         productsData.unshift({ value: -2, label: "Add" });
 
         console.log("productsData", data.responseData);
@@ -434,7 +405,7 @@ function QuotationGeneratorPage() {
         console.log(err);
       });
     setProductsOptions([
-      { value: -1, label: "None" },
+      { value: -1, label: "Select" },
       { value: -2, label: "Add" },
     ]);
   };
@@ -447,18 +418,18 @@ function QuotationGeneratorPage() {
           (entry) => entry.is_master_product === false
         );
 
-        // Transform filtered data and set it to state
         const productsData = filteredData.map((entry) => ({
           value: entry.id,
           label: entry.name,
           unit: entry.unit,
           amount: entry.rate,
-          image: entry.image,
+          image: entry.Image,
           unit_id: entry.unit_id,
           is_master_product: entry.is_master_product,
+          
         }));
-        productsData.unshift({ value: -1, label: "None" });
-        productsData.unshift({ value: -2, label: "Add" });
+        // productsData.unshift({ value: -2, label: "Add" });
+        productsData.unshift({ value: -1, label: "Select" });
 
         console.log("productsData", filteredData);
         setAccessoriesProductsOptions(productsData);
@@ -467,8 +438,8 @@ function QuotationGeneratorPage() {
         console.log(err);
       });
     setAccessoriesProductsOptions([
-      { value: -1, label: "None" },
-      { value: -2, label: "Add" },
+      { value: -1, label: "Select" },
+      // { value: -2, label: "Add" },
     ]);
   };
 
@@ -480,30 +451,32 @@ function QuotationGeneratorPage() {
     getCliendData();
   }, []);
 
-  const handleleftIputsChange = (e) => {
-    const { name, value } = e.target;
-    console.log("name, value", name, value);
+  const handleleftIputsChange = (e, inputName) => {
+    const { value } = e.target;
+    console.log("inputName, value", inputName, value);
     setLeftInputs({
       ...leftInputs,
-      [name]: value,
+      [inputName]: value,
     });
-    // handleAddData()
   };
+
   const handleAddData = () => {
-    console.log("firsttest",areaOfWorkCategorySelected);
+    console.log("firsttest", areaOfWorkCategorySelected);
     const productDatas = {
       ...leftInputs,
       accessorieslist: accessoriesList,
       product: `${selectedProduct.selectedOptionObject?.value}`,
       productname: selectedProduct.selectedOptionObject?.label,
       productunit: selectedProduct.selectedOptionObject?.unit,
-      category:`${areaOfWorkCategorySelected?.value}`,
-      categoryName:areaOfWorkCategorySelected?.label
+      image:selectedProduct.selectedOptionObject?.image,
+      category: `${areaOfWorkCategorySelected?.value}`,
+      categoryName: areaOfWorkCategorySelected?.label
     };
     console.log("handleAddData", selectedProduct);
     setProductData([...productData, productDatas]);
-    setAccessoriesList([])
-    setSelectedProduct({})
+    setAccessoriesList([]);
+    setSelectedProduct({});
+    // setProductSelectData({})
     setLeftInputs({
       quantity: "",
       amount: "",
@@ -513,6 +486,10 @@ function QuotationGeneratorPage() {
       accessories: "",
     });
   };
+  
+
+
+
   const handlerightIputsChange = (e) => {
     const { name, value } = e.target;
     console.log("first", name, value);
@@ -522,7 +499,6 @@ function QuotationGeneratorPage() {
     }));
   };
 
-  // Function to handle input value change
   const handleInputChange = (index, value) => {
     console.log(index);
     const newInputs = [...inputs];
@@ -576,9 +552,9 @@ function QuotationGeneratorPage() {
   // };
   const handleImageChange = (e) => {
     console.log("e.target.files", e.target.files);
-    const files = e.target.files; // Get all selected files
-    const fileList = Array.from(files); // Convert FileList to array
-    setImg(fileList); // Update state with array of files
+    const files = e.target.files; 
+    const fileList = Array.from(files); 
+    setImg(fileList); 
   };
 
   const handleAddAccessory = async () => {
@@ -608,14 +584,14 @@ function QuotationGeneratorPage() {
       (option) => option.value == event.target.value
     );
     if (selectedOptionObject.value == -2) {
-      console.log(
-        "event.target",
-        event.target.value.value,
-        selectedOptionObject.value
-      );
+      
       console.log(selectedOptionObject.value == -2);
       toggleDrawer2("right", true)();
     } else {
+      // const { value, label } = selectedOptionObject;
+      // { "value":value,"label":label }
+      // setProductSelectData({ "value":value,"label":label })
+      console.log("firstevent",selectedOptionObject)
       setSelectedProduct({ selectedOptionObject });
     }
   };
@@ -629,6 +605,8 @@ function QuotationGeneratorPage() {
       const selectedOptionObject = categoryOptions.find(
         (option) => option.value == event.target.value
       );
+      console.log("firstselectedOptionObject",selectedOptionObject)
+      
       setAreaOfWorkCategorySelected(selectedOptionObject);
     }
   };
@@ -648,6 +626,9 @@ function QuotationGeneratorPage() {
           .then((data) => {
             console.log(data);
             setIsCategoryDesabled(true)
+            handleClose()
+            setAreaOfWorkCategoryInput("")
+            getCategeryOptionsFormAPI()
             alert("Category Added");
           })
           .catch((err) => {
@@ -665,7 +646,7 @@ function QuotationGeneratorPage() {
       inputName: "AreaOfWorkCategory",
       label: "Area Of Work / Category",
       inputOrSelect: "select",
-      value: areaOfWorkCategorySelected,
+      // value: areaOfWorkCategorySelected,
       options: categoryOptions,
     },
     {
@@ -673,43 +654,48 @@ function QuotationGeneratorPage() {
       inputName: "productname",
       label: " Product Name",
       inputOrSelect: "select",
+      // value: productSelectData.data, 
       options: productsOptions,
     },
     {
       inputName: "amount",
       label: " Amount",
       type: "number",
+      value: leftInputs.amount, 
     },
     {
       inputName: "description",
       label: "Description",
       type: "text",
+      value: leftInputs.description, 
     },
     {
       inputName: "hardware",
       label: " Hardware",
       type: "number",
+      value: leftInputs.hardware, 
     },
     {
       inputName: "installation",
       label: " Installation",
       type: "number",
+      value: leftInputs.installation, 
     },
     {
       inputName: "accessories",
       label: " Accessories",
       type: "number",
+      value: leftInputs.accessories, 
     },
     {
       handleChange: handleAccessoryChange,
       inputName: "accessorieslist",
       label: " Accessories list",
       inputOrSelect: "select",
-      // value: selectedAccessory,
       options: accessoriesProductsOptions,
     },
   ];
-  const RightArrOfInputs = [
+    const RightArrOfInputs = [
     {
       handleChange: handleClientname,
       intputName: "clientname",
@@ -746,17 +732,40 @@ function QuotationGeneratorPage() {
       type: "date",
     },
   ];
-  const handleDelete = (event) => {
-    event.stopPropagation(); // Prevent the click event from bubbling up to the main div
-    alert("You clicked delete!");
+  const handleDelete = (index) => {
+    const updatedArray = productData.filter((item, i) => i !== index);
+    setProductData(updatedArray);
   };
+
+  const handleDeleteAccessories = (productIndex, accessoryIndex) => {
+    const productToUpdate = productData[productIndex];
+    const updatedAccessories = productToUpdate.accessorieslist.filter((accessory, index) => index !== accessoryIndex);
+    const updatedProduct = {
+      ...productToUpdate,
+      accessorieslist: updatedAccessories,
+    };
+    const updatedProductData = productData.map((product, index) => {
+      if (index === productIndex) {
+        return updatedProduct;
+      }
+      return product;
+    });
+  
+    setProductData(updatedProductData);
+  };
+  
+  const handleDeleteAccessoriesChip = (index) => {
+    const updatedArray = accessoriesList.filter((item, i) => i !== index);
+    setAccessoriesList(updatedArray);
+  };
+
   const pageone = renderToString(
     <div
       className="quatationgenerator"
       id="quatationgenerator"
       style={{
         fontSize: "13px",
-        fontFamily: "'Roboto'", // Corrected font family name
+        fontFamily: "'Roboto'", 
         fontWeight: 400,
         textAlign: "justify",
       }}
@@ -787,7 +796,7 @@ function QuotationGeneratorPage() {
             paddingBottom: "5px",
             lineHeight: "22px",
             textAlign: "justify",
-            fontFamily: "'Roboto'", // Corrected font family name
+            fontFamily: "'Roboto'", 
             fontWeight: 400,
           }}
         >
@@ -800,7 +809,7 @@ function QuotationGeneratorPage() {
           style={{
             paddingBottom: "5px",
             lineHeight: "22px",
-            fontFamily: "'Roboto'", // Corrected font family name
+            fontFamily: "'Roboto'", 
             fontWeight: 400,
           }}
         >
@@ -836,27 +845,24 @@ function QuotationGeneratorPage() {
     );
 
     const pdf = new jsPDF("p", "pt", "a4", true);
-    const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf"; // Path to font file
-
-    // Embed font using addFileToVFS and addFont
-    pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman); // 'Metropolis-Regular.ttf' is the name you want to give to the font within the PDF
+    const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf"; 
+    pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman); 
     pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
 
-    pdf.setFont("OPTITimesRomanfont"); // Set the font before adding text
+    pdf.setFont("OPTITimesRomanfont");
 
     pdf.html(pageone, {
       callback: async () => {
-        // Make the callback function async
         pdf.addPage();
         pdf.addImage(
           "https://res.cloudinary.com/dczou8g32/image/upload/v1714668042/DEV/jw8j76cgw2ogtokyoisi.png",
           30,
           30,
-          100, // Width
-          60 // Height
+          100, 
+          60 
         );
         pdf.autoTable({
-          html: pdftable, // Pass the HTML structure directly
+          html: pdftable,
           startY: 100,
           useCss: true,
           theme: "grid",
@@ -920,15 +926,15 @@ function QuotationGeneratorPage() {
             });
           };
 
-          const imageWidth = 575; // Set the width of the image
-          const imageHeight = 820; // Set the height of the image
-          const paddingX = 10; // Set the horizontal padding
-          const paddingY = 10; // Set the vertical padding
-          const marginLeft = 0; // Set the left margin
-          const marginTop = 0; // Set the top margin
+          const imageWidth = 575;
+          const imageHeight = 820; 
+          const paddingX = 10; 
+          const paddingY = 10; 
+          const marginLeft = 0; 
+          const marginTop = 0; 
 
           for (const [i, url] of imageUrls.entries()) {
-            const image = await addImageProcess(url); // Await here
+            const image = await addImageProcess(url); 
             pdf.addImage(
               image,
               "png",
@@ -974,7 +980,7 @@ function QuotationGeneratorPage() {
           });
         pdf.setFontSize(12);
         console.log("inputsExclusion", inputsExclusion.length);
-        const inputText1 = inputsExclusion.join("\n"); // Convert the inputs array to a newline-separated string
+        const inputText1 = inputsExclusion.join("\n"); 
         pdf.text(`${inputText1}`, 50, 100, {
           maxWidth,
           lineHeightFactor: 1.5,
@@ -995,7 +1001,7 @@ function QuotationGeneratorPage() {
             }
           );
         pdf.setFontSize(12);
-        const inputText = inputs.join("\n"); // Convert the inputs array to a newline-separated string
+        const inputText = inputs.join("\n"); 
         pdf.text(
           `${inputText}`,
           50,
@@ -1445,7 +1451,7 @@ function QuotationGeneratorPage() {
         </Box>
 
         <Box className="input-box" sx={{ gap: 2 }}>
-          <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2 }}>
             {leftArrOfInputs.slice(0, 1).map((input, index) => (
               <InputComponent
                 key={index}
@@ -1453,7 +1459,7 @@ function QuotationGeneratorPage() {
                 label={input.label}
                 type="text"
                 value={input.value}
-                intputName={input.intputName}
+                inputName={input.inputName}
                 inputOrSelect={input.inputOrSelect}
                 options={input.options}
               />
@@ -1461,42 +1467,48 @@ function QuotationGeneratorPage() {
           </Box>
 
           <Box sx={{ display: "flex", gap: 2 }}>
-            {leftArrOfInputs.slice(1, 2).map((input, index) => (
+            {leftArrOfInputs.slice(1, 2).map((input, index) => {
+            console.log("input.inputName",input.options,input.value)
+
+              return(
               <InputComponent
                 key={index}
                 handleChange={handleProductNameChange}
                 label={input.label}
                 type={input.type}
-                // value={areaOfWorkCategorySelected} // Ensure the value is correctly passed
-                inputName={input.inputName} // Ensure the prop name is correct
+                value={input.value} 
+                inputName={input.inputName} 
                 inputOrSelect={input.inputOrSelect}
                 options={input.options}
               />
-            ))}
+            )})}
 
-            {leftArrOfInputs.slice(2, 3).map((input, index) => (
-              <InputComponent
-                key={index}
-                handleChange={(e) => handleleftIputsChange(e, input.intputName)}
-                label={input.label}
-                type={input.type}
-                value={leftInputs[input.intputName]} // Ensure the value is correctly passed
-                intputName={input.intputName}
-                inputOrSelect={input.inputOrSelect}
-                options={input.options}
-              />
-            ))}
+{leftArrOfInputs.slice(2, 3).map((input, index) => {
+        console.log("input.value", input);
+        return (
+          <InputComponent
+            key={index}
+            handleChange={(e) => handleleftIputsChange(e, input.inputName)} 
+            label={input.label}
+            type={input.type}
+            value={input.value}
+            inputName={input.inputName} 
+            inputOrSelect={input.inputOrSelect}
+            options={input.options}
+          />
+        );
+      })}
           </Box>
 
           <Box sx={{ display: "flex", gap: 2 }}>
             {leftArrOfInputs.slice(3, 4).map((input, index) => (
               <InputComponent
                 key={index}
-                handleChange={(e) => handleleftIputsChange(e, input.intputName)}
+                handleChange={(e) => handleleftIputsChange(e, input.inputName)}
                 label={input.label}
                 type={input.type}
-                value={leftInputs[input.intputName]} // Ensure the value is correctly passed
-                intputName={input.intputName}
+                value={input.value} 
+                inputName={input.inputName}
                 inputOrSelect={input.inputOrSelect}
                 options={input.options}
               />
@@ -1507,11 +1519,11 @@ function QuotationGeneratorPage() {
             {leftArrOfInputs.slice(4, 7).map((input, index) => (
               <InputComponent
                 key={index}
-                handleChange={(e) => handleleftIputsChange(e, input.intputName)}
+                handleChange={(e) => handleleftIputsChange(e, input.inputName)}
                 label={input.label}
                 type={input.type}
-                value={leftInputs[input.intputName]} // Ensure the value is correctly passed
-                intputName={input.intputName}
+                value={input.value} 
+                inputName={input.inputName}
                 inputOrSelect={input.inputOrSelect}
                 options={input.options}
               />
@@ -1526,8 +1538,8 @@ function QuotationGeneratorPage() {
         handleChange={input.handleChange}
         label={input.label}
         type={input.type}
-        // value={input.value.selectedOptionObject?.value || ""} // Ensure the value is correctly passed
-        intputName={input.intputName}
+        value={input.value} 
+        inputName={input.inputName}
         inputOrSelect={input.inputOrSelect}
         options={input.options}
       />
@@ -1556,6 +1568,15 @@ function QuotationGeneratorPage() {
               Add
             </Button>
           </Box>
+          <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
+  {accessoriesList?.map((product, productIndex) => (
+    <Chip
+      key={productIndex}
+      onDelete={() => handleDeleteAccessoriesChip(productIndex)}
+      label={product.name}
+    />
+  ))}
+</div>
 
           <Box
             sx={{
@@ -1638,7 +1659,8 @@ function QuotationGeneratorPage() {
 
           
 
-{ productData.length!==0 ?<Box
+{/* { productData.length!==0 ? */}
+<Box
             sx={{
               height: "57vh", // Height of the inner container, larger than the outer container
               overflowY: "auto", // Enable scrolling
@@ -1662,9 +1684,9 @@ function QuotationGeneratorPage() {
                     }}
                   >
                     <ProductInputCard
-                      handleDelete={handleDelete}
+                      handleDelete={() => handleDelete(productIndex)}
                       heading={product.productname}
-                      image={product.img} // Assuming you have an image property in productData
+                      image={product.image} // Assuming you have an image property in productData
                       qty={product.quantity}
                       unit={product.productunit}
                       rate={product.amount}
@@ -1673,7 +1695,9 @@ function QuotationGeneratorPage() {
                   </Grid>
 
                   {/* Map over accessorieslist of the current product */}
-                  {product.accessorieslist.map((accessory, accessoryIndex) => (
+                  {product.accessorieslist.map((accessory, accessoryIndex) => {
+                    console.log("accessorydatas",accessory)
+                    return(
                     <Grid
                       md={4}
                       item
@@ -1685,20 +1709,21 @@ function QuotationGeneratorPage() {
                       }}
                     >
                       <ProductInputCard
-                        handleDelete={handleDelete}
+                       handleDelete={() => handleDeleteAccessories(productIndex, accessoryIndex)}
                         heading={accessory.name}
-                        image={accessory.img} // Assuming you have an image property in accessorieslist
+                        image={accessory.image} // Assuming you have an image property in accessorieslist
                         qty={accessory.quantity}
                         unit={accessory.unit}
                         rate={accessory.price}
                         amount={accessory.amount}
                       />
                     </Grid>
-                  ))}
+                  )})}
                 </div>
               );
             })}
-          </Box>:<Box
+          </Box>
+          {/* :<Box
             sx={{
               height: "57vh", // Height of the inner container, larger than the outer container
               overflowY: "auto", // Enable scrolling
@@ -1734,7 +1759,8 @@ function QuotationGeneratorPage() {
                 </div>
               );
             })}
-          </Box>}
+          </Box>} */}
+          
         </Box>
       </Box>
       {/* <p className="added-item"> Added Items</p> */}

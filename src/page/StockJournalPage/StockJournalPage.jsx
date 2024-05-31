@@ -227,9 +227,7 @@ function StockJournalPage() {
     // Set the state with the updated array
     setMyArray(updatedArray);
   };
-  useEffect(() => {
-    console.log(myArray)
-  }, [myArray])
+ 
   
   
   // handle right input change
