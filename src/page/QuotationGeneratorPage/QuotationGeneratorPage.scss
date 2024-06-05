@@ -22,6 +22,7 @@
   border-radius: 10px;
   padding: 2px;
   margin-top: 1px;
+  
     h2{
         padding-bottom: 20px;
         padding-top: 10px;
@@ -37,6 +38,7 @@
         display: flex;
     flex-direction: column;
     gap: 15px;
+    
     }
     .added-item{
         padding-top: 10px;
@@ -65,6 +67,7 @@
         left: -9999px;
         top: -9999px;
       }
+      
       
     
 }

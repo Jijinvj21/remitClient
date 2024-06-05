@@ -121,6 +121,8 @@ function QuotationGeneratorPage() {
   const [img, setImg] = useState(null);
   const [taxOptions, setTaxOptions] = useState([]);
   const [isCategoryDesabled, setIsCategoryDesabled] = useState(true);
+  const [imagePreview,setImagePreview]=useState(null)
+
 
 
   const getTaxOptionsFormAPI = () => {
@@ -551,10 +553,20 @@ function QuotationGeneratorPage() {
   //   setImg(file);
   // };
   const handleImageChange = (e) => {
-    console.log("e.target.files", e.target.files);
-    const files = e.target.files; 
-    const fileList = Array.from(files); 
-    setImg(fileList); 
+    // console.log("e.target.files", e.target.files);
+    // const files = e.target.files; 
+    // const fileList = Array.from(files); 
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader(); // FileReader object to read the file
+      reader.onloadend = () => {
+        // When reading is done, update the component state with the image data URL
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+    }
+    setImg(file); 
   };
 
   const handleAddAccessory = async () => {
@@ -1291,7 +1303,39 @@ function QuotationGeneratorPage() {
                   />
                 );
               })}
-              <Button
+
+{imagePreview? <Chip onDelete={()=>{setImagePreview(null);setImg(null);}} avatar={<img src={imagePreview}  width={100} height={100}  />} style={{marginTop:"15px",marginLeft:"10px"}} size="medium" />:
+
+<Button
+disableRipple
+sx={{
+  mt: 3,
+  textTransform: "none",
+  color: "var(--black-button)",
+  "&:hover": {
+    background: "transparent",
+  },
+}}
+component="label"
+>
+<img src={ImageAdd} alt="add img" />
+<Typography
+  variant="string"
+  sx={{
+    pl: 1,
+  }}
+>
+  Add plan
+</Typography>
+<input
+  type="file"
+  // multiple
+  hidden
+  onChange={handleImageChange}
+/>
+</Button> 
+}
+              {/* <Button
                 disableRipple
                 sx={{
                   mt: 3,
@@ -1314,11 +1358,11 @@ function QuotationGeneratorPage() {
                 </Typography>
                 <input
                   type="file"
-                  multiple
+                  // multiple
                   hidden
                   onChange={handleImageChange}
                 />
-              </Button>
+              </Button> */}
             </Box>
           </Box>
 
@@ -1683,7 +1727,9 @@ function QuotationGeneratorPage() {
                       py: 1,
                     }}
                   >
-                    <ProductInputCard
+                    <Chip label={product.productname} onDelete={() => handleDelete(productIndex)} />
+
+                    {/* <ProductInputCard
                       handleDelete={() => handleDelete(productIndex)}
                       heading={product.productname}
                       image={product.image} // Assuming you have an image property in productData
@@ -1691,7 +1737,7 @@ function QuotationGeneratorPage() {
                       unit={product.productunit}
                       rate={product.amount}
                       amount={product.amount}
-                    />
+                    /> */}
                   </Grid>
 
                   {/* Map over accessorieslist of the current product */}
@@ -1699,7 +1745,7 @@ function QuotationGeneratorPage() {
                     console.log("accessorydatas",accessory)
                     return(
                     <Grid
-                      md={4}
+                      md={12}
                       item
                       key={`${productIndex}-${accessoryIndex}`} // Use a unique key combining productIndex and accessoryIndex
                       sx={{
@@ -1708,7 +1754,9 @@ function QuotationGeneratorPage() {
                         py: 1,
                       }}
                     >
-                      <ProductInputCard
+                                          <Chip label={accessory.name} onDelete={() => handleDeleteAccessories(productIndex, accessoryIndex)} />
+
+                      {/* <ProductInputCard
                        handleDelete={() => handleDeleteAccessories(productIndex, accessoryIndex)}
                         heading={accessory.name}
                         image={accessory.image} // Assuming you have an image property in accessorieslist
@@ -1716,7 +1764,7 @@ function QuotationGeneratorPage() {
                         unit={accessory.unit}
                         rate={accessory.price}
                         amount={accessory.amount}
-                      />
+                      /> */}
                     </Grid>
                   )})}
                 </div>

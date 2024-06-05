@@ -1,15 +1,33 @@
-.right_side_layout_components{
+.right_side_layout_components {
     background: var(--bgblue);
     width: 100%;
     color: rgb(0, 0, 0);
     margin: 25px;
     border-radius: 50px;
-    padding-left: 40px;
-    padding-top: 20px;
-    padding-right: 40px;
+    padding: 20px 40px 10px;
     overflow: auto;
-    padding-bottom: 10px;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-}
+  
+    // &::-webkit-scrollbar {
+    //   width: 10px;
+    // }
+  
+    // &::-webkit-scrollbar-track {
+    //   background-color: white;
+    //   border-radius: 10rem;
+    //   min-height: 20px; // Set your desired minimum height here
+    // }
+  
+    // &::-webkit-scrollbar-thumb {
+    //   background-color: var(--primary-light);
+    //   border-radius: 10rem;
+    // }
+  
+    // &::-webkit-scrollbar-thumb:vertical {
+    //   min-height: 30px; // Ensure the thumb has a minimum height for better visibility
+    // }
+  
+    // &::-webkit-scrollbar-track-piece {
+    //   min-height: 20px; // Ensure the track piece respects the minimum height
+    // }
+  }
+  
