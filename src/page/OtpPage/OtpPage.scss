@@ -1,0 +1,98 @@
+.otp-page-container {
+    height: 100vh;
+    color: white;
+    display: flex;
+  
+    .form-section {
+      background: #1c1c1c;
+      width: 50%;
+    //   height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      
+      .top-side-text {
+        margin: 30px;
+        font-size: 24px; 
+        font-weight: 600; 
+        background: rgb(143, 255, 133); 
+        background: linear-gradient(
+          17deg,
+          rgba(57, 160, 255, 1) 5%,
+          rgba(143, 255, 133, 1) 20%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+       
+      }
+  .welcome-back-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .welcome-back-form {
+          width: 70%;
+        display: flex;
+        flex-direction: column;
+        // align-items: flex-start;
+        justify-content: center;
+        // flex-grow: 1;
+  
+        .top-section-of-form {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+  
+        
+  
+          p {
+            font-weight: 400;
+            font-size: 16px;
+            color: #999999;
+            span{
+                color: white;
+            }
+          }
+        }
+        .input-for-otp{
+            // width: 10%;
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            // this for otp inpus
+     
+        }
+    
+        .trouble-in-login{
+            color: #50545F;
+            font-size:14px;
+            text-align: center;
+            margin-top: 30px;
+            span{
+                color: #4EA971;
+                text-decoration: underline;
+            }
+        }
+      }
+    }
+  
+      .footer-text {
+        margin: 30px;
+        font-size: 14px;
+        color: #999999;
+        text-align: start;
+      }
+    }
+  
+    .image-section {
+      background: #161616;
+      width: 50%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  

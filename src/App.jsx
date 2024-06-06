@@ -24,6 +24,7 @@ import ExpenseView from "./page/ExpenseView/ExpenseView";
 import DebitNoteView from "./page/DebitNoteView/DebitNoteView";
 import CreaditNoteView from "./page/CreaditNoteView/CreaditNoteView";
 import SignUpPage from "./page/SignUpPage/SignUpPage";
+import OtpPage from "./page/OtpPage/OtpPage";
 
 function App() {
   return (
@@ -56,7 +57,7 @@ function App() {
           </Route>
         </Route>
             <Route path="sign-up" element={<SignUpPage />} />
-            <Route path="otp" element={<SignUpPage />} />
+            <Route path="otp" element={<OtpPage />} />
 
 
 
