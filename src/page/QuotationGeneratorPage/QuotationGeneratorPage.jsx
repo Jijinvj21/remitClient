@@ -1,4 +1,4 @@
-import { Box, Button, Chip, CircularProgress, Grid, Modal, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Chip, CircularProgress, Grid, IconButton, Modal, Typography } from "@mui/material";
 import "./QuotationGeneratorPage.scss";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import ProductInputCard from "../../components/ProductInputCard/ProductDataCard";
@@ -7,6 +7,8 @@ import "jspdf-autotable";
 import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 import {
   categoryDataAddAPI,
@@ -23,6 +25,7 @@ import {
 import { renderToString } from "react-dom/server";
 import AddClientDrawer from "../../components/AddClientDrawer/AddClientDrawer";
 import AddStockJournalDrawer from "../../components/AddStockJournalDrawer/AddStockJournalDrawer";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const style = {
   position: "absolute",
@@ -1727,20 +1730,35 @@ component="label"
                       py: 1,
                     }}
                   >
-                    <Chip label={product.productname} onDelete={() => handleDelete(productIndex)} />
+                    {/* <Chip label={product.productname} onDelete={() => handleDelete(productIndex)} /> */}
+                    <Accordion>
+                    <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel2-content"
+        id="panel2-header"
+      >
+        <div style={{display:"flex",flexDirection:"column"}}>
 
-                    {/* <ProductInputCard
-                      handleDelete={() => handleDelete(productIndex)}
-                      heading={product.productname}
-                      image={product.image} // Assuming you have an image property in productData
-                      qty={product.quantity}
-                      unit={product.productunit}
-                      rate={product.amount}
-                      amount={product.amount}
-                    /> */}
-                  </Grid>
-
-                  {/* Map over accessorieslist of the current product */}
+          <Typography>{product.categoryName}</Typography>
+        <Typography>{product.productname}</Typography>
+        </div>
+        <IconButton
+          aria-label="delete"
+          onClick={() => handleDelete(productIndex)}
+          style={{ marginLeft: 'auto' }} // Adjust the button to the right
+        >
+          <DeleteIcon />
+        </IconButton>
+      </AccordionSummary>
+        <AccordionDetails  sx={{
+            "&.css-1086bdv-MuiPaper-root-MuiAccordion-root.Mui-expanded": {
+             margin:"0px !important"
+            },
+          }}>
+          {/* <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          </Typography> */}
                   {product.accessorieslist.map((accessory, accessoryIndex) => {
                     console.log("accessorydatas",accessory)
                     return(
@@ -1767,6 +1785,22 @@ component="label"
                       /> */}
                     </Grid>
                   )})}
+        </AccordionDetails>
+      </Accordion>
+
+                    {/* <ProductInputCard
+                      handleDelete={() => handleDelete(productIndex)}
+                      heading={product.productname}
+                      image={product.image} // Assuming you have an image property in productData
+                      qty={product.quantity}
+                      unit={product.productunit}
+                      rate={product.amount}
+                      amount={product.amount}
+                    /> */}
+                  </Grid>
+
+                  {/* Map over accessorieslist of the current product */}
+              
                 </div>
               );
             })}
