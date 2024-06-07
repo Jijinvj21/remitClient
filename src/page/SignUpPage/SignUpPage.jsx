@@ -69,7 +69,9 @@ function SignUpPage() {
                   }}
                   disableUnderline
                   startAdornment={
-                    <InputAdornment position="start" sx={{ color: "white" }}>
+                    <InputAdornment position="start" sx={{"& .css-18m8r0v":{
+                      color:"wheat"
+                    } }}>
                       +91
                     </InputAdornment>
                   }
