@@ -127,9 +127,9 @@ function SignUpPage() {
                           }}
                         >
                           {showPassword ? (
-                            <VisibilityOffOutlinedIcon />
+                            <VisibilityOffOutlinedIcon sx={{ color:"#868686"}} />
                           ) : (
-                            <VisibilityOutlinedIcon />
+                            <VisibilityOutlinedIcon sx={{ color:"#868686"}} />
                           )}
                         </IconButton>
                       </InputAdornment>
