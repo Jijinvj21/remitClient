@@ -10,7 +10,7 @@ function ProductInputCard({
   rate,
   handleDelete,
   handleUpdate,
-  image
+  image,
 }) {
   const userUpdate = {
     heading,
@@ -29,7 +29,7 @@ function ProductInputCard({
         // alignItems: "center",
         // justifyContent:"between",
         bgcolor: "var(--product-card)",
-        width: 250,
+        width: "100%",
         borderRadius: "15px",
         cursor: "default",
       }}
@@ -37,18 +37,22 @@ function ProductInputCard({
         handleUpdate(userUpdate);
       }}
     >
-      <Box sx={{ display: "flex",justifyContent:"space-around", alignItems: "center",width:"20%" }}>
-        {
-          image? <Avatar
-          alt="Remy Sharp"
-          src={`https://drive.google.com/thumbnail?id=${image}&sz=w30`}
-          sx={{ width: 56, height: 56, }}
-        />:<img src={ImageAdd} alt="add" />
-        }
-
-
-
-
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        {image ? (
+          <Avatar
+            alt="Remy Sharp"
+            src={`https://drive.google.com/thumbnail?id=${image}&sz=w30`}
+            sx={{ width: 56, height: 56 }}
+          />
+        ) : (
+          <img src={ImageAdd} alt="add" />
+        )}
       </Box>
       <Box sx={{ height: "auto", width: "100%" }}>
         <Box
@@ -57,14 +61,12 @@ function ProductInputCard({
             justifyContent: "between",
             gap: 5,
             alignItems: "center",
-            px:2,
-            pb:2
-
+            px: 2,
+            pb: 2,
           }}
         >
-          <Box sx={{width:"100%"}}>
-
-          <p >{heading} </p>
+          <Box sx={{ width: "100%" }}>
+            <p>{heading} </p>
           </Box>
           <img src={Deleteicon} alt="Delete" onClick={handleDelete} />
         </Box>

@@ -10,10 +10,12 @@ import {
   InputLabel,
   styled,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import { addToken } from "../../store/features/loginReducer";
+import { useDispatch } from "react-redux";
 
 function SignUpPage() {
   const CustomInputLabel = styled(InputLabel)(({ theme }) => ({
@@ -34,7 +36,11 @@ function SignUpPage() {
     setPhoneNumber("");
     setPassword("");
   };
-
+const dispatch=useDispatch()
+  useEffect(() => {
+    dispatch(addToken('your-token-value'));
+  }, [])
+  
   return (
     <div className="signup-page-container">
       <div className="form-section">

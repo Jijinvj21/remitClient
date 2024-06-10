@@ -568,6 +568,16 @@ const transformedData = groupByHSN(rows);
   const handlepdfgenerate = () => {
     const pdfpagedata = document.querySelector("#pagedatatoshow");
     const pdf = new jsPDF("p", "pt", "a4", true);
+    const Inter = "../../assets/Fonts/Inter-Medium.ttf"; 
+    pdf.addFileToVFS("Inter-Medium.ttf", Inter); 
+    pdf.addFont("Inter-Medium.ttf", "Inter-Medium", "normal");
+
+    pdf.setFont("Inter-Medium");    
+    // const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf"; 
+    // pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman); 
+    // pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
+
+    // pdf.setFont("OPTITimesRomanfont");
     pdf.html(pdfpagedata, {
       callback: () => {
         const blobURL = pdf.output("bloburl");
