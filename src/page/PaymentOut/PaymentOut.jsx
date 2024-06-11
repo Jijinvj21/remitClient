@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Modal,
 } from "@mui/material";
 import "./PaymentOut.scss";
 import { useEffect, useState } from "react";
@@ -17,14 +18,29 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 // import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import { useLocation } from "react-router-dom";
 import {
+  countryOptionsGetAPI,
+  createPartyAPI,
   partyDataGetAPI,
   paymentDataGetAPI,
   paymentInAPI,
+  paymentTypeDataAddAPI,
   paymentTypeDataGetAPI,
 } from "../../service/api/admin";
 import { generateRandom6Digit } from "../../utils/randomWithDate";
 import jsPDF from "jspdf";
 import { renderToString } from "react-dom/server";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)", 
+  width: 400,
+  bgcolor: "background.paper",
+  // border: '2px solid #000',
+  borderRadius: "10px",
+  boxShadow: 24,
+  p: 4,
+};
 function PaymentOut() {
   const location = useLocation();
   const [textValue, setTextValue] = useState("");
@@ -38,7 +54,189 @@ function PaymentOut() {
   const [paymentData, setPaymenData] = useState([]);
   const [isDesabled, setIsDesabled] = useState(true);
   const [paymentOptions,setPaymentOptions]= useState([]);
+  const [open, setOpen] = useState(false);
+  const [partydataData, setPartyData] = useState({
+    name: "",
+    phoneNumber: "",
+    email: "",
+    address1: "",
+    address2: "",
+    postalCode: "",
+  });
+  const [countryValue, setCountryValue] = useState(""); // State to hold the value of the new input
+  const [contryOptions, setContryOptions] = useState([]);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentAddData, setPaymentAddData] = useState({
+    holder_name: "",
+    bank: "",
+    ifsc: "",
+    account_no: "",
+    upi_id: "",
+  });
 
+  const handlePaymentClose = () => setPaymentOpen(false);
+
+  const handlePartyFormChange = (e) => {
+    const { name, value } = e.target;
+    setPartyData({ ...partydataData, [name]: value });
+  };
+  const hanldecountrychange = (e) => {
+    setCountryValue(e.target.value);
+    console.log(e.target.value);
+  };
+  const addPartyInputArrat = [
+    {
+      handleChange: handlePartyFormChange,
+      intputName: "name",
+      label: "Name",
+      type: "text",
+    },
+    {
+      handleChange: handlePartyFormChange,
+      intputName: "phoneNumber",
+      label: "Phone number",
+      type: "text",
+    },
+    {
+      handleChange: handlePartyFormChange,
+      intputName: "email",
+      label: "Email",
+      type: "text",
+    },
+    {
+      handleChange: handlePartyFormChange,
+      intputName: "address1",
+      label: "Address1",
+      type: "text",
+    },
+    {
+      handleChange: handlePartyFormChange,
+      intputName: "address2",
+      label: "Address2",
+      type: "text",
+    },
+    {
+      handleChange: hanldecountrychange,
+      intputName: "country",
+      label: "country",
+      type: "text",
+      inputOrSelect: "select",
+      option: contryOptions,
+    },
+    {
+      handleChange: handlePartyFormChange,
+      intputName: "postalCode",
+      label: "Pin code",
+      type: "text",
+    },
+  ];
+
+  const handleAddParty = () => {
+    const data = {
+      name: partydataData.name,
+      phonenumber: partydataData.phoneNumber,
+      email: partydataData.email,
+      address1: partydataData.address1,
+      address2: partydataData.address2,
+      country: parseInt(countryValue),
+      postalCode: partydataData.postalCode,
+    };
+    console.log(data);
+    createPartyAPI(data)
+      .then((data) => {
+        console.log(data);
+alert("Party Added")
+partyDataGet()
+        setOpen(false)
+        setPartyData({
+          name: "",
+          phoneNumber: "",
+          email: "",
+          address1: "",
+          address2: "",
+          postalCode: "",
+        })
+
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+
+
+  const handlePaymentFormChange = (e) => {
+    const { name, value } = e.target;
+    setPaymentAddData({ ...paymentAddData, [name]: value });
+  };
+
+
+  const addPaymentInputArrat = [
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "holder_name",
+      label: "Holder Name",
+      type: "text",
+    },
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "bank",
+      label: "Bank",
+      type: "text",
+    },
+  
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "ifsc",
+      label: "IFSC",
+      type: "text",
+    },
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "account_no",
+      label: "Account Number",
+      type: "text",
+    },
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "upi_id",
+      label: "UPI ID",
+      type: "text",
+     
+    },
+   
+  ];
+
+  const handleAddPayment = () => {
+    // const data = {
+    //   name: partydataData.name,
+    //   phonenumber: partydataData.phoneNumber,
+    //   email: partydataData.email,
+    //   address1: partydataData.address1,
+    //   address2: partydataData.address2,
+    //   country: parseInt(countryValue),
+    //   postalCode: partydataData.postalCode,
+    // };
+    // console.log(data);
+    paymentTypeDataAddAPI(paymentAddData)
+      .then((data) => {
+        console.log(data);
+        alert("Payment Added");
+        // partyDataGet();
+        setPaymentOpen(false);
+        setPaymentAddData({
+          holder_name: "",
+          bank: "",
+          ifsc: "",
+          account_no: "",
+          upi_id: "",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getpaymentDataGetAPI = () => {
     paymentDataGetAPI({ payment_mode: "OUT", project_id: 1 })
@@ -50,20 +248,43 @@ function PaymentOut() {
         console.log(err);
       });
   };
+  const handleClose = () => setOpen(false);
+
 
   useEffect(() => {
-    paymentTypeDataGetAPI().then((res)=>{
-      const paymentType = res.data.responseData.map((entry) => ({
+    countryOptionsGetAPI()
+    .then((data) => {
+      // console.log("country:", data);
+
+      const countryData = data.map((entry) => ({
         value: entry.id,
         label: entry.name,
       }));
-  console.log(paymentType)
-  paymentType.unshift({ value: -2, label: "Select" })
-  setPaymentOptions(paymentType)
+      setContryOptions(countryData);
     })
-    .catch((err)=>{
-  console.log(err)
+    .catch((err) => {
+      console.log(err);
+    });
+
+
+
+    paymentTypeDataGetAPI()
+    .then((res) => {
+      const paymentType = res.data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.bank,
+      }));
+      console.log(paymentType);
+      paymentType.unshift({ value: -1, label: "Add" });
+      paymentType.unshift({ value: 5, label: "Cash " });
+      paymentType.unshift({ value: -2, label: "Select" });
+
+      setPaymentOptions(paymentType);
     })
+    .catch((err) => {
+      console.log(err);
+      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
+    });
     const currentDate = new Date();
     const random6Digit = generateRandom6Digit(currentDate);
     console.log(random6Digit);
@@ -71,24 +292,26 @@ function PaymentOut() {
 
     getpaymentDataGetAPI();
   }, []);
-
-  useEffect(() => {
+  const partyDataGet=()=>{
     partyDataGetAPI()
-      .then((data) => {
-        console.log("partyData:", data);
-        // setTaxOptions(data);
+    .then((data) => {
+      console.log("partyData:", data);
+      // setTaxOptions(data);
 
-        // Transform data and set it to state
-        const partyData = data.responseData.map((entry) => ({
-          value: entry.id,
-          label: entry.name,
-        }));
-        console.log(partyData);
-        setPartyOptions(partyData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      // Transform data and set it to state
+      const partyData = data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+      }));
+      console.log(partyData);
+      setPartyOptions(partyData);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+  useEffect(() => {
+    partyDataGet()
   }, []);
 
   useEffect(() => {
@@ -105,10 +328,26 @@ function PaymentOut() {
     const file = e.target.files[0];
     setImg(file);
   };
-  const handleSetParty = (e, data) => {
-    setPartySelect(data.value);
+  const handleSetParty = (e) => {
+    console.log("handleSetParty", e.target.value);
+    const selectedOption = e.target.value;
+
+    if (selectedOption === "addNew") {
+      setOpen(true);
+    } else {
+      setOpen(false);
+      setPartySelect(e.target.value);
+    }
   };
   const handlepaymenttype = (e) => {
+    const selectedOption = e.target.value;
+
+    if (selectedOption === "-1") {
+      setPaymentOpen(true);
+    } else {
+      setPaymentOpen(false);
+      setPartySelect(e.target.value);
+    }
     setPaymentSelect(e.target.value);
   };
   const handleDate = (e) => {
@@ -396,7 +635,7 @@ function PaymentOut() {
       <div className="inner-section">
         <div style={{ display: "flex", gap: "84px", padding: "20px" }}>
           <Box sx={{ width: "50%" }}>
-            <Box sx={{ width: "100%", marginBottom: "10px" }}>
+            {/* <Box sx={{ width: "100%", marginBottom: "10px" }}>
               <p className="party-name">Party</p>
 
               <Autocomplete
@@ -439,7 +678,32 @@ function PaymentOut() {
                   </div>
                 )}
               />
-            </Box>
+            </Box> */}
+
+<Box
+          sx={{
+            margin: "2px",
+            p: "3px",
+            borderRadius: 1,
+            // border: "1px solid #bbbdbf",
+          }}
+        >
+          <p className="party-name">party Details</p>
+    <select
+          className="party-details-select"
+          value={partySelect} 
+          style={{ width: "100%" }}
+          onChange={handleSetParty}
+        >
+          <option value="select">Select</option>
+          <option value="addNew">Add New</option>
+          {partyOptions.map((option, index) => (
+            <option key={index} value={option.value} label={option.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        </Box>
             {/* <p style={{ color: "red", fontSize: "12px", fontWeight: "600" }}>
               BAL: 63660
             </p> */}
@@ -626,6 +890,110 @@ function PaymentOut() {
           </Table>
         </TableContainer>
       </div>
+      <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+              <h4> Add new Party</h4>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                alignItems: "center",
+                my: 1,
+                gap: 1,
+              }}
+            >
+              {addPartyInputArrat.map((data, index) => (
+                <InputComponent
+                  key={index}
+                  label={data.label}
+                  intputName={data.intputName}
+                  type={data.type}
+                  value={partydataData[data.intputName]}
+                  handleChange={data.handleChange}
+                  inputOrSelect={data.inputOrSelect}
+                  options={data.option}
+                />
+              ))}
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{
+                  mt: 3,
+                  fontWeight: "bold",
+                  textTransform: "none",
+                  bgcolor: "var(--black-button)",
+                  "&:hover": {
+                    background: "var(--button-hover)",
+                  },
+                }}
+                onClick={handleAddParty}
+              >
+                Add party
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+        <Modal
+        open={paymentOpen}
+        onClose={handlePaymentClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+            <h4> Add new Payment type</h4>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              my: 1,
+              gap: 1,
+            }}
+          >
+            {addPaymentInputArrat.map((data, index) => (
+              <InputComponent
+                key={index}
+                label={data.label}
+                intputName={data.intputName}
+                type={data.type}
+                value={paymentAddData[data.intputName]}
+                handleChange={data.handleChange}
+                inputOrSelect={data.inputOrSelect}
+                options={data.option}
+              />
+            ))}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 3,
+                fontWeight: "bold",
+                textTransform: "none",
+                bgcolor: "var(--black-button)",
+                "&:hover": {
+                  background: "var(--button-hover)",
+                },
+              }}
+              onClick={handleAddPayment}
+            >
+              Add payment type
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 }

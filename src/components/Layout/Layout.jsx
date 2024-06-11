@@ -2,6 +2,8 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar/Sidebar";
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+
 
 import "./Layout.scss";
 
@@ -18,6 +20,7 @@ function Layout() {
   return (
     <>
       <div style={{ display: "flex", height: "100vh" }}>
+      <Toaster />
         <Sidebar />
         <Outlet />
       </div>

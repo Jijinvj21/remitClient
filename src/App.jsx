@@ -26,6 +26,7 @@ import CreaditNoteView from "./page/CreaditNoteView/CreaditNoteView";
 import SignUpPage from "./page/SignUpPage/SignUpPage";
 import OtpPage from "./page/OtpPage/OtpPage";
 
+
 function App() {
   return (
     <BrowserRouter>

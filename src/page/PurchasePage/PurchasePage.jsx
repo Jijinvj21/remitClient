@@ -35,6 +35,8 @@ import {
 } from "../../service/api/admin";
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import { generateRandom6Digit } from "../../utils/randomWithDate";
+import toast from 'react-hot-toast';
+
 
 const style = {
   position: "absolute",
@@ -49,6 +51,30 @@ const style = {
   p: 4,
 };
 function PurchasePage() {
+  // const settings = { theme: 'dark', notifications: true };
+
+  // const saveSettings = (settings) => {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       if (true) {
+  //         resolve('Success');
+  //       } else {
+  //         reject('Error');
+  //       }
+  //     }, 1000);
+  //   });
+  // };
+
+  // const notify = (message) => toast.promise(
+  //   saveSettings(settings),
+  //   {
+  //     loading: 'Saving...',
+  //     success: <b>Settings saved!</b>,
+  //     // error: <b>Could not save.</b>,
+  //   }
+  // );
+  const notify = (message) => toast(message);
+
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null); // State to hold selected product
   const [totalValues, setTotalValues] = useState([]);
@@ -323,15 +349,16 @@ partyDataGet()
       });
   }, []);
 
-  // Function to handle changes in the new input value
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+
 
   const handleOptionSelect = (e) => {
-    console.log(e.target.value);
 
-    setSelectedCustomer(e.target.value);
+    if(e.target.value!=="-1"){
+      console.log("firste.target.value",e.target.value);
+      
+      setSelectedCustomer(e.target.value);
+    }
+
     // Handle selection of other options
   };
   const handlePartySelect = (e) => {
@@ -519,15 +546,14 @@ partyDataGet()
     },
   ];
   const handleAddVoucher = async () => {
-    setIsDesabled(false)
+    setIsDesabled(false);
     const newArray = await rows.map((item) => ({
       product_id: item.id,
       quantity: item.qty,
-      Price:  item.rate,
-      unit:parseInt(item.unit_id),
-
-      discount: parseFloat(item?.descountvalue||0),
-      tax_rate:{id:item?.taxId?item?.taxId:item?.tax_id}
+      Price: item.rate,
+      unit: parseInt(item.unit_id),
+      discount: parseFloat(item?.descountvalue || 0),
+      tax_rate: { id: item?.taxId ? item?.taxId : item?.tax_id }
     }));
     const salesVoucher = {
       credit_sale: false,
@@ -539,24 +565,21 @@ partyDataGet()
       product_details: newArray,
     };
 
-    // console.log(salesVoucher);
-    console.log("createPurchaseAPI",rows);
+    console.log("createPurchaseAPI", rows);
     createPurchaseAPI(salesVoucher)
       .then((data) => {
         console.log(data);
-        alert("Bill created")
-        handlepdfgenerate()
-        setRows([])
-        selectedCustomer({})
-        setSelectedParty({})
-        setSelectedProduct()
-        setIsDesabled(true)
-
+        notify("Bill created");
+        handlepdfgenerate();
+        setRows([]);
+        setSelectedCustomer("-1"); // Reset customer select
+        setSelectedParty("select"); // Reset party select
+        setSelectedProduct(null);
+        setIsDesabled(true);
       })
       .catch((err) => {
         console.log(err);
-        setIsDesabled(true)
-
+        setIsDesabled(true);
       });
   };
 
@@ -822,8 +845,8 @@ partyDataGet()
         >
           <p className="head-p-tag">Clinet Details</p>
           <select value={selectedCustomer} style={{ width: "100%" }} onChange={handleOptionSelect}>
-          <option value="" label="None">
-                  None
+          <option value="-1" label="Select">
+                  Select
                 </option>
             {clientOptions.map((option, index) => {
               return (
@@ -844,19 +867,19 @@ partyDataGet()
           }}
         >
           <p className="head-p-tag">party Details</p>
-          <select style={{ width: "100%" }} onChange={handlePartySelect}>
-            <option value="select">Select</option>
-
-            <option value="addNew">Add New</option>
-
-            {partyOptions.map((option, index) => {
-              return (
-                <option key={index} value={option.value} label={option.label}>
-                  {option.label}
-                </option>
-              );
-            })}
-          </select>
+          <select
+          value={selectedParty}
+          style={{ width: "100%" }}
+          onChange={handlePartySelect}
+        >
+          <option value="select">Select</option>
+          <option value="addNew">Add New</option>
+          {partyOptions.map((option, index) => (
+            <option key={index} value={option.value} label={option.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
         </Box>
 
         <Box

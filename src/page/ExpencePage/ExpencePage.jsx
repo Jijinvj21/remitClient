@@ -18,6 +18,7 @@ import {
   expensesDataAddAPI,
   expensesTypeAddAPI,
   partyDataGetAPI,
+  paymentTypeDataAddAPI,
   paymentTypeDataGetAPI,
   productGetAPI,
   projectGetAPI,
@@ -61,6 +62,88 @@ function ExpencePage() {
   const [isChecked, setIsChecked] = useState(false);
   const [isDesabled, setIsDesabled] = useState(true);
   const [paymentOptions,setPaymentOptions]= useState([]);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+    const [paymentAddData, setPaymentAddData] = useState({
+      holder_name: "",
+      bank: "",
+      ifsc: "",
+      account_no: "",
+      upi_id: "",
+    });
+  
+    const handlePaymentClose = () => setPaymentOpen(false);
+
+    const handlePaymentFormChange = (e) => {
+      const { name, value } = e.target;
+      setPaymentAddData({ ...paymentAddData, [name]: value });
+    };
+  
+  
+    const addPaymentInputArrat = [
+      {
+        handleChange: handlePaymentFormChange,
+        intputName: "holder_name",
+        label: "Holder Name",
+        type: "text",
+      },
+      {
+        handleChange: handlePaymentFormChange,
+        intputName: "bank",
+        label: "Bank",
+        type: "text",
+      },
+    
+      {
+        handleChange: handlePaymentFormChange,
+        intputName: "ifsc",
+        label: "IFSC",
+        type: "text",
+      },
+      {
+        handleChange: handlePaymentFormChange,
+        intputName: "account_no",
+        label: "Account Number",
+        type: "text",
+      },
+      {
+        handleChange: handlePaymentFormChange,
+        intputName: "upi_id",
+        label: "UPI ID",
+        type: "text",
+       
+      },
+     
+    ];
+  
+    const handleAddPayment = () => {
+      // const data = {
+      //   name: partydataData.name,
+      //   phonenumber: partydataData.phoneNumber,
+      //   email: partydataData.email,
+      //   address1: partydataData.address1,
+      //   address2: partydataData.address2,
+      //   country: parseInt(countryValue),
+      //   postalCode: partydataData.postalCode,
+      // };
+      // console.log(data);
+      paymentTypeDataAddAPI(paymentAddData)
+        .then((data) => {
+          console.log(data);
+          alert("Payment Added");
+          // partyDataGet();
+          setPaymentOpen(false);
+          setPaymentAddData({
+            holder_name: "",
+            bank: "",
+            ifsc: "",
+            account_no: "",
+            upi_id: "",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
   
 
@@ -166,23 +249,36 @@ function ExpencePage() {
     setProductOptions(options);
   };
   useEffect(() => {
-    paymentTypeDataGetAPI().then((res)=>{
+    paymentTypeDataGetAPI()
+    .then((res) => {
       const paymentType = res.data.responseData.map((entry) => ({
         value: entry.id,
-        label: entry.name,
+        label: entry.bank,
       }));
-  console.log(paymentType)
-  paymentType.unshift({ value: -2, label: "Select" })
-  setPaymentOptions(paymentType)
+      console.log(paymentType);
+      paymentType.unshift({ value: -1, label: "Add" });
+      paymentType.unshift({ value: 5, label: "Cash " });
+      paymentType.unshift({ value: -2, label: "Select" });
+  
+      setPaymentOptions(paymentType);
     })
-    .catch((err)=>{
-  console.log(err)
-    })
+    .catch((err) => {
+      console.log(err);
+      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
+    });
     fetchData();
     // setProductOptions([{ value: -2, label: "Add" }]);
   }, []);
 
   const handlepaymenttype = (e) => {
+    const selectedOption = e.target.value;
+  
+    if (selectedOption === "-1") {
+      setPaymentOpen(true);
+    } else {
+      setPaymentOpen(false);
+      setPartySelect(e.target.value);
+    }
     setPaymentSelect(e.target.value);
   };
 
@@ -1048,6 +1144,58 @@ function ExpencePage() {
               </Button>
             </div>
           </div>{" "}
+        </Box>
+      </Modal>
+      <Modal
+        open={paymentOpen}
+        onClose={handlePaymentClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+            <h4> Add new Payment type</h4>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              my: 1,
+              gap: 1,
+            }}
+          >
+            {addPaymentInputArrat.map((data, index) => (
+              <InputComponent
+                key={index}
+                label={data.label}
+                intputName={data.intputName}
+                type={data.type}
+                value={paymentAddData[data.intputName]}
+                handleChange={data.handleChange}
+                inputOrSelect={data.inputOrSelect}
+                options={data.option}
+              />
+            ))}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 3,
+                fontWeight: "bold",
+                textTransform: "none",
+                bgcolor: "var(--black-button)",
+                "&:hover": {
+                  background: "var(--button-hover)",
+                },
+              }}
+              onClick={handleAddPayment}
+            >
+              Add payment type
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </div>

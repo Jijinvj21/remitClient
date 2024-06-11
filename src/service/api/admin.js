@@ -274,7 +274,7 @@ export const quotationGetAPI = async (id) => {
 
 export const expenceGetAPI = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/voucher/expenses/item/getall`,);
+    const response = await axios.get(`${BASE_URL}/voucher/journal-voucher/item/getall`,);
     return response.data
   } catch (error) {
     console.error(error);
@@ -286,7 +286,7 @@ export const expenceGetAPI = async () => {
 
 export const expensesTypeAddAPI = async (expenses) => {
   try {
-    const response = await axios.post(`${BASE_URL}/voucher/expenses/item/add`,expenses);
+    const response = await axios.post(`${BASE_URL}/voucher/journal-voucher/item/add`,expenses);
     console.log(response)
     return response
   } catch (error) {
@@ -297,7 +297,7 @@ export const expensesTypeAddAPI = async (expenses) => {
 
 export const expensesDataAddAPI = async (expenses) => {
   try {
-    const response = await axios.post(`${BASE_URL}/voucher/expenses/add`,expenses);
+    const response = await axios.post(`${BASE_URL}/voucher/journal-voucher/add`,expenses);
     console.log(response)
     return response
   } catch (error) {
@@ -378,7 +378,7 @@ export const stateDataGetAPI = async () => {
 
 export const paymentTypeDataGetAPI = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/master/paymenttype/list`);
+    const response = await axios.get(`${BASE_URL}/paymenttype/list`);
     console.log(response)
     return response
   } catch (error) {
@@ -412,7 +412,7 @@ export const debitDataGetAPI = async () => {
 
 export const expensesDataGetAPI = async () => {
   try {
-    const response = await axios.post(`${BASE_URL}/voucher/expenses/getall`,{});
+    const response = await axios.post(`${BASE_URL}/voucher/journal-voucher/getall`,{});
     console.log(response)
     return response
   } catch (error) {
@@ -424,6 +424,20 @@ export const expensesDataGetAPI = async () => {
 export const deliveryChallanDataGetAPI = async () => {
   try {
     const response = await axios.post(`${BASE_URL}/voucher/delivery-challan/getall`,{});
+    console.log(response)
+    return response
+  } catch (error) {
+    console.error(error);
+    throw error.response.data;
+  }
+}
+
+
+
+
+export const paymentTypeDataAddAPI = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/paymenttype/add`,{data});
     console.log(response)
     return response
   } catch (error) {

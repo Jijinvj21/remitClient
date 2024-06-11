@@ -31,6 +31,8 @@ import {
 } from "../../service/api/admin";
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import { generateRandom6Digit } from "../../utils/randomWithDate";
+import toast from 'react-hot-toast';
+
 
 const style = {
   position: "absolute",
@@ -46,6 +48,32 @@ const style = {
 };
  
 function SalesPage() {
+  // const settings = { theme: 'dark', notifications: true };
+
+  // const saveSettings = (settings) => {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       if (true
+
+  //       ) {
+  //         resolve('Success');
+  //       } else {
+  //         reject('Error');
+  //       }
+  //     }, 1000);
+  //   });
+  // };
+
+  // const notify = (message) => toast.promise(
+  //   saveSettings(settings),
+  //   {
+  //     loading: 'Saving...',
+  //     success: <b>Settings saved!</b>,
+  //     error: <b>Could not save.</b>,
+  //   }
+  // );
+  const notify = (message) => toast(message);
+
   const selectRef = useRef(null);
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null); // State to hold selected product
@@ -380,7 +408,7 @@ const transformedData = groupByHSN(rows);
     console.log(salesVoucher);
     createVoucherAPI(salesVoucher)
       .then((data) => {
-        alert("Bill created")
+        notify("Bill created")
         handlepdfgenerate()
         console.log(data);
         setSelectedOption({})
