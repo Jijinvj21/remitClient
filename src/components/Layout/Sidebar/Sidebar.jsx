@@ -103,11 +103,11 @@ function Sidebar() {
         Debit Note
           </MenuItem>
         </NavLink>
-        <NavLink className="navelink" to="/admin/expense">
+        <NavLink className="navelink" to="/admin/journal-voucher">
           <MenuItem
             icon={<DashboardOutlinedIcon style={{ fontSize: "20px" }} />}
           >
-        Expense
+        Journal Voucher
           </MenuItem>
         </NavLink>
 

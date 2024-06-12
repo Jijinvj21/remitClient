@@ -44,10 +44,10 @@ function App() {
             <Route path="debit-note" element={<DebitNotePage />} />
             <Route path="project-data" element={<ProjectDataPage />} />
             <Route path="Quotation-View" element={<QuotationView />} />
-            <Route path="expense" element={<ExpencePage />} />
+            <Route path="journal-voucher" element={<ExpencePage />} />
             <Route path="delivery-challan" element={<DeliveryChallan />} />
             <Route path="delivery-challan/delivery-challan-view" element={<DeliveryChallanView />}/>
-            <Route path="expense/expense-view" element={<ExpenseView />} />
+            <Route path="journal-voucher/journal-voucher-view" element={<ExpenseView />} />
             <Route path="debit-note/debit-note-view" element={<DebitNoteView />}/>
             <Route path="creadit-note/creadit-note-view" element={<CreaditNoteView />}/>
             <Route path="employees/add-employes" element={<AddStaff />} />

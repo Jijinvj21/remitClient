@@ -816,7 +816,7 @@ function ExpencePage() {
   return (
     <div className="expence-page">
       <div style={{ display: "flex" }}>
-        <h2>Expense</h2>
+        <h2>Journal Voucher</h2>
         {/* <div
           style={{
             display: "flex",
@@ -839,7 +839,7 @@ function ExpencePage() {
       </div>
         <div style={{display :"flex",justifyContent:"end",marginRight:"10px"}}>
       <Link
-            to={"/admin/expense/expense-view"}
+            to={"/admin/journal-voucher/journal-voucher-view"}
             style={{display: "flex",
               textDecoration: "none",fontSize:"14px",marginLeft:"9px",marginTop:"10px",fontWeight:500}}
           >
@@ -848,7 +848,7 @@ function ExpencePage() {
               variant="string"
               sx={{ color: "black", fontWeight: "700 ", paddingLeft: 1,paddingTop:"2px" }}
             >
-              Expense View
+              Journal voucher View
             </Typography>
           </Link>      </div>
       <div className="inner-section">

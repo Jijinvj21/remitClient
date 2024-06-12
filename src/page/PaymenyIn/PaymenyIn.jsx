@@ -226,7 +226,7 @@ function PaymenyIn() {
       .then((data) => {
         console.log(data);
         alert("Payment Added");
-        // partyDataGet();
+        paymentGet();
         setPaymentOpen(false);
         setPaymentAddData({
           holder_name: "",
@@ -255,8 +255,27 @@ function PaymenyIn() {
         console.log(err);
       });
   };
+const paymentGet=()=>{
+  paymentTypeDataGetAPI()
+  .then((res) => {
+    const paymentType = res.data.responseData.map((entry) => ({
+      value: entry.id,
+      label: `${entry.bank} (${entry.holder_name})`,
+    }));
+    console.log(paymentType);
+    paymentType.unshift({ value: -1, label: "Add" });
+    paymentType.unshift({ value: 5, label: "Cash " });
+    paymentType.unshift({ value: -2, label: "Select" });
 
+    setPaymentOptions(paymentType);
+  })
+  .catch((err) => {
+    console.log(err);
+    setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
+  });
+}
   useEffect(() => {
+    paymentGet()
     countryOptionsGetAPI()
       .then((data) => {
         // console.log("country:", data);
@@ -271,23 +290,7 @@ function PaymenyIn() {
         console.log(err);
       });
 
-    paymentTypeDataGetAPI()
-      .then((res) => {
-        const paymentType = res.data.responseData.map((entry) => ({
-          value: entry.id,
-          label: `${entry.bank} (${entry.holder_name})`,
-        }));
-        console.log(paymentType);
-        paymentType.unshift({ value: -1, label: "Add" });
-        paymentType.unshift({ value: 5, label: "Cash " });
-        paymentType.unshift({ value: -2, label: "Select" });
-
-        setPaymentOptions(paymentType);
-      })
-      .catch((err) => {
-        console.log(err);
-        setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
-      });
+   
     const currentDate = new Date();
     const random6Digit = generateRandom6Digit(currentDate);
     console.log(random6Digit);
