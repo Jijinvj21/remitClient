@@ -275,7 +275,7 @@ function PaymenyIn() {
       .then((res) => {
         const paymentType = res.data.responseData.map((entry) => ({
           value: entry.id,
-          label: entry.bank,
+          label: `${entry.bank} (${entry.holder_name})`,
         }));
         console.log(paymentType);
         paymentType.unshift({ value: -1, label: "Add" });
@@ -345,9 +345,9 @@ function PaymenyIn() {
       setPaymentOpen(true);
     } else {
       setPaymentOpen(false);
-      setPartySelect(e.target.value);
-    }
+      // setPartySelect(e.target.value);
     setPaymentSelect(e.target.value);
+    }
   };
   const handleDate = (e) => {
     console.log(e.target.value);

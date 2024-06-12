@@ -437,7 +437,7 @@ export const deliveryChallanDataGetAPI = async () => {
 
 export const paymentTypeDataAddAPI = async (data) => {
   try {
-    const response = await axios.post(`${BASE_URL}/paymenttype/add`,{data});
+    const response = await axios.post(`${BASE_URL}/paymenttype/add`,data);
     console.log(response)
     return response
   } catch (error) {

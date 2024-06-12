@@ -27,6 +27,7 @@ import {
   createPurchaseAPI,
   gstOptionsGetAPI,
   partyDataGetAPI,
+  paymentTypeDataAddAPI,
   paymentTypeDataGetAPI,
   productAddAPI,
   productGetAPI,
@@ -35,14 +36,13 @@ import {
 } from "../../service/api/admin";
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import { generateRandom6Digit } from "../../utils/randomWithDate";
-import toast from 'react-hot-toast';
-
+import toast from "react-hot-toast";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
-  transform: "translate(-50%, -50%)", 
+  transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
   // border: '2px solid #000',
@@ -105,90 +105,194 @@ function PurchasePage() {
   });
   const [toggle, setToggle] = useState(true);
   const [ProductDrawerFormData, setProductDrawerFormData] = useState({
-    name:"",
-    quantity:"",
-    rate:0,
-    hsn:"",
+    name: "",
+    quantity: "",
+    rate: 0,
+    hsn: "",
   });
-  const [categoryOptions,setCategoryOptions]=useState([])
-  const [projectOptions,setProjectOptions]=useState([])
-  const [unitOptions,setUnitOptions]=useState([])
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [projectOptions, setProjectOptions] = useState([]);
+  const [unitOptions, setUnitOptions] = useState([]);
   const [taxRateValue, setTaxRateValue] = useState({});
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState("");
   const [state, setState] = useState({
     right: false,
   });
-  const [projectValue, setProjectValue] = useState('');
-  const [categoryValue, setCategoryValue] = useState('');
+  const [projectValue, setProjectValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("");
   const [img, setImg] = useState(null);
-  const [taxOptions,setTaxOptions]=useState([])
+  const [taxOptions, setTaxOptions] = useState([]);
   const [isDesabled, setIsDesabled] = useState(true);
-  const [clientData,setclientData]= useState({});
-  const [paymentOptions,setPaymentOptions]= useState([]);
+  const [clientData, setclientData] = useState({});
+  const [paymentOptions, setPaymentOptions] = useState([]);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentAddData, setPaymentAddData] = useState({
+    holder_name: "",
+    bank: "",
+    ifsc: "",
+    account_no: "",
+    upi_id: "",
+  });
 
+  const handlePaymentClose = () => setPaymentOpen(false);
+
+  const handlePaymentFormChange = (e) => {
+    const { name, value } = e.target;
+    setPaymentAddData({ ...paymentAddData, [name]: value });
+  };
+
+  const addPaymentInputArrat = [
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "holder_name",
+      label: "Holder Name",
+      type: "text",
+    },
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "bank",
+      label: "Bank",
+      type: "text",
+    },
+
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "ifsc",
+      label: "IFSC",
+      type: "text",
+    },
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "account_no",
+      label: "Account Number",
+      type: "text",
+    },
+    {
+      handleChange: handlePaymentFormChange,
+      intputName: "upi_id",
+      label: "UPI ID",
+      type: "text",
+    },
+  ];
+
+  const handleAddPayment = () => {
+    // const data = {
+    //   name: partydataData.name,
+    //   phonenumber: partydataData.phoneNumber,
+    //   email: partydataData.email,
+    //   address1: partydataData.address1,
+    //   address2: partydataData.address2,
+    //   country: parseInt(countryValue),
+    //   postalCode: partydataData.postalCode,
+    // };
+    // console.log(data);
+    paymentTypeDataAddAPI(paymentAddData)
+      .then((data) => {
+        console.log(data);
+        alert("Payment Added");
+        // partyDataGet();
+        setPaymentOpen(false);
+        setPaymentAddData({
+          holder_name: "",
+          bank: "",
+          ifsc: "",
+          account_no: "",
+          upi_id: "",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handlepaymenttype = (e) => {
+    const selectedOption = e.target.value;
+
+    if (selectedOption === "-1") {
+      setPaymentOpen(true);
+    } else {
+      setPaymentOpen(false);
+      setSelectedOption(e.target.value);
+    }
+  };
 
   const groupByHSN = (data) => {
     const groupedData = data.reduce((acc, curr) => {
-      console.log("firstcurr.taxRate",(parseInt(curr.taxApplied?.split("@")[1].replace("%", ""))||0))
+      console.log(
+        "firstcurr.taxRate",
+        parseInt(curr.taxApplied?.split("@")[1].replace("%", "")) || 0
+      );
       if (!acc[curr.hsn]) {
         acc[curr.hsn] = {
           hsn: curr.hsn,
           total: 0,
-          cgstRate: (parseInt(curr.taxApplied?.split("@")[1].replace("%", ""))||0) / 2,
-          sgstRate: (parseInt(curr.taxApplied?.split("@")[1].replace("%", ""))||0) / 2,
+          cgstRate:
+            (parseInt(curr.taxApplied?.split("@")[1].replace("%", "")) || 0) /
+            2,
+          sgstRate:
+            (parseInt(curr.taxApplied?.split("@")[1].replace("%", "")) || 0) /
+            2,
           cgstAmount: 0,
-          sgstAmount: 0
+          sgstAmount: 0,
         };
       }
       const totalValue = curr.qty * curr.rate;
       acc[curr.hsn].total += totalValue;
-      acc[curr.hsn].cgstAmount += (totalValue * ((parseInt(curr.taxApplied?.split("@")[1].replace("%", ""))||0) / 100)) / 2;
-      acc[curr.hsn].sgstAmount += (totalValue * ((parseInt(curr.taxApplied?.split("@")[1].replace("%", ""))||0) / 100)) / 2;
+      acc[curr.hsn].cgstAmount +=
+        (totalValue *
+          ((parseInt(curr.taxApplied?.split("@")[1].replace("%", "")) || 0) /
+            100)) /
+        2;
+      acc[curr.hsn].sgstAmount +=
+        (totalValue *
+          ((parseInt(curr.taxApplied?.split("@")[1].replace("%", "")) || 0) /
+            100)) /
+        2;
       return acc;
     }, {});
-  
+
     return Object.values(groupedData);
   };
-  
+
   const transformedData = groupByHSN(rows);
 
   const getTaxOptionsFormAPI = () => {
-    gstOptionsGetAPI().then((data) => {
-      console.log("tax:", data);
-      // setTaxOptions(data);
+    gstOptionsGetAPI()
+      .then((data) => {
+        console.log("tax:", data);
+        // setTaxOptions(data);
 
-      // Transform data and set it to state
-      const transformedData = data.map(entry => ({
-        value: entry.percentage,
-        label: entry.name?`${entry.name} ${entry.percentage}` :"none",
-        taxlabel: entry.percentage,
-        id:entry.id
-
-      }));
-      console.log(transformedData)
-      setTaxOptions(transformedData);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+        // Transform data and set it to state
+        const transformedData = data.map((entry) => ({
+          value: entry.percentage,
+          label: entry.name ? `${entry.name} ${entry.percentage}` : "none",
+          taxlabel: entry.percentage,
+          id: entry.id,
+        }));
+        console.log(transformedData);
+        setTaxOptions(transformedData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getCategeryOptionsFormAPI = () => {
     categeryGetAPI()
       .then((data) => {
         console.log("category:", data);
-        
+
         // Transform data and set it to state
-        const categoryOptions = data?.responseData.map(entry => ({
+        const categoryOptions = data?.responseData.map((entry) => ({
           value: entry.id,
-          label:`${entry.name}`,
-          
+          label: `${entry.name}`,
         }));
         categoryOptions.unshift({ value: 0, label: "None" });
-  
-        console.log("categoryOptions",categoryOptions);
+
+        console.log("categoryOptions", categoryOptions);
         setCategoryOptions(categoryOptions);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -196,19 +300,18 @@ function PurchasePage() {
     projectGetAPI()
       .then((data) => {
         console.log("projects:", data);
-        
+
         // Transform data and set it to state
-        const projectdData = data?.responseData.map(entry => ({
+        const projectdData = data?.responseData.map((entry) => ({
           value: entry.id,
-          label:`${entry.name} ( ${entry.client_name} )`,
-          
+          label: `${entry.name} ( ${entry.client_name} )`,
         }));
         projectdData.unshift({ value: 0, label: "None" });
-  
-        console.log("projectdData",projectdData);
+
+        console.log("projectdData", projectdData);
         setProjectOptions(projectdData);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -216,64 +319,67 @@ function PurchasePage() {
     unitsDataGetAPI()
       .then((data) => {
         console.log("units:", data);
-        
+
         // Transform data and set it to state
-        const unitsdData = data?.responseData.map(entry => ({
+        const unitsdData = data?.responseData.map((entry) => ({
           value: entry.id,
-          label: entry.name ,
-          
+          label: entry.name,
         }));
-        unitsdData.unshift({ value: 0, label: "None" })
-        console.log("unitsdData",unitsdData);
+        unitsdData.unshift({ value: 0, label: "None" });
+        console.log("unitsdData", unitsdData);
         setUnitOptions(unitsdData);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
-  const partyDataGet=()=>{
+  const partyDataGet = () => {
     partyDataGetAPI()
-    .then((data) => {
-      console.log("partyData:", data);
-      // setTaxOptions(data);
+      .then((data) => {
+        console.log("partyData:", data);
+        // setTaxOptions(data);
 
-      // Transform data and set it to state
-      const partyData = data.responseData.map((entry) => ({
-        value: entry.id,
-        label: entry.name,
-      }));
-      console.log(partyData);
-      setPartyOptions(partyData);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-
+        // Transform data and set it to state
+        const partyData = data.responseData.map((entry) => ({
+          value: entry.id,
+          label: entry.name,
+        }));
+        console.log(partyData);
+        setPartyOptions(partyData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    paymentTypeDataGetAPI().then((res)=>{
-      const paymentType = res.data.responseData.map((entry) => ({
-        value: entry.id,
-        label: entry.name,
-      }));
-  console.log(paymentType)
-  paymentType.unshift({ value: -2, label: "Select" })
-  setPaymentOptions(paymentType)
-    })
-    .catch((err)=>{
-  console.log(err)
-    })
-    partyDataGet()
-    getTaxOptionsFormAPI()
-    getCategeryOptionsFormAPI()
-    getClientOptionsFormAPI()
-    getUnitOptionsFormAPI()
-  }, [])
-  
+    paymentTypeDataGetAPI()
+      .then((res) => {
+        const paymentType = res.data.responseData.map((entry) => ({
+          value: entry.id,
+          label: `${entry.bank} (${entry.holder_name})`,
+        }));
+        console.log(paymentType);
+        paymentType.unshift({ value: -1, label: "Add" });
+        paymentType.unshift({ value: 5, label: "Cash " });
+        paymentType.unshift({ value: -2, label: "Select" });
 
-
-
+        setPaymentOptions(paymentType);
+      })
+      .catch((err) => {
+        console.log(err);
+        setPaymentOptions([
+          { value: -2, label: "Select" },
+          { value: -1, label: "Add" },
+          { value: 5, label: "Cash " },
+        ]);
+      });
+    partyDataGet();
+    getTaxOptionsFormAPI();
+    getCategeryOptionsFormAPI();
+    getClientOptionsFormAPI();
+    getUnitOptionsFormAPI();
+  }, []);
 
   // Function to handle input change for all fields
   const handlePartyFormChange = (e) => {
@@ -295,9 +401,9 @@ function PurchasePage() {
     createPartyAPI(data)
       .then((data) => {
         console.log(data);
-alert("Party Added")
-partyDataGet()
-        setOpen(false)
+        alert("Party Added");
+        partyDataGet();
+        setOpen(false);
         setPartyData({
           name: "",
           phoneNumber: "",
@@ -305,9 +411,7 @@ partyDataGet()
           address1: "",
           address2: "",
           postalCode: "",
-        })
-
-
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -329,8 +433,6 @@ partyDataGet()
         console.log(err);
       });
 
-  
-
     clientDataGetAPI()
       .then((data) => {
         console.log("clientData:", data);
@@ -349,13 +451,10 @@ partyDataGet()
       });
   }, []);
 
-
-
   const handleOptionSelect = (e) => {
+    if (e.target.value !== "-1") {
+      console.log("firste.target.value", e.target.value);
 
-    if(e.target.value!=="-1"){
-      console.log("firste.target.value",e.target.value);
-      
       setSelectedCustomer(e.target.value);
     }
 
@@ -371,8 +470,8 @@ partyDataGet()
       const selectedOptionObject = clientOptions.find(
         (option) => option.value == e.target.value
       );
-      console.log("firstselectedOptionObject",selectedOptionObject)
-      setclientData(selectedOptionObject)
+      console.log("firstselectedOptionObject", selectedOptionObject);
+      setclientData(selectedOptionObject);
       setSelectedParty(e.target.value);
       // Handle selection of other options
     }
@@ -398,8 +497,7 @@ partyDataGet()
   };
   useEffect(() => {
     fetchData();
-    setProductOptions([{ value: -2, label: "Add" }])
-
+    setProductOptions([{ value: -2, label: "Add" }]);
   }, []);
 
   useEffect(() => {
@@ -442,52 +540,47 @@ partyDataGet()
     setTotalValues(grandTotal);
   }, [rows]); // Update when rows change
 
-
   const handleSelectedProductChange = async (event, newValue) => {
     if (!newValue) {
       // Handle the case where newValue is not defined
       return;
     }
-    if(newValue.value===-2){
-      console.log(newValue.value===-2);
+    if (newValue.value === -2) {
+      console.log(newValue.value === -2);
       toggleDrawer("right", true)();
-      setSelectedProduct()
+      setSelectedProduct();
+    } else {
+      setSelectedProduct(newValue);
 
-    }else{
+      if (newValue) {
+        console.log(newValue.label);
+        // Set the amount based on the selected product
+        const response = await productGetAPI();
+        console.log(response);
+        const products = response.responseData;
 
-   
+        const selectedProductData = products.find(
+          (product) => product.name === newValue?.label
+        );
+        console.log(selectedProductData);
+        setSelectedProductDetails(selectedProductData);
+        console.log(selectedProductData);
+        // Add selected product to the table rows
+        const newRow = {
+          id: 1,
+          itemName: selectedProductData.name,
+          qty: 1, // You can set default quantity here
+          unit: selectedProductData.unit, // Assuming selectedProductData has a unit property
+          price: selectedProductData.price, // Assuming selectedProductData has a price property
+          discount: 0, // Assuming default discount is 0
+          taxApplied: 0, // Assuming default tax applied is 0
+          total: selectedProductData.price, // Assuming total is initially equal to price
+        };
+        setSelectedProduct();
 
-    setSelectedProduct(newValue);
-
-    if (newValue) {
-      console.log(newValue.label);
-      // Set the amount based on the selected product
-      const response = await productGetAPI();
-      console.log(response);
-      const products = response.responseData;
-
-      const selectedProductData = products.find(
-        (product) => product.name === newValue?.label
-      );
-      console.log(selectedProductData);
-      setSelectedProductDetails(selectedProductData);
-      console.log(selectedProductData);
-      // Add selected product to the table rows
-      const newRow = {
-        id: 1,
-        itemName: selectedProductData.name,
-        qty: 1, // You can set default quantity here
-        unit: selectedProductData.unit, // Assuming selectedProductData has a unit property
-        price: selectedProductData.price, // Assuming selectedProductData has a price property
-        discount: 0, // Assuming default discount is 0
-        taxApplied: 0, // Assuming default tax applied is 0
-        total: selectedProductData.price, // Assuming total is initially equal to price
-      };
-      setSelectedProduct()
-
-      setTableRows([...tableRows, newRow]);
+        setTableRows([...tableRows, newRow]);
+      }
     }
-  }
   };
   const handleChangeAmout = (e) => {
     setInputData(e.target.value);
@@ -553,7 +646,7 @@ partyDataGet()
       Price: item.rate,
       unit: parseInt(item.unit_id),
       discount: parseFloat(item?.descountvalue || 0),
-      tax_rate: { id: item?.taxId ? item?.taxId : item?.tax_id }
+      tax_rate: { id: item?.taxId ? item?.taxId : item?.tax_id },
     }));
     const salesVoucher = {
       credit_sale: false,
@@ -583,10 +676,9 @@ partyDataGet()
       });
   };
 
-
   const handleDrawerSelectChange = (event) => {
     setSelectedValue(event.target.value);
-    console.log(event.target.value)
+    console.log(event.target.value);
   };
 
   const handleDrawerChange = (e) => {
@@ -596,10 +688,14 @@ partyDataGet()
       [name]: value,
     }));
   };
-  const toggleDrawer = (anchor, open) => (event) =>{
-    console.log(event)
+  const toggleDrawer = (anchor, open) => (event) => {
+    console.log(event);
     console.log("Toggle Drawer:", anchor, open);
-    if (event && event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
     setState({ ...state, [anchor]: open });
@@ -610,49 +706,50 @@ partyDataGet()
     setImg(file);
   };
   const handleTaxRateChange = (event) => {
-    console.log(event.target.value)
-    const selectedOptionObject = taxOptions.find(option => option.taxlabel == event.target.value);
+    console.log(event.target.value);
+    const selectedOptionObject = taxOptions.find(
+      (option) => option.taxlabel == event.target.value
+    );
     console.log(selectedOptionObject);
     // setTaxRateValue({
     //   label: selectedOptionObject ? selectedOptionObject.label : "", // Handle case where selectedOptionObject is undefined
     //   value: event.target.value
     // });
-    setTaxRateValue(selectedOptionObject)
+    setTaxRateValue(selectedOptionObject);
   };
   const handleSelectChange = (event) => {
     setSelectedValue(event.target.value);
-    console.log(event.target.value)
+    console.log(event.target.value);
   };
 
   const handleSelectProject = (event) => {
     setProjectValue(event.target.value);
-    console.log(event.target.value)
+    console.log(event.target.value);
   };
 
   const handleSelectCatogary = (event) => {
     setCategoryValue(event.target.value);
-    console.log(event.target.value)
+    console.log(event.target.value);
   };
-
 
   const handleDrawerAddProducts = () => {
     const formData = new FormData();
-  
-    formData.append('name', ProductDrawerFormData.name);
-    formData.append('hsn', ProductDrawerFormData.hsn);
-    formData.append('rate', parseInt(ProductDrawerFormData.rate));
-    formData.append('quantity', parseInt(ProductDrawerFormData.quantity));
-    formData.append('unit', selectedValue);
-    formData.append('projectid', parseInt(projectValue));
-    formData.append('is_master_product', toggle);
-    formData.append('category_id', categoryValue);
+
+    formData.append("name", ProductDrawerFormData.name);
+    formData.append("hsn", ProductDrawerFormData.hsn);
+    formData.append("rate", parseInt(ProductDrawerFormData.rate));
+    formData.append("quantity", parseInt(ProductDrawerFormData.quantity));
+    formData.append("unit", selectedValue);
+    formData.append("projectid", parseInt(projectValue));
+    formData.append("is_master_product", toggle);
+    formData.append("category_id", categoryValue);
     // formData.append('gst', ((parseInt(ProductDrawerFormData.rate) * parseInt(ProductFormData.quantity)) * (taxRateValue.value?.replace("%", ""))) / 100);
-    formData.append('tax_rate', taxRateValue.id);
-    formData.append('image', img);
-  
+    formData.append("tax_rate", taxRateValue.id);
+    formData.append("image", img);
+
     productAddAPI(formData)
       .then((data) => {
-        fetchData()
+        fetchData();
         if (data.status === 200) {
           setProductDrawerFormData({
             name: "",
@@ -665,7 +762,7 @@ partyDataGet()
           setSelectedValue("");
           setTaxRateValue("");
           alert("Product added successfully");
-          fetchData()
+          fetchData();
         }
       })
       .catch((err) => {
@@ -679,8 +776,6 @@ partyDataGet()
       intputName: "name",
       label: " Product Name",
       type: "text",
-      
-      
     },
     {
       handleChange: handleDrawerChange,
@@ -694,22 +789,25 @@ partyDataGet()
       label: "Quantity",
       type: "number",
     },
-    {handleChange:handleTaxRateChange,
+    {
+      handleChange: handleTaxRateChange,
       intputName: "taxrate",
       label: "Tax Rate",
-      
 
-      inputOrSelect:"select",
-      options:taxOptions 
+      inputOrSelect: "select",
+      options: taxOptions,
     },
     {
       intputName: "taxvalue",
       label: " Tax Value",
       // type: "number",
-      value: (((parseFloat(ProductDrawerFormData.rate || 0)) * parseFloat(ProductDrawerFormData.quantity || 0)) * (parseFloat(taxRateValue.value?.replace("%", "")) || 0) / 100),
+      value:
+        (parseFloat(ProductDrawerFormData.rate || 0) *
+          parseFloat(ProductDrawerFormData.quantity || 0) *
+          (parseFloat(taxRateValue.value?.replace("%", "")) || 0)) /
+        100,
 
-      disabled:"disabled"
-      
+      disabled: "disabled",
     },
     {
       handleChange: handleDrawerChange,
@@ -723,10 +821,8 @@ partyDataGet()
       label: "Unit",
       // type: "text",
 
-      inputOrSelect:"select",
+      inputOrSelect: "select",
       options: unitOptions,
-      
-      
     },
     {
       handleChange: handleSelectProject,
@@ -735,10 +831,8 @@ partyDataGet()
       // type: "text",
       // value:selectedValue,
 
-      inputOrSelect:"select",
+      inputOrSelect: "select",
       options: projectOptions,
-      
-      
     },
     // {
     //   handleChange: handleSelectCatogary,
@@ -749,10 +843,8 @@ partyDataGet()
 
     //   inputOrSelect:"select",
     //   options: categoryOptions,
-      
-      
+
     // },
-    
   ];
   const handlepdfgenerate = () => {
     const pdfpagedata = document.querySelector("#pagedatatoshow");
@@ -764,11 +856,6 @@ partyDataGet()
       },
     });
   };
-
-
-
-
-
 
   return (
     <div className="sales-table-container">
@@ -844,10 +931,14 @@ partyDataGet()
           }}
         >
           <p className="head-p-tag">Clinet Details</p>
-          <select value={selectedCustomer} style={{ width: "100%" }} onChange={handleOptionSelect}>
-          <option value="-1" label="Select">
-                  Select
-                </option>
+          <select
+            value={selectedCustomer}
+            style={{ width: "100%" }}
+            onChange={handleOptionSelect}
+          >
+            <option value="-1" label="Select">
+              Select
+            </option>
             {clientOptions.map((option, index) => {
               return (
                 <option key={index} value={option.value} label={option.label}>
@@ -868,18 +959,18 @@ partyDataGet()
         >
           <p className="head-p-tag">party Details</p>
           <select
-          value={selectedParty}
-          style={{ width: "100%" }}
-          onChange={handlePartySelect}
-        >
-          <option value="select">Select</option>
-          <option value="addNew">Add New</option>
-          {partyOptions.map((option, index) => (
-            <option key={index} value={option.value} label={option.label}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+            value={selectedParty}
+            style={{ width: "100%" }}
+            onChange={handlePartySelect}
+          >
+            <option value="select">Select</option>
+            <option value="addNew">Add New</option>
+            {partyOptions.map((option, index) => (
+              <option key={index} value={option.value} label={option.label}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </Box>
 
         <Box
@@ -937,16 +1028,17 @@ partyDataGet()
           >
             <p>Payment Method:</p>
             <select
-      style={{ width: "50%" }}
-      value={selectedOption}
-      onChange={(e) => setSelectedOption(e.target.value)}
-    >
-      {paymentOptions.map((data, index) => (
-        <option key={index} value={data.value}>
-          {data.label}
-        </option>
-      ))}
-    </select>
+              style={{ width: "50%" }}
+              value={selectedOption}
+              // onChange={(e) => setSelectedOption(e.target.value)}
+              onChange={handlepaymenttype}
+            >
+              {paymentOptions.map((data, index) => (
+                <option key={index} value={data.value}>
+                  {data.label}
+                </option>
+              ))}
+            </select>
           </Box>
           <Box
             sx={{
@@ -981,7 +1073,7 @@ partyDataGet()
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
             <p>Change to Return:</p>
-            <p>&#8377;{inputData-totalValues}</p>
+            <p>&#8377;{inputData - totalValues}</p>
           </Box>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
@@ -996,17 +1088,29 @@ partyDataGet()
               "&:hover": {
                 background: "var(--button-hover)",
               },
-              '&:disabled': {
+              "&:disabled": {
                 bgcolor: "var(--black-button)",
-                color: 'white', 
+                color: "white",
               },
             }}
             onClick={handleAddVoucher}
             disabled={!isDesabled}
           >
-            {isDesabled? "Save and Print Bill":
-            <CircularProgress style={{color:"white",marginBottom:"5px",marginTop:"5px",marginLeft:"35px",marginRight:"35px"}} size={15} />
-          }</Button>
+            {isDesabled ? (
+              "Save and Print Bill"
+            ) : (
+              <CircularProgress
+                style={{
+                  color: "white",
+                  marginBottom: "5px",
+                  marginTop: "5px",
+                  marginLeft: "35px",
+                  marginRight: "35px",
+                }}
+                size={15}
+              />
+            )}
+          </Button>
         </Box>
       </Box>
       <div>
@@ -1073,9 +1177,12 @@ partyDataGet()
         handleAdd={handleDrawerAddProducts}
         setToggle={setToggle}
         toggle={toggle}
-        
       />
-      <div  id="pagedatatoshow"className="offscreen" style={{ margin: "8px", width: "580px" ,  }}>
+      <div
+        id="pagedatatoshow"
+        className="offscreen"
+        style={{ margin: "8px", width: "580px" }}
+      >
         <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
           Tax Invoice
         </h6>
@@ -1087,9 +1194,14 @@ partyDataGet()
             >
               <div style={{ display: "flex", borderBottom: "1px solid" }}>
                 <div style={{ width: "100px", height: "100px" }}>
-                  <img src="https://res.cloudinary.com/dczou8g32/image/upload/v1714668042/DEV/jw8j76cgw2ogtokyoisi.png" alt="img" width={90} height={90}/>
+                  <img
+                    src="https://res.cloudinary.com/dczou8g32/image/upload/v1714668042/DEV/jw8j76cgw2ogtokyoisi.png"
+                    alt="img"
+                    width={90}
+                    height={90}
+                  />
                 </div>
-                <div className="address" >
+                <div className="address">
                   <h6>BILTREE</h6>
                   <h6>54/3175</h6>
                   <h6>MANGHAT ARCADE</h6>
@@ -1100,27 +1212,42 @@ partyDataGet()
                   <h6>E-Mail:info@biltree.in</h6>
                 </div>
               </div>
-              <div style={{ borderBottom: "1px solid", marginLeft:"2px",display:"flex",flexDirection:"column",gap:"3px" }}>
+              <div
+                style={{
+                  borderBottom: "1px solid",
+                  marginLeft: "2px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
+                }}
+              >
                 <h6>Consignee (Ship to)</h6>
-                 <h5>{clientData?.label}</h5>
+                <h5>{clientData?.label}</h5>
                 <h6>{clientData?.address1}</h6>
-                 <h6>{clientData?.address2}</h6> 
-                <h6>{clientData?.phonenumber}</h6> 
+                <h6>{clientData?.address2}</h6>
+                <h6>{clientData?.phonenumber}</h6>
 
-                <h6 style={{ display: "flex", gap: "20px",marginBottom:"3px" }}>
+                <h6
+                  style={{ display: "flex", gap: "20px", marginBottom: "3px" }}
+                >
                   <span>GSTIN/UIN</span> <span>: 32AAFFC5911M2Z1</span>
                 </h6>
-                
               </div>
-              <div style={{ marginLeft:"2px",display:"flex",flexDirection:"column",gap:"3px"}}>
-              <h5>{clientData?.label}</h5>
+              <div
+                style={{
+                  marginLeft: "2px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
+                }}
+              >
+                <h5>{clientData?.label}</h5>
                 <h6>{clientData?.address1}</h6>
-                 <h6>{clientData?.address2}</h6> 
-                <h6>{clientData?.phonenumber}</h6> 
-                <h6 style={{ display: "flex", gap: "20px", }}>
+                <h6>{clientData?.address2}</h6>
+                <h6>{clientData?.phonenumber}</h6>
+                <h6 style={{ display: "flex", gap: "20px" }}>
                   <span>GSTIN/UIN</span> <span>: 32AAFFC5911M2Z1</span>
                 </h6>
-                
               </div>
             </div>
             <div className="right" style={{ width: "50%" }}>
@@ -1131,7 +1258,7 @@ partyDataGet()
                       style={{ borderLeft: "1px solid black", padding: "8px" }}
                     >
                       <h6>Invoice No</h6>
-                      <h6>{ generateRandom6Digit(new Date())}</h6>
+                      <h6>{generateRandom6Digit(new Date())}</h6>
                     </td>
                     <td
                       style={{
@@ -1150,7 +1277,6 @@ partyDataGet()
                     <td
                       style={{ borderLeft: "1px solid black", padding: "8px" }}
                     >
-                      
                       <h6>Delivery Note</h6>
                     </td>
                     <td
@@ -1160,7 +1286,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Mode/Terms of Payment</h6>
                     </td>
                   </tr>
@@ -1172,7 +1297,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Reference No.& Date</h6>
                     </td>
                     <td
@@ -1182,7 +1306,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Other References</h6>
                     </td>
                   </tr>
@@ -1194,7 +1317,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Buyer's Order No</h6>
                     </td>
                     <td
@@ -1204,7 +1326,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Date</h6>
                     </td>
                   </tr>
@@ -1216,7 +1337,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Dispatch Doc No</h6>
                     </td>
                     <td
@@ -1226,7 +1346,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Delivery Note Date</h6>
                     </td>
                   </tr>
@@ -1239,7 +1358,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Dispatch throught</h6>
                     </td>
                     <td
@@ -1249,7 +1367,6 @@ partyDataGet()
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Destination</h6>
                     </td>
                   </tr>
@@ -1267,7 +1384,7 @@ partyDataGet()
             </div>
           </div>
           <div className="middlesection">
-          <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }}>
               <thead
                 style={{
                   borderBottom: "1px solid black",
@@ -1276,73 +1393,96 @@ partyDataGet()
               >
                 <tr>
                   <th>
-                    
                     <h6>Sl.No</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>
                       Description of <br /> Goods and Services
                     </h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>HSN/SAC</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Quantity</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Rate</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Per</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Amount</h6>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((data, index) => {
-                   console.log("firstdata",data)
-                  return(
-                    <tr key={index} style={{borderBottom: "1px solid black",}}>
-                      <td style={{paddingLeft:"3px",paddingBottom:"5px"}}>
-                        
-                        <h6>{index+1}</h6>
+                  console.log("firstdata", data);
+                  return (
+                    <tr key={index} style={{ borderBottom: "1px solid black" }}>
+                      <td style={{ paddingLeft: "3px", paddingBottom: "5px" }}>
+                        <h6>{index + 1}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6>{data.name}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6> </h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6>{data.qty}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6> {data.rate}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6> {data.unit}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
-                        <h6>{((data.rate||0)*(data.qty)||0)}</h6>
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
+                        <h6>{(data.rate || 0) * data.qty || 0}</h6>
                       </td>
                     </tr>
-                  )})}
-                
+                  );
+                })}
+
                 {/* <tr
                   style={{
                     borderTop: "1px solid black",
@@ -1381,14 +1521,14 @@ partyDataGet()
                   </td>
                 </tr> */}
               </tbody>
-            </table> 
+            </table>
           </div>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               marginTop: "10px",
-              marginLeft:"2px"
+              marginLeft: "2px",
             }}
           >
             <h6>Amount Chargeable (in words)</h6>
@@ -1399,122 +1539,228 @@ partyDataGet()
           </h6>
 
           <table
-  style={{
-    borderCollapse: "collapse",
-    width: "100%",
-    marginTop: "10px",
-  }}
->
-  <thead
-    style={{
-      borderBottom: "1px solid black",
-      borderTop: "1px solid black",
-    }}
-  >
-    <tr>
-      <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
-        <h6> HSN/SAC</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
-        <h6> Taxable Value</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black",borderBottom: "1px solid black",borderRight: "1px solid black" }} colSpan="2">
-        <h6> CGST</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black",borderBottom: "1px solid black" }} colSpan="2">
-        <h6> SGST/UTGST</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Total Tax Amount</h6>
-      </th>
-    </tr>
-    <tr>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Rate</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Amount</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Rate</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black",borderRight: "1px solid black" }}>
-        <h6> Amount</h6>
-      </th>
-    </tr>
-    
-  </thead>
-  <tbody style={{ borderBottom: "1px solid black"}}>
-  {transformedData?.map(item => (
-    <tr key={item?.hsn}>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.hsn}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.total.toFixed(2)}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.cgstRate}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.cgstAmount.toFixed(2)}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.sgstRate}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.sgstAmount.toFixed(2)}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6>{ (item?.total+item?.sgstAmount+item?.cgstAmount).toFixed(2)}</h6>
-      </td>
-    </tr>
-            ))}
+            style={{
+              borderCollapse: "collapse",
+              width: "100%",
+              marginTop: "10px",
+            }}
+          >
+            <thead
+              style={{
+                borderBottom: "1px solid black",
+                borderTop: "1px solid black",
+              }}
+            >
+              <tr>
+                <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
+                  <h6> HSN/SAC</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
+                  <h6> Taxable Value</h6>
+                </th>
+                <th
+                  style={{
+                    borderLeft: "1px solid black",
+                    borderBottom: "1px solid black",
+                    borderRight: "1px solid black",
+                  }}
+                  colSpan="2"
+                >
+                  <h6> CGST</h6>
+                </th>
+                <th
+                  style={{
+                    borderLeft: "1px solid black",
+                    borderBottom: "1px solid black",
+                  }}
+                  colSpan="2"
+                >
+                  <h6> SGST/UTGST</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Total Tax Amount</h6>
+                </th>
+              </tr>
+              <tr>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Rate</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Amount</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Rate</h6>
+                </th>
+                <th
+                  style={{
+                    borderLeft: "1px solid black",
+                    borderRight: "1px solid black",
+                  }}
+                >
+                  <h6> Amount</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody style={{ borderBottom: "1px solid black" }}>
+              {transformedData?.map((item) => (
+                <tr key={item?.hsn}>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.hsn}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.total.toFixed(2)}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.cgstRate}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.cgstAmount.toFixed(2)}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.sgstRate}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.sgstAmount.toFixed(2)}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6>
+                      {(
+                        item?.total +
+                        item?.sgstAmount +
+                        item?.cgstAmount
+                      ).toFixed(2)}
+                    </h6>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-  </tbody>
-</table>
-
-
-          <div style={{ display: "flex", gap: "10px", marginTop: "5px",marginLeft:"2px" }}>
-            
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              marginTop: "5px",
+              marginLeft: "2px",
+            }}
+          >
             <h6>Tax Amount (in words)</h6>
             <h6>
               INR Sixteen lakh Twenty Eight Thousand Six Hundred Fifty One Only
             </h6>
           </div>
-          <div style={{display:"flex",flexDirection:"column",justifyContent:"end", marginTop: "5px",marginLeft:"50%",fontSize:"12px"}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "end",
+              marginTop: "5px",
+              marginLeft: "50%",
+              fontSize: "12px",
+            }}
+          >
             <h6>Company's bank details</h6>
-            <div style={{display:"flex",gap:"16.4px"}}>
+            <div style={{ display: "flex", gap: "16.4px" }}>
               <h6>A/c Holder Name</h6>
               <h6>: BILTREE</h6>
             </div>
-            <div style={{display:"flex",gap:"38px"}}>
+            <div style={{ display: "flex", gap: "38px" }}>
               <h6>Bank Name</h6>
               <h6>: ICICI BANK CA - 785236984125</h6>
             </div>
-            <div style={{display:"flex",gap:"56.6px"}}>
+            <div style={{ display: "flex", gap: "56.6px" }}>
               <h6>A/c No</h6>
               <h6>: 785236984125</h6>
             </div>
-            <div style={{display:"flex",gap:"12.4px"}}>
+            <div style={{ display: "flex", gap: "12.4px" }}>
               <h6>Branch & IFS Code</h6>
               <h6>: PANAMPILLY MAGAR & ICIC0002483</h6>
             </div>
             <h6>SWIFT Code</h6>
           </div>
-          <div style={{display:'flex'}}>
-            <div className="leftsection" style={{width:"50%",marginLeft:"2px",marginBottom:"3px"}}>
-<h6 style={{borderBottom:"1px solid black",width:"60px"}}>Declaration</h6>
+          <div style={{ display: "flex" }}>
+            <div
+              className="leftsection"
+              style={{ width: "50%", marginLeft: "2px", marginBottom: "3px" }}
+            >
+              <h6 style={{ borderBottom: "1px solid black", width: "60px" }}>
+                Declaration
+              </h6>
 
-<h6>we seclare that this invoice shows the actual price of the goods described and that all particulars are true and currect</h6>
+              <h6>
+                we seclare that this invoice shows the actual price of the goods
+                described and that all particulars are true and currect
+              </h6>
             </div>
-            <div className="rightsection" style={{width:"50%",textAlign:"end",borderTop:"1px solid black",borderLeft:"1px solid black"}}>
-<h6 style={{marginBottom:"23px",marginRight:"5px"}}>for BILTREEE</h6>
-              <h6 style={{marginRight:"5px"}}>Authorised Signatory</h6>
+            <div
+              className="rightsection"
+              style={{
+                width: "50%",
+                textAlign: "end",
+                borderTop: "1px solid black",
+                borderLeft: "1px solid black",
+              }}
+            >
+              <h6 style={{ marginBottom: "23px", marginRight: "5px" }}>
+                for BILTREEE
+              </h6>
+              <h6 style={{ marginRight: "5px" }}>Authorised Signatory</h6>
             </div>
           </div>
         </div>
       </div>
+      <Modal
+        open={paymentOpen}
+        onClose={handlePaymentClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+            <h4> Add new Payment type</h4>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              my: 1,
+              gap: 1,
+            }}
+          >
+            {addPaymentInputArrat.map((data, index) => (
+              <InputComponent
+                key={index}
+                label={data.label}
+                intputName={data.intputName}
+                type={data.type}
+                value={paymentAddData[data.intputName]}
+                handleChange={data.handleChange}
+                inputOrSelect={data.inputOrSelect}
+                options={data.option}
+              />
+            ))}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 3,
+                fontWeight: "bold",
+                textTransform: "none",
+                bgcolor: "var(--black-button)",
+                "&:hover": {
+                  background: "var(--button-hover)",
+                },
+              }}
+              onClick={handleAddPayment}
+            >
+              Add payment type
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 }

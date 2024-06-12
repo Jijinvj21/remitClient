@@ -23,6 +23,7 @@ import {
   clientDataGetAPI,
   createVoucherAPI,
   gstOptionsGetAPI,
+  paymentTypeDataAddAPI,
   paymentTypeDataGetAPI,
   productAddAPI,
   productGetAPI,
@@ -111,9 +112,100 @@ function SalesPage() {
 const [clientData,setclientData]= useState({});
 const [isDesabled, setIsDesabled] = useState(true);
 const [paymentOptions,setPaymentOptions]= useState([]);
+const [paymentOpen, setPaymentOpen] = useState(false);
+const [paymentAddData, setPaymentAddData] = useState({
+  holder_name: "",
+  bank: "",
+  ifsc: "",
+  account_no: "",
+  upi_id: "",
+});
+
+const handlePaymentClose = () => setPaymentOpen(false);
+
+const handlePaymentFormChange = (e) => {
+  const { name, value } = e.target;
+  setPaymentAddData({ ...paymentAddData, [name]: value });
+};
 
 
+const addPaymentInputArrat = [
+  {
+    handleChange: handlePaymentFormChange,
+    intputName: "holder_name",
+    label: "Holder Name",
+    type: "text",
+  },
+  {
+    handleChange: handlePaymentFormChange,
+    intputName: "bank",
+    label: "Bank",
+    type: "text",
+  },
 
+  {
+    handleChange: handlePaymentFormChange,
+    intputName: "ifsc",
+    label: "IFSC",
+    type: "text",
+  },
+  {
+    handleChange: handlePaymentFormChange,
+    intputName: "account_no",
+    label: "Account Number",
+    type: "text",
+  },
+  {
+    handleChange: handlePaymentFormChange,
+    intputName: "upi_id",
+    label: "UPI ID",
+    type: "text",
+   
+  },
+ 
+];
+
+const handleAddPayment = () => {
+  // const data = {
+  //   name: partydataData.name,
+  //   phonenumber: partydataData.phoneNumber,
+  //   email: partydataData.email,
+  //   address1: partydataData.address1,
+  //   address2: partydataData.address2,
+  //   country: parseInt(countryValue),
+  //   postalCode: partydataData.postalCode,
+  // };
+  // console.log(data);
+  paymentTypeDataAddAPI(paymentAddData)
+    .then((data) => {
+      console.log(data);
+      alert("Payment Added");
+      // partyDataGet();
+      setPaymentOpen(false);
+      setPaymentAddData({
+        holder_name: "",
+        bank: "",
+        ifsc: "",
+        account_no: "",
+        upi_id: "",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+
+const handlepaymenttype = (e) => {
+  const selectedOption = e.target.value;
+
+  if (selectedOption === "-1") {
+    setPaymentOpen(true);
+  } else {
+    setPaymentOpen(false);
+    setSelectedOption(e.target.value);
+  }
+};
 const groupByHSN = (data) => {
   const groupedData = data.reduce((acc, curr) => {
     console.log("firstcurr.taxRate",(parseInt(curr.taxApplied?.split("@")[1].replace("%", ""))||0))
@@ -216,18 +308,23 @@ const transformedData = groupByHSN(rows);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    paymentTypeDataGetAPI().then((res)=>{
+    paymentTypeDataGetAPI()
+    .then((res) => {
       const paymentType = res.data.responseData.map((entry) => ({
         value: entry.id,
-        label: entry.name,
+        label: `${entry.bank} (${entry.holder_name})`,
       }));
-  console.log(paymentType)
-  paymentType.unshift({ value: -2, label: "Select" })
-  setPaymentOptions(paymentType)
+      console.log(paymentType);
+      paymentType.unshift({ value: -1, label: "Add" });
+      paymentType.unshift({ value: 5, label: "Cash " });
+      paymentType.unshift({ value: -2, label: "Select" });
+
+      setPaymentOptions(paymentType);
     })
-    .catch((err)=>{
-  console.log(err)
-    })
+    .catch((err) => {
+      console.log(err);
+      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
+    });
     getTaxOptionsFormAPI();
     getUnitOptionsFormAPI();
     getClientOptionsFormAPI();
@@ -632,7 +729,6 @@ const transformedData = groupByHSN(rows);
                   theme.palette.getContrastText(theme.palette.background.paper),
               },
             }}
-            
             id="custom-input-demo"
             options={productOptions}
             value={selectedProduct}
@@ -683,7 +779,12 @@ const transformedData = groupByHSN(rows);
           }}
         >
           <p className="head-p-tag">Customer Details</p>
-          <select  value={selectedCustomer} ref={selectRef} style={{ width: "100%" }} onChange={handleOptionSelect}>
+          <select
+            value={selectedCustomer}
+            ref={selectRef}
+            style={{ width: "100%" }}
+            onChange={handleOptionSelect}
+          >
             <option value="select">Select</option>
 
             <option value="addNew">Add New</option>
@@ -753,16 +854,17 @@ const transformedData = groupByHSN(rows);
           >
             <p>Payment Method:</p>
             <select
-      style={{ width: "50%" }}
-      value={selectedOption}
-      onChange={(e) => setSelectedOption(e.target.value)}
-    >
-      {paymentOptions.map((data, index) => (
-        <option key={index} value={data.value}>
-          {data.label}
-        </option>
-      ))}
-    </select>
+              style={{ width: "50%" }}
+              value={selectedOption}
+              // onChange={(e) => setSelectedOption(e.target.value)}
+              onChange={handlepaymenttype}
+            >
+              {paymentOptions.map((data, index) => (
+                <option key={index} value={data.value}>
+                  {data.label}
+                </option>
+              ))}
+            </select>
           </Box>
           <Box
             sx={{
@@ -812,18 +914,30 @@ const transformedData = groupByHSN(rows);
               "&:hover": {
                 background: "var(--button-hover)",
               },
-              '&:disabled': {
+              "&:disabled": {
                 bgcolor: "var(--black-button)",
-                color: 'white', 
+                color: "white",
               },
             }}
             onClick={handleAddVoucher}
             // onClick={handlepdfgenerate}
             disabled={!isDesabled}
           >
-                 {isDesabled? "Save and Print Bill":
-            <CircularProgress style={{color:"white",marginBottom:"5px",marginTop:"5px",marginLeft:"35px",marginRight:"35px"}} size={15} />
-          }</Button>
+            {isDesabled ? (
+              "Save and Print Bill"
+            ) : (
+              <CircularProgress
+                style={{
+                  color: "white",
+                  marginBottom: "5px",
+                  marginTop: "5px",
+                  marginLeft: "35px",
+                  marginRight: "35px",
+                }}
+                size={15}
+              />
+            )}
+          </Button>
         </Box>
       </Box>
       <div>
@@ -865,7 +979,11 @@ const transformedData = groupByHSN(rows);
         setToggle={setToggle}
         toggle={toggle}
       />
-      <div  id="pagedatatoshow"className="offscreen" style={{ margin: "8px", width: "580px" ,  }}>
+      <div
+        id="pagedatatoshow"
+        className="offscreen"
+        style={{ margin: "8px", width: "580px" }}
+      >
         <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
           Tax Invoice
         </h6>
@@ -877,9 +995,14 @@ const transformedData = groupByHSN(rows);
             >
               <div style={{ display: "flex", borderBottom: "1px solid" }}>
                 <div style={{ width: "100px", height: "100px" }}>
-                  <img src="https://res.cloudinary.com/dczou8g32/image/upload/v1714668042/DEV/jw8j76cgw2ogtokyoisi.png" alt="img" width={90} height={90}/>
+                  <img
+                    src="https://res.cloudinary.com/dczou8g32/image/upload/v1714668042/DEV/jw8j76cgw2ogtokyoisi.png"
+                    alt="img"
+                    width={90}
+                    height={90}
+                  />
                 </div>
-                <div className="address" >
+                <div className="address">
                   <h6>BILTREE</h6>
                   <h6>54/3175</h6>
                   <h6>MANGHAT ARCADE</h6>
@@ -890,27 +1013,42 @@ const transformedData = groupByHSN(rows);
                   <h6>E-Mail:info@biltree.in</h6>
                 </div>
               </div>
-              <div style={{ borderBottom: "1px solid", marginLeft:"2px",display:"flex",flexDirection:"column",gap:"3px" }}>
+              <div
+                style={{
+                  borderBottom: "1px solid",
+                  marginLeft: "2px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
+                }}
+              >
                 <h6>Consignee (Ship to)</h6>
-                 <h5>{clientData?.label}</h5>
+                <h5>{clientData?.label}</h5>
                 <h6>{clientData?.address1}</h6>
-                 <h6>{clientData?.address2}</h6> 
-                <h6>{clientData?.phonenumber}</h6> 
+                <h6>{clientData?.address2}</h6>
+                <h6>{clientData?.phonenumber}</h6>
 
-                <h6 style={{ display: "flex", gap: "20px",marginBottom:"3px" }}>
+                <h6
+                  style={{ display: "flex", gap: "20px", marginBottom: "3px" }}
+                >
                   <span>GSTIN/UIN</span> <span>: 32AAFFC5911M2Z1</span>
                 </h6>
-                
               </div>
-              <div style={{ marginLeft:"2px",display:"flex",flexDirection:"column",gap:"3px"}}>
-              <h5>{clientData?.label}</h5>
+              <div
+                style={{
+                  marginLeft: "2px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
+                }}
+              >
+                <h5>{clientData?.label}</h5>
                 <h6>{clientData?.address1}</h6>
-                 <h6>{clientData?.address2}</h6> 
-                <h6>{clientData?.phonenumber}</h6> 
-                <h6 style={{ display: "flex", gap: "20px", }}>
+                <h6>{clientData?.address2}</h6>
+                <h6>{clientData?.phonenumber}</h6>
+                <h6 style={{ display: "flex", gap: "20px" }}>
                   <span>GSTIN/UIN</span> <span>: 32AAFFC5911M2Z1</span>
                 </h6>
-                
               </div>
             </div>
             <div className="right" style={{ width: "50%" }}>
@@ -921,7 +1059,7 @@ const transformedData = groupByHSN(rows);
                       style={{ borderLeft: "1px solid black", padding: "8px" }}
                     >
                       <h6>Invoice No</h6>
-                      <h6>{ generateRandom6Digit(new Date())}</h6>
+                      <h6>{generateRandom6Digit(new Date())}</h6>
                     </td>
                     <td
                       style={{
@@ -940,7 +1078,6 @@ const transformedData = groupByHSN(rows);
                     <td
                       style={{ borderLeft: "1px solid black", padding: "8px" }}
                     >
-                      
                       <h6>Delivery Note</h6>
                     </td>
                     <td
@@ -950,7 +1087,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Mode/Terms of Payment</h6>
                     </td>
                   </tr>
@@ -962,7 +1098,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Reference No.& Date</h6>
                     </td>
                     <td
@@ -972,7 +1107,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Other References</h6>
                     </td>
                   </tr>
@@ -984,7 +1118,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Buyer's Order No</h6>
                     </td>
                     <td
@@ -994,7 +1127,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Date</h6>
                     </td>
                   </tr>
@@ -1006,7 +1138,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Dispatch Doc No</h6>
                     </td>
                     <td
@@ -1016,7 +1147,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Delivery Note Date</h6>
                     </td>
                   </tr>
@@ -1029,7 +1159,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Dispatch throught</h6>
                     </td>
                     <td
@@ -1039,7 +1168,6 @@ const transformedData = groupByHSN(rows);
                         padding: "8px",
                       }}
                     >
-                      
                       <h6>Destination</h6>
                     </td>
                   </tr>
@@ -1057,7 +1185,7 @@ const transformedData = groupByHSN(rows);
             </div>
           </div>
           <div className="middlesection">
-          <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }}>
               <thead
                 style={{
                   borderBottom: "1px solid black",
@@ -1066,73 +1194,96 @@ const transformedData = groupByHSN(rows);
               >
                 <tr>
                   <th>
-                    
                     <h6>Sl.No</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>
                       Description of <br /> Goods and Services
                     </h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>HSN/SAC</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Quantity</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Rate</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Per</h6>
                   </th>
                   <th style={{ borderLeft: "1px solid black" }}>
-                    
                     <h6>Amount</h6>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((data, index) => {
-                   console.log("firstdata",data)
-                  return(
-                    <tr key={index} style={{borderBottom: "1px solid black",}}>
-                      <td style={{paddingLeft:"3px",paddingBottom:"5px"}}>
-                        
-                        <h6>{index+1}</h6>
+                  console.log("firstdata", data);
+                  return (
+                    <tr key={index} style={{ borderBottom: "1px solid black" }}>
+                      <td style={{ paddingLeft: "3px", paddingBottom: "5px" }}>
+                        <h6>{index + 1}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6>{data.name}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6> </h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6>{data.qty}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6> {data.rate}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         <h6> {data.unit}</h6>
                       </td>
-                      <td style={{ borderLeft: "1px solid black",paddingLeft:"3px",paddingBottom:"5px" }}>
-                        
-                        <h6>{((data.rate||0)*(data.qty)||0)}</h6>
+                      <td
+                        style={{
+                          borderLeft: "1px solid black",
+                          paddingLeft: "3px",
+                          paddingBottom: "5px",
+                        }}
+                      >
+                        <h6>{(data.rate || 0) * data.qty || 0}</h6>
                       </td>
                     </tr>
-                  )})}
-                
+                  );
+                })}
+
                 {/* <tr
                   style={{
                     borderTop: "1px solid black",
@@ -1171,14 +1322,14 @@ const transformedData = groupByHSN(rows);
                   </td>
                 </tr> */}
               </tbody>
-            </table> 
+            </table>
           </div>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               marginTop: "10px",
-              marginLeft:"2px"
+              marginLeft: "2px",
             }}
           >
             <h6>Amount Chargeable (in words)</h6>
@@ -1189,122 +1340,228 @@ const transformedData = groupByHSN(rows);
           </h6>
 
           <table
-  style={{
-    borderCollapse: "collapse",
-    width: "100%",
-    marginTop: "10px",
-  }}
->
-  <thead
-    style={{
-      borderBottom: "1px solid black",
-      borderTop: "1px solid black",
-    }}
-  >
-    <tr>
-      <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
-        <h6> HSN/SAC</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
-        <h6> Taxable Value</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black",borderBottom: "1px solid black",borderRight: "1px solid black" }} colSpan="2">
-        <h6> CGST</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black",borderBottom: "1px solid black" }} colSpan="2">
-        <h6> SGST/UTGST</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Total Tax Amount</h6>
-      </th>
-    </tr>
-    <tr>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Rate</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Amount</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black" }}>
-        <h6> Rate</h6>
-      </th>
-      <th style={{ borderLeft: "1px solid black",borderRight: "1px solid black" }}>
-        <h6> Amount</h6>
-      </th>
-    </tr>
-    
-  </thead>
-  <tbody style={{ borderBottom: "1px solid black"}}>
-  {transformedData?.map(item => (
-    <tr key={item?.hsn}>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.hsn}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.total.toFixed(2)}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.cgstRate}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.cgstAmount.toFixed(2)}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.sgstRate}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6> {item?.sgstAmount.toFixed(2)}</h6>
-      </td>
-      <td style={{ borderLeft: "1px solid black" }}>
-        <h6>{ (item?.total+item?.sgstAmount+item?.cgstAmount).toFixed(2)}</h6>
-      </td>
-    </tr>
-            ))}
+            style={{
+              borderCollapse: "collapse",
+              width: "100%",
+              marginTop: "10px",
+            }}
+          >
+            <thead
+              style={{
+                borderBottom: "1px solid black",
+                borderTop: "1px solid black",
+              }}
+            >
+              <tr>
+                <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
+                  <h6> HSN/SAC</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }} rowSpan="2">
+                  <h6> Taxable Value</h6>
+                </th>
+                <th
+                  style={{
+                    borderLeft: "1px solid black",
+                    borderBottom: "1px solid black",
+                    borderRight: "1px solid black",
+                  }}
+                  colSpan="2"
+                >
+                  <h6> CGST</h6>
+                </th>
+                <th
+                  style={{
+                    borderLeft: "1px solid black",
+                    borderBottom: "1px solid black",
+                  }}
+                  colSpan="2"
+                >
+                  <h6> SGST/UTGST</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Total Tax Amount</h6>
+                </th>
+              </tr>
+              <tr>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Rate</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Amount</h6>
+                </th>
+                <th style={{ borderLeft: "1px solid black" }}>
+                  <h6> Rate</h6>
+                </th>
+                <th
+                  style={{
+                    borderLeft: "1px solid black",
+                    borderRight: "1px solid black",
+                  }}
+                >
+                  <h6> Amount</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody style={{ borderBottom: "1px solid black" }}>
+              {transformedData?.map((item) => (
+                <tr key={item?.hsn}>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.hsn}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.total.toFixed(2)}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.cgstRate}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.cgstAmount.toFixed(2)}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.sgstRate}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6> {item?.sgstAmount.toFixed(2)}</h6>
+                  </td>
+                  <td style={{ borderLeft: "1px solid black" }}>
+                    <h6>
+                      {(
+                        item?.total +
+                        item?.sgstAmount +
+                        item?.cgstAmount
+                      ).toFixed(2)}
+                    </h6>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-  </tbody>
-</table>
-
-
-          <div style={{ display: "flex", gap: "10px", marginTop: "5px",marginLeft:"2px" }}>
-            
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              marginTop: "5px",
+              marginLeft: "2px",
+            }}
+          >
             <h6>Tax Amount (in words)</h6>
             <h6>
               INR Sixteen lakh Twenty Eight Thousand Six Hundred Fifty One Only
             </h6>
           </div>
-          <div style={{display:"flex",flexDirection:"column",justifyContent:"end", marginTop: "5px",marginLeft:"50%",fontSize:"12px"}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "end",
+              marginTop: "5px",
+              marginLeft: "50%",
+              fontSize: "12px",
+            }}
+          >
             <h6>Company's bank details</h6>
-            <div style={{display:"flex",gap:"16.4px"}}>
+            <div style={{ display: "flex", gap: "16.4px" }}>
               <h6>A/c Holder Name</h6>
               <h6>: BILTREE</h6>
             </div>
-            <div style={{display:"flex",gap:"38px"}}>
+            <div style={{ display: "flex", gap: "38px" }}>
               <h6>Bank Name</h6>
               <h6>: ICICI BANK CA - 785236984125</h6>
             </div>
-            <div style={{display:"flex",gap:"56.6px"}}>
+            <div style={{ display: "flex", gap: "56.6px" }}>
               <h6>A/c No</h6>
               <h6>: 785236984125</h6>
             </div>
-            <div style={{display:"flex",gap:"12.4px"}}>
+            <div style={{ display: "flex", gap: "12.4px" }}>
               <h6>Branch & IFS Code</h6>
               <h6>: PANAMPILLY MAGAR & ICIC0002483</h6>
             </div>
             <h6>SWIFT Code</h6>
           </div>
-          <div style={{display:'flex'}}>
-            <div className="leftsection" style={{width:"50%",marginLeft:"2px",marginBottom:"3px"}}>
-<h6 style={{borderBottom:"1px solid black",width:"60px"}}>Declaration</h6>
+          <div style={{ display: "flex" }}>
+            <div
+              className="leftsection"
+              style={{ width: "50%", marginLeft: "2px", marginBottom: "3px" }}
+            >
+              <h6 style={{ borderBottom: "1px solid black", width: "60px" }}>
+                Declaration
+              </h6>
 
-<h6>we seclare that this invoice shows the actual price of the goods described and that all particulars are true and currect</h6>
+              <h6>
+                we seclare that this invoice shows the actual price of the goods
+                described and that all particulars are true and currect
+              </h6>
             </div>
-            <div className="rightsection" style={{width:"50%",textAlign:"end",borderTop:"1px solid black",borderLeft:"1px solid black"}}>
-<h6 style={{marginBottom:"23px",marginRight:"5px"}}>for BILTREEE</h6>
-              <h6 style={{marginRight:"5px"}}>Authorised Signatory</h6>
+            <div
+              className="rightsection"
+              style={{
+                width: "50%",
+                textAlign: "end",
+                borderTop: "1px solid black",
+                borderLeft: "1px solid black",
+              }}
+            >
+              <h6 style={{ marginBottom: "23px", marginRight: "5px" }}>
+                for BILTREEE
+              </h6>
+              <h6 style={{ marginRight: "5px" }}>Authorised Signatory</h6>
             </div>
           </div>
         </div>
       </div>
+      <Modal
+        open={paymentOpen}
+        onClose={handlePaymentClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+            <h4> Add new Payment type</h4>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              my: 1,
+              gap: 1,
+            }}
+          >
+            {addPaymentInputArrat.map((data, index) => (
+              <InputComponent
+                key={index}
+                label={data.label}
+                intputName={data.intputName}
+                type={data.type}
+                value={paymentAddData[data.intputName]}
+                handleChange={data.handleChange}
+                inputOrSelect={data.inputOrSelect}
+                options={data.option}
+              />
+            ))}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 3,
+                fontWeight: "bold",
+                textTransform: "none",
+                bgcolor: "var(--black-button)",
+                "&:hover": {
+                  background: "var(--button-hover)",
+                },
+              }}
+              onClick={handleAddPayment}
+            >
+              Add payment type
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 }
