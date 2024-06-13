@@ -34,6 +34,8 @@ import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer
 import { generateRandom6Digit } from "../../utils/randomWithDate";
 import toast from 'react-hot-toast';
 
+import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+
 
 const style = {
   position: "absolute",
@@ -127,6 +129,7 @@ const handlePaymentFormChange = (e) => {
   const { name, value } = e.target;
   setPaymentAddData({ ...paymentAddData, [name]: value });
 };
+
 
 
 const addPaymentInputArrat = [
@@ -693,16 +696,13 @@ const transformedData = groupByHSN(rows);
   const handlepdfgenerate = () => {
     const pdfpagedata = document.querySelector("#pagedatatoshow");
     const pdf = new jsPDF("p", "pt", "a4", true);
-    const Inter = "../../assets/Fonts/Inter-Medium.ttf"; 
-    pdf.addFileToVFS("Inter-Medium.ttf", Inter); 
-    pdf.addFont("Inter-Medium.ttf", "Inter-Medium", "normal");
+    console.log(interBase,"inter");
+    
+pdf.addFileToVFS('Inter-Regular.ttf', interBase);
+pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+pdf.setFont('Inter');
 
-    pdf.setFont("Inter-Medium");    
-    // const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf"; 
-    // pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman); 
-    // pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
-
-    // pdf.setFont("OPTITimesRomanfont");
+    
     pdf.html(pdfpagedata, {
       callback: () => {
         const blobURL = pdf.output("bloburl");
@@ -984,7 +984,7 @@ const transformedData = groupByHSN(rows);
         className="offscreen"
         style={{ margin: "8px", width: "580px" }}
       >
-        <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
+        <h6  className="font_inter" style={{ textAlign: "center", marginBottom: "10px" }}>
           Tax Invoice
         </h6>
         <div style={{ border: "1px solid" }}>

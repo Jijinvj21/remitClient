@@ -41,6 +41,8 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+
 function PaymentOut() {
   const location = useLocation();
   const [textValue, setTextValue] = useState("");
@@ -388,7 +390,7 @@ const paymentdataget=()=>{
     const data = {
       date: date,
       payment_type: parseInt(paymentSelect),
-      party_id: partySelect,
+      party_id: parseInt(partySelect),
       project_id: 1,
       amount: parseInt(recived),
       payment_mode: "OUT",
@@ -620,6 +622,9 @@ const paymentdataget=()=>{
     );
 
     const pdf = new jsPDF("p", "pt", "a4", true);
+    pdf.addFileToVFS('Inter-Regular.ttf', interBase);
+    pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+    pdf.setFont('Inter');
     pdf.html(string, {
       callback: () => {
         const blobURL = pdf.output("bloburl");

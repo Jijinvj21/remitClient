@@ -32,6 +32,7 @@ import jsPDF from "jspdf";
 import { renderToString } from "react-dom/server";
 import PlaylistAddRoundedIcon from "@mui/icons-material/PlaylistAddRounded";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
 
 const style = {
   position: "absolute",
@@ -571,6 +572,9 @@ const paymentGet=()=>{
     );
 
     const pdf = new jsPDF("p", "pt", "a4", true);
+    pdf.addFileToVFS('Inter-Regular.ttf', interBase);
+    pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+    pdf.setFont('Inter');
     pdf.html(string, {
       callback: () => {
         const blobURL = pdf.output("bloburl");

@@ -37,6 +37,8 @@ import {
 import AddProductDrawer from "../../components/AddProductDrawer/AddProductDrawer";
 import { generateRandom6Digit } from "../../utils/randomWithDate";
 import toast from "react-hot-toast";
+import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+
 
 const style = {
   position: "absolute",
@@ -849,6 +851,9 @@ function PurchasePage() {
   const handlepdfgenerate = () => {
     const pdfpagedata = document.querySelector("#pagedatatoshow");
     const pdf = new jsPDF("p", "pt", "a4", true);
+    pdf.addFileToVFS('Inter-Regular.ttf', interBase);
+pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+pdf.setFont('Inter');
     pdf.html(pdfpagedata, {
       callback: () => {
         const blobURL = pdf.output("bloburl");

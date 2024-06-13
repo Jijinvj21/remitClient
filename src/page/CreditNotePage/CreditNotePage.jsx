@@ -42,6 +42,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
 
 function CreditNotePage() {
   const [partyOptions, setPartytOptions] = useState([]);
@@ -212,6 +213,11 @@ function CreditNotePage() {
   const handlepdfgenerate = () => {
     const pdfpagedata = document.querySelector("#pagedatatoshow");
     const pdf = new jsPDF("p", "pt", "a4", true);
+        
+pdf.addFileToVFS('Inter-Regular.ttf', interBase);
+pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+pdf.setFont('Inter');
+
     pdf.html(pdfpagedata, {
       callback: () => {
         const blobURL = pdf.output("bloburl");
