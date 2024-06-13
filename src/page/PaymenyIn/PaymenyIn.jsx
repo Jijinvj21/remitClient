@@ -437,24 +437,24 @@ const paymentGet=()=>{
               marginLeft: "25px",
             }}
           >
-            <h5 style={{ fontSize: "13px", width: "300px" }}>
+            <h5 style={{ fontSize: "12px", width: "300px" }}>
               BILTREE FY204-25
             </h5>
-            <p style={{ fontSize: "13px", width: "300px" }}>
+            <p style={{ fontSize: "12px", width: "300px" }}>
               54/3175, MANGHAT ARCADE <br /> 1ST FLOOR, KALOOR-KADAVANTHRA ROAD{" "}
               <br /> ERANAKLAM
             </p>
-            <p style={{ fontSize: "13px", width: "300px" }}>
+            <p style={{ fontSize: "12px", width: "300px" }}>
               StateName:Kerala, Code:32
             </p>
-            <p style={{ fontSize: "13px", width: "300px" }}>
+            <p style={{ fontSize: "12px", width: "300px" }}>
               E-Mail:info@biltree.in
             </p>
           </div>
         </div>
         <h5
           className="resceipt-text"
-          style={{ fontSize: "13px", width: "600px", textAlign: "center" }}
+          style={{ fontSize: "12px", width: "600px", textAlign: "center" }}
         >
           Receipt voucher
         </h5>
@@ -466,65 +466,70 @@ const paymentGet=()=>{
             width: "950px",
           }}
         >
-          <p style={{ fontSize: "13px", width: "600px", marginLeft: "10px" }}>
-            No:{row?.ref_no}
+          <p style={{ fontSize: "12px", width: "600px", marginLeft: "10px" }}>
+            No:{row?.Ref_no}
           </p>
-          <p style={{ fontSize: "13px", width: "600px" }}>
-            Date:{new Date(row?.date).toLocaleDateString()}
+          <p style={{ fontSize: "12px", width: "600px" }}>
+            Date:{new Date(row?.Date).toLocaleDateString()}
           </p>
         </div>
         <p
           style={{
-            fontSize: "13px",
+            fontSize: "12px",
             width: "600px",
             marginTop: "10px",
             marginLeft: "10px",
           }}
         >
-          Through: ICICI BANK CA-313254897
+          Through: {row.PaymentType.Bank}
         </p>
         <div>
           <div
             style={{
               marginTop: "20px",
-              width: "950px",
+              // width: "950px",
+              width:"573px",
               marginLeft: "10px",
               display: "flex",
+               border:"1px solid black"
             }}
           >
-            <div style={{ width: "40%", borderRight: "1px solid" }}>
-              <hr style={{ width: "400px" }} />
-              <p style={{ marginLeft: "20px" }}>Particulars</p>
-              <hr style={{ width: "400px" }} />
-              <p style={{ fontSize: "13px", width: "600px" }}>Account :</p>
+            <div style={{ width: "55%",borderRight: "1px solid" }}>
+              {/* <hr style={{ width: "400px" }} /> */}
+              <p style={{ marginLeft: "20px" , fontSize: "14px"  }}>Particulars</p>
+              {/* <hr style={{ width: "400px" }} /> */}
+              <div style={{width:"573px",height:"1px",background:"black"}}></div>
+              <p style={{ fontSize: "12px", width: "600px",marginLeft:"10px" }}>Account :</p>
               <p
-                style={{ marginLeft: "20px", fontSize: "13px", width: "600px" }}
+                style={{ marginLeft: "20px", fontSize: "12px", width: "600px" }}
               >
-                {row?.party_id}
+                {row?.Party}
               </p>
             
             </div>
             <div
               style={{
-                width: "20%",
+                // width: "20%",
+                width: "42%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
               }}
             >
               <div>
-                <hr style={{ width: "190px" }} />
-                <p style={{ marginLeft: "20px", textAlign: "end" }}>Amount</p>
-                <hr style={{ width: "190px" }} />
+                {/* <hr style={{ width: "190px" }} /> */}
+                <p style={{ marginLeft: "20px", textAlign: "end" , fontSize: "14px" }}>Amount</p>
+                {/* <hr style={{ width: "190px" }} /> */}
                 <p
                   style={{
-                    fontSize: "13px",
+                    fontSize: "12px",
                     width: "188px",
                     textAlign: "end",
                     marginTop: "20px",
+                    marginLeft:"45px"
                   }}
                 >
-                  {row?.amount.toLocaleString("en-IN", {
+                  {row?.Amount.toLocaleString("en-IN", {
                     style: "decimal",
                     minimumFractionDigits: 2,
                   })}
@@ -532,21 +537,22 @@ const paymentGet=()=>{
               </div>
 
               <div>
-                <hr style={{ width: "190px" }} />
-                <p style={{ marginLeft: "25px", textAlign: "end" }}>
-                  {row?.amount.toLocaleString("en-IN", {
+                {/* <hr style={{ width: "190px" }} /> */}
+                <div style={{width:"257px",height:"1px",background:"black"}}></div>
+                <p style={{ marginLeft: "25px", textAlign: "end",fontSize: "14px", }}>
+                  {row?.Amount.toLocaleString("en-IN", {
                     style: "decimal",
                     minimumFractionDigits: 2,
                   })}
                 </p>
-                <hr style={{ width: "190px" }} />
+                {/* <hr style={{ width: "190px" }} /> */}
               </div>
             </div>
           </div>
           <p
             className="resceipt-text"
             style={{
-              fontSize: "13px",
+              fontSize: "12px",
               width: "580px",
               textAlign: "end",
               marginTop: "90px",
@@ -555,15 +561,15 @@ const paymentGet=()=>{
             Authorised Signatory
           </p>
           <div style={{ display: "flex", width: "580px", marginTop: "20px" }}>
-            <p style={{ marginLeft: "20px", fontSize: "13px", width: "580px" }}>
+            <p style={{ marginLeft: "20px", fontSize: "12px", width: "580px" }}>
               Prepared by
             </p>
             <p
-              style={{ fontSize: "13px", width: "580px", textAlign: "center" }}
+              style={{ fontSize: "12px", width: "580px", textAlign: "center" }}
             >
               Checked by
             </p>
-            <p style={{ fontSize: "13px", width: "580px", textAlign: "end" }}>
+            <p style={{ fontSize: "12px", width: "580px", textAlign: "end" }}>
               Verified by
             </p>
           </div>
@@ -812,12 +818,12 @@ const paymentGet=()=>{
                     <TableRow key={index + 1}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
-                        {new Date(row?.date).toLocaleDateString()}
+                        {new Date(row?.Date).toLocaleDateString()}
                       </TableCell>
-                      <TableCell>{row?.description}</TableCell>
+                      <TableCell>{row?.Description}</TableCell>
                       <TableCell>
                         {" "}
-                        {row?.amount.toLocaleString("en-IN", {
+                        {row?.Amount.toLocaleString("en-IN", {
                           style: "decimal",
                           minimumFractionDigits: 2,
                         })}
