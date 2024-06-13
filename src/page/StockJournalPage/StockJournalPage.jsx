@@ -16,8 +16,11 @@ import {
 } from "../../service/api/admin";
 // import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import toast from 'react-hot-toast';
 
 function StockJournalPage() {
+  const notify = (message) => toast(message);
+
   const navigate = useNavigate();
   const [productOptions, setProductOptions] = useState([]);
   const [projectOptions, setProjectOptions] = useState([]);
@@ -215,7 +218,7 @@ function StockJournalPage() {
   ];
   // const handleDelete = (event) => {
   //   event.stopPropagation(); // Prevent the click event from bubbling up to the main div
-  //   alert("You clicked delete!");
+  //   notify("You clicked delete!");
   //   // const updatedArray = myArray.filter((item, i) => i !== index);
   //   // // Set the state with the updated array
   //   // setMyArray(updatedArray);
@@ -314,7 +317,7 @@ function StockJournalPage() {
   
       const data = await stockJournalCreateAPI(formData);
       console.log("stockJournalCreateAPI", data);
-      alert("Stock journal created")
+      notify("Stock journal created")
       setIsDesabled(true)
       // Reset states
       setCreatedProducts({
@@ -329,7 +332,7 @@ function StockJournalPage() {
       setSelectedTax(0);
     } catch (error) {
       console.error("Error creating product:", error);
-      alert("Problem in stock journal created")
+      notify("Problem in stock journal created")
       setIsDesabled(true)
     }
   };

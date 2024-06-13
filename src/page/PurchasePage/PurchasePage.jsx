@@ -40,6 +40,7 @@ import toast from "react-hot-toast";
 import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
 
 
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -53,6 +54,7 @@ const style = {
   p: 4,
 };
 function PurchasePage() {
+
   // const settings = { theme: 'dark', notifications: true };
 
   // const saveSettings = (settings) => {
@@ -191,7 +193,7 @@ function PurchasePage() {
     paymentTypeDataAddAPI(paymentAddData)
       .then((data) => {
         console.log(data);
-        alert("Payment Added");
+        notify("Payment Added");
         // partyDataGet();
         setPaymentOpen(false);
         setPaymentAddData({
@@ -401,7 +403,7 @@ function PurchasePage() {
     createPartyAPI(data)
       .then((data) => {
         console.log(data);
-        alert("Party Added");
+        notify("Party Added");
         partyDataGet();
         setOpen(false);
         setPartyData({
@@ -761,13 +763,13 @@ function PurchasePage() {
           });
           setSelectedValue("");
           setTaxRateValue("");
-          alert("Product added successfully");
+          notify("Product added successfully");
           fetchData();
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding product");
+        notify("Problem in adding product");
       });
   };
   const arrOfDrawerInputs = [

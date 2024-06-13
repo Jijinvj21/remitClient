@@ -182,7 +182,7 @@ const handleAddPayment = () => {
   paymentTypeDataAddAPI(paymentAddData)
     .then((data) => {
       console.log(data);
-      alert("Payment Added");
+      notify("Payment Added");
       // partyDataGet();
       setPaymentOpen(false);
       setPaymentAddData({
@@ -600,12 +600,12 @@ const transformedData = groupByHSN(rows);
           });
           setSelectedValue("");
           setTaxRateValue("");
-          alert("Product added successfully");
+          notify("Product added successfully");
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding product");
+        notify("Problem in adding product");
       });
   };
   const arrOfDrawerInputs = [

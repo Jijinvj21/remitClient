@@ -23,9 +23,13 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { Link } from "react-router-dom";
 import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+import toast from 'react-hot-toast';
+
 
 
 function DeliveryChallan() {
+  const notify = (message) => toast(message);
+
   const [partyOptions, setPartyOptions] = useState([]);
   const [selectedProductDetails, setSelectedProductDetails] = useState(null); // State to hold selected product
   const [totalValues, setTotalValues] = useState([]);
@@ -268,12 +272,12 @@ const handleImageChange = (e) => {
           });
           setSelectedValue("");
           setTaxRateValue("");
-          alert("Product added successfully");
+          notify("Product added successfully");
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding product");
+        notify("Problem in adding product");
       });
   };
 
@@ -604,7 +608,7 @@ const handleImageChange = (e) => {
     // If you want to use the FormData with an API call, uncomment the following:
     deliveryChallanAddAPI(formData).then((res) => {
         console.log(res);
-        alert("Delivery Challan added")
+        notify("Delivery Challan added")
         setPartySelect()
         setChallanNo("")
         setInvoiceDate("")
@@ -616,7 +620,7 @@ const handleImageChange = (e) => {
 
     }).catch((err) => {
         console.log(err);
-        alert("Delivery Challan adding Problem ")
+        notify("Delivery Challan adding Problem ")
         setIsDesabled(true)
 
     });

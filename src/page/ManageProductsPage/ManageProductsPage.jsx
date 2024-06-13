@@ -24,8 +24,12 @@ import {
   projectGetAPI,
   unitsDataGetAPI,
 } from "../../service/api/admin";
+import toast from 'react-hot-toast';
+
 
 function ManageProductsPage() {
+  const notify = (message) => toast(message);
+
   const navigate = useNavigate();
   const [myArray, setMyArray] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Initialize searchQuery as an empty string
@@ -351,10 +355,10 @@ function ManageProductsPage() {
     setUpdateTrue(true);
     setUpdateData(data);
     toggleDrawer("right", true)(); // Check if "right" is the correct anchor value
-    alert("update");
+    notify("update");
   };
   const handleUpdateData = () => {
-    alert("update");
+    notify("update");
     const productUpdate = {
       name: updateData.name,
       hsn: updateData.hsn,
@@ -425,13 +429,13 @@ function ManageProductsPage() {
           setProjectValue({});
           setImagePreview(null);
           setImg(null);
-          alert("Product added successfully");
+          notify("Product added successfully");
           getDataFromAPI();
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding product", selectedValue);
+        notify("Problem in adding product", selectedValue);
       });
   };
 

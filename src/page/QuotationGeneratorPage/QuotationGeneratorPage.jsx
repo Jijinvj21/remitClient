@@ -39,8 +39,12 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+import toast from 'react-hot-toast';
+
 
 function QuotationGeneratorPage() {
+  const notify = (message) => toast(message);
+
   const tableRef = useRef();
   const exclusionRef = useRef();
   const exclusionData = exclusionRef.current;
@@ -306,7 +310,7 @@ function QuotationGeneratorPage() {
   ];
 
   const handleAdd = () => {
-    alert("add");
+    notify("add");
   };
   const handleprojectImageChange = (e) => {
     const file = e.target.files[0];
@@ -526,7 +530,7 @@ function QuotationGeneratorPage() {
   };
   // const handleProjectname = (e) => {
   //   console.log("e.target", e.target.value === "-2");
-  //   // alert(e.target.value==="-2")
+  //   // notify(e.target.value==="-2")
   //   if (e.target.value === "-2") {
   //     navigate("/admin/projects/add-projects");
   //   }
@@ -644,14 +648,14 @@ function QuotationGeneratorPage() {
             handleClose()
             setAreaOfWorkCategoryInput("")
             getCategeryOptionsFormAPI()
-            alert("Category Added");
+            notify("Category Added");
           })
           .catch((err) => {
             console.log(err);
             setIsCategoryDesabled(true)
-            alert("Problem Category Adding");
+            notify("Problem Category Adding");
           })
-      : alert("Client not Selected");
+      : notify("Client not Selected");
       setIsCategoryDesabled(true)
   };
 
@@ -1182,12 +1186,12 @@ function QuotationGeneratorPage() {
           });
           setSelectedValue("");
           setTaxRateValue("");
-          alert("Product added successfully");
+          notify("Product added successfully");
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding product");
+        notify("Problem in adding product");
       });
   };
   const arrOfDrawerInputs = [

@@ -42,8 +42,12 @@ const style = {
   p: 4,
 };
 import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+import toast from 'react-hot-toast';
+
 
 function PaymentOut() {
+  const notify = (message) => toast(message);
+
   const location = useLocation();
   const [textValue, setTextValue] = useState("");
   const [img, setImg] = useState(null);
@@ -147,7 +151,7 @@ function PaymentOut() {
     createPartyAPI(data)
       .then((data) => {
         console.log(data);
-alert("Party Added")
+notify("Party Added")
 partyDataGet()
         setOpen(false)
         setPartyData({
@@ -224,7 +228,7 @@ partyDataGet()
     paymentTypeDataAddAPI(paymentAddData)
       .then((data) => {
         console.log(data);
-        alert("Payment Added");
+        notify("Payment Added");
         paymentdataget();
         setPaymentOpen(false);
         setPaymentAddData({
@@ -400,7 +404,7 @@ const paymentdataget=()=>{
     paymentInAPI(data)
       .then((data) => {
         console.log(data);
-        alert("Payment added")
+        notify("Payment added")
 
         getpaymentDataGetAPI();
         const currentDate = new Date();

@@ -33,6 +33,8 @@ import { renderToString } from "react-dom/server";
 import PlaylistAddRoundedIcon from "@mui/icons-material/PlaylistAddRounded";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+import toast from 'react-hot-toast';
+
 
 const style = {
   position: "absolute",
@@ -47,6 +49,8 @@ const style = {
   p: 4,
 };
 function PaymenyIn() {
+  const notify = (message) => toast(message);
+
   const location = useLocation();
   const [textValue, setTextValue] = useState("");
   const [img, setImg] = useState(null);
@@ -155,7 +159,7 @@ function PaymenyIn() {
     createPartyAPI(data)
       .then((data) => {
         console.log(data);
-        alert("Party Added");
+        notify("Party Added");
         partyDataGet();
         setOpen(false);
         setPartyData({
@@ -226,7 +230,7 @@ function PaymenyIn() {
     paymentTypeDataAddAPI(paymentAddData)
       .then((data) => {
         console.log(data);
-        alert("Payment Added");
+        notify("Payment Added");
         paymentGet();
         setPaymentOpen(false);
         setPaymentAddData({
@@ -397,7 +401,7 @@ const paymentGet=()=>{
     };
     paymentInAPI(data)
       .then((data) => {
-        alert("Receipt added");
+        notify("Receipt added");
         getpaymentDataGetAPI();
         const currentDate = new Date();
         const random6Digit = generateRandom6Digit(currentDate);

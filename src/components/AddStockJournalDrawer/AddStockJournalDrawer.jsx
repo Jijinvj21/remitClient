@@ -17,6 +17,8 @@ import ProductInputCard from "../../components/ProductInputCard/ProductDataCard"
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import PlaylistAddRoundedIcon from "@mui/icons-material/PlaylistAddRounded";
+import toast from 'react-hot-toast';
+
 
 function AddStockJournalDrawer({
 //   handleSubmit,
@@ -34,6 +36,8 @@ function AddStockJournalDrawer({
   // toggle,
 }) {
   // draw
+  const notify = (message) => toast(message);
+
   const navigate = useNavigate();
   const [productOptions, setProductOptions] = useState([]);
   const [projectOptions, setProjectOptions] = useState([]);
@@ -220,7 +224,7 @@ function AddStockJournalDrawer({
   ];
   const handleDelete = (event) => {
     event.stopPropagation(); // Prevent the click event from bubbling up to the main div
-    alert("You clicked delete!");
+    notify("You clicked delete!");
   };
 
   // handle right input change

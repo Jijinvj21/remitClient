@@ -42,9 +42,12 @@ const style = {
   p: 4,
 };
 import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+import toast from 'react-hot-toast';
 
 
 function DebitNotePage() {
+  const notify = (message) => toast(message);
+
   const [partyOptions, setPartytOptions] = useState([]);
   const [textValue, setTextValue] = useState("");
   const [selectedProductDetails, setSelectedProductDetails] = useState(null); // State to hold selected product
@@ -150,7 +153,7 @@ function DebitNotePage() {
     paymentTypeDataAddAPI(paymentAddData)
       .then((data) => {
         console.log(data);
-        alert("Payment Added");
+        notify("Payment Added");
         paymentdataget();
         setPaymentOpen(false);
         setPaymentAddData({
@@ -397,12 +400,12 @@ pdf.setFont('Inter');
           });
           setSelectedValue("");
           setTaxRateValue("");
-          alert("Product added successfully");
+          notify("Product added successfully");
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding product");
+        notify("Problem in adding product");
       });
   };
 
@@ -755,7 +758,7 @@ pdf.setFont('Inter');
     await debitDataAddAPI(formData)
       .then((res) => {
         console.log(res);
-        alert("Debit note data added");
+        notify("Debit note data added");
         setPhoneNumber("");
         setReceiptNo("");
         setInvoiceNo("");
@@ -767,7 +770,7 @@ pdf.setFont('Inter');
       })
       .catch((err) => {
         console.log(err);
-        alert("Problem in adding debit note data");
+        notify("Problem in adding debit note data");
         setIsDesabled(true);
       });
   };

@@ -30,10 +30,14 @@ import { renderToString } from "react-dom/server";
 import SalesTable from "../../components/SalesTable/SalesTable";
 import { Link } from "react-router-dom";
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import toast from 'react-hot-toast';
+
 
 
 
 function ExpencePage() {
+  const notify = (message) => toast(message);
+
   const [rows, setRows] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null); // State to hold selected products
 
@@ -129,7 +133,7 @@ function ExpencePage() {
       paymentTypeDataAddAPI(paymentAddData)
         .then((data) => {
           console.log(data);
-          alert("Payment Added");
+          notify("Payment Added");
           // partyDataGet();
           setPaymentOpen(false);
           setPaymentAddData({
@@ -796,7 +800,7 @@ function ExpencePage() {
     expensesDataAddAPI(formData)
       .then((data) => {
         console.log(data);
-        alert("Expense data added")
+        notify("Expense data added")
         setExpenceNo("")
         setInvoiceDate("")
         setRows([])
@@ -806,7 +810,7 @@ function ExpencePage() {
       })
       .catch((err) => {
         console.log(err);
-        alert("Expense data Problem")
+        notify("Expense data Problem")
         setIsDesabled(true)
 
       });
