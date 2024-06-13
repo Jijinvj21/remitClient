@@ -79,14 +79,14 @@ function SalesPage() {
 
   const selectRef = useRef(null);
   const [productOptions, setProductOptions] = useState([]);
-  const [selectedProductDetails, setSelectedProductDetails] = useState(null); // State to hold selected product
+  const [selectedProductDetails, setSelectedProductDetails] = useState(null); 
   const [totalValues, setTotalValues] = useState(0);
   const [inputData, setInputData] = useState(0);
 
-  const [selectedProduct, setSelectedProduct] = useState(null); // State to hold selected product
+  const [selectedProduct, setSelectedProduct] = useState(null); 
 
-  const [tableRows, setTableRows] = useState([]); // State to hold table rows
-  const [inputValue, setInputValue] = useState(""); // State to hold the value of the new input
+  const [tableRows, setTableRows] = useState([]);
+  const [inputValue, setInputValue] = useState(""); 
   const [open, setOpen] = useState(false);
   const [clinedOptions, setClientOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState("none");
@@ -319,14 +319,13 @@ const transformedData = groupByHSN(rows);
       }));
       console.log(paymentType);
       paymentType.unshift({ value: -1, label: "Add" });
-      paymentType.unshift({ value: 5, label: "Cash " });
       paymentType.unshift({ value: -2, label: "Select" });
 
       setPaymentOptions(paymentType);
     })
     .catch((err) => {
       console.log(err);
-      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
+      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" }])
     });
     getTaxOptionsFormAPI();
     getUnitOptionsFormAPI();
@@ -334,9 +333,7 @@ const transformedData = groupByHSN(rows);
     getCategeryOptionsFormAPI();
     clientDataGetAPI()
       .then((data) => {
-        // setTaxOptions(data);
-        
-        // Transform data and set it to state
+       
         const clientData = data.responseData.map((entry) => ({
           value: entry.id,
           label: `${entry.project_name} ( ${entry.name} )`,
@@ -353,29 +350,29 @@ const transformedData = groupByHSN(rows);
   }, []);
   useEffect(() => {
     const updatedRows = rows.map((row) => {
-      const quantity = parseInt(row.qty) || 0; // Parsing quantity to integer, defaulting to 0 if NaN
-      const rate = parseInt(row.rate) || 0; // Parsing rate to integer, defaulting to 0 if NaN
+      const quantity = parseInt(row.qty) || 0; 
+      const rate = parseInt(row.rate) || 0; 
 
       const totalWithoutTax = quantity * rate;
 
-      const totalWithTax = totalWithoutTax - (row.amountafterdescount || 0); // Subtracting discount amount from totalWithoutTax
+      const totalWithTax = totalWithoutTax - (row.amountafterdescount || 0); 
 
-      let taxAppliedamount = 0; // Initializing taxAppliedamount variable
+      let taxAppliedamount = 0; 
       if (row.taxAppliedamount) {
         taxAppliedamount =
-          parseFloat(row.taxAppliedamount.replace("%", "")) || 0; // Parsing taxAppliedamount to float, defaulting to 0 if NaN
+          parseFloat(row.taxAppliedamount.replace("%", "")) || 0; 
       } else if (row.taxApplied?.value) {
         taxAppliedamount =
-          parseFloat(row.taxApplied.value.replace("%", "")) || 0; // Parsing taxApplied.value to float, defaulting to 0 if NaN
+          parseFloat(row.taxApplied.value.replace("%", "")) || 0; 
       } else if (row.taxApplied) {
         taxAppliedamount =
-          parseFloat(row.taxApplied.split("@")[1].replace("%", "")) || 0; // Parsing taxApplied to float, defaulting to 0 if NaN
+          parseFloat(row.taxApplied.split("@")[1].replace("%", "")) || 0; 
       }
 
       const total = (
         (totalWithTax * taxAppliedamount) / 100 +
         totalWithTax
-      ).toFixed(2); // Calculating total with tax and rounding to 2 decimal places
+      ).toFixed(2); 
 
       return {
         ...row,
@@ -386,7 +383,7 @@ const transformedData = groupByHSN(rows);
     const grandTotal = updatedRows.reduce(
       (sum, row) => sum + parseFloat(row.total),
       0
-    ); // Summing up all row totals
+    ); 
 
     setTotalValues(grandTotal);
   }, [rows]); // Update when rows change
@@ -559,10 +556,7 @@ const transformedData = groupByHSN(rows);
       (option) => option.taxlabel == event.target.value
     );
     console.log(selectedOptionObject);
-    // setTaxRateValue({
-    //   label: selectedOptionObject ? selectedOptionObject.label : "", // Handle case where selectedOptionObject is undefined
-    //   value: event.target.value
-    // });
+    
     setTaxRateValue(selectedOptionObject);
   };
   const handleSelectChange = (event) => {
@@ -575,10 +569,7 @@ const transformedData = groupByHSN(rows);
     console.log(event.target.value);
   };
 
-  // const handleSelectCatogary = (event) => {
-  //   setCategoryValue(event.target.value);
-  //   console.log(event.target.value);
-  // };
+ 
 
   const handleDrawerAddProducts = () => {
     const formData = new FormData();

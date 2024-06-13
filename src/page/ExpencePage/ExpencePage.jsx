@@ -257,14 +257,13 @@ function ExpencePage() {
       }));
       console.log(paymentType);
       paymentType.unshift({ value: -1, label: "Add" });
-      paymentType.unshift({ value: 5, label: "Cash " });
       paymentType.unshift({ value: -2, label: "Select" });
   
       setPaymentOptions(paymentType);
     })
     .catch((err) => {
       console.log(err);
-      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" },{ value: 5, label: "Cash " }])
+      setPaymentOptions([{ value: -2, label: "Select" },{ value: -1, label: "Add" }])
     });
     fetchData();
     // setProductOptions([{ value: -2, label: "Add" }]);

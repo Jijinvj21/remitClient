@@ -305,7 +305,6 @@ pdf.setFont('Inter');
       }));
       console.log(paymentType);
       paymentType.unshift({ value: -1, label: "Add" });
-      paymentType.unshift({ value: 5, label: "Cash " });
       paymentType.unshift({ value: -2, label: "Select" });
 
       setPaymentOptions(paymentType);
@@ -315,7 +314,6 @@ pdf.setFont('Inter');
       setPaymentOptions([
         { value: -2, label: "Select" },
         { value: -1, label: "Add" },
-        { value: 5, label: "Cash " },
       ]);
     });
   }
