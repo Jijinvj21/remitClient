@@ -169,6 +169,7 @@ function CreditNotePage() {
         });
       })
       .catch((err) => {
+        notify("Error in Creating Patment Type");
         console.log(err);
       });
   };

@@ -48,7 +48,6 @@ function QuotationGeneratorPage() {
   const tableRef = useRef();
   const exclusionRef = useRef();
   const exclusionData = exclusionRef.current;
-  const table = tableRef.current;
   const [clientOptions, setClientOptions] = useState([]);
   // const [projectOptions, setProjectOptions] = useState([]);
   const [productsOptions, setProductsOptions] = useState([]);
@@ -64,6 +63,7 @@ function QuotationGeneratorPage() {
   const [selectedClient, setSelectedClient] = useState({});
   const [selectedProduct, setSelectedProduct] = useState({});
   // const [productSelectData, setProductSelectData] = useState({});
+  const [isDesabled, setIsDesabled] = useState(true);
 
   
 
@@ -130,7 +130,225 @@ function QuotationGeneratorPage() {
   const [isCategoryDesabled, setIsCategoryDesabled] = useState(true);
   const [imagePreview,setImagePreview]=useState(null)
 
+  const groupByCategory = (data) => {
+    return data.reduce(
+      (acc, item) => {
+        const totalAmount =
+          Number(item.amount || 0) +
+          Number(item.hardware || 0) +
+          Number(item.installation || 0) +
+          Number(item.accessories || 0);
+        if (!acc[item.categoryName]) {
+          acc[item.categoryName] = {
+            category: item.categoryName,
+            products: [],
+            accessories: [],
+            totalAmount: 0,
+          };
+        }
+        acc[item.categoryName].products.push(item);
+        acc[item.categoryName].totalAmount += totalAmount;
+        if (item.accessorieslist && item.accessorieslist.length > 0) {
+          acc[item.categoryName].accessories = acc[
+            item.categoryName
+          ].accessories.concat(item.accessorieslist);
+        }
+        acc.grandTotal += totalAmount;
+        return acc;
+      },
+      { grandTotal: 0 }
+    );
+  };
+  const groupedData = groupByCategory(productData);
 
+  const createTable = (groupedData) => {
+    const categoryNames = Object.keys(groupedData).filter(
+      (name) => name !== "grandTotal"
+    );
+
+    return (
+      <table
+      className="offscreen"
+        ref={tableRef}
+        border="1"
+        style={{ color: "black", width: "100%", borderCollapse: "collapse", background: "white" }}
+      >
+        <thead>
+          <tr
+            style={{
+              backgroundColor: "#FFFF00",
+              color: "black",
+              textAlign: "center",
+            }}
+          >
+            <th style={{ padding: "5px" }}>AREA OF WORK</th>
+            <th style={{ padding: "5px" }}>Specification</th>
+            <th style={{ padding: "5px" }}>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {categoryNames.map((categoryName, index) => {
+            const categoryData = groupedData[categoryName];
+            return (
+              <React.Fragment key={index}>
+                {categoryData.products.map((item, productIndex) => {
+                  const rows = [];
+
+                  if (item.description) {
+                    rows.push(
+                      <tr key={`description-${productIndex}`}>
+                        {productIndex === 0 && (
+                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                            {categoryName}
+                          </td>
+                        )}
+                        <td>{`${item.productname} ${item.description}`}</td>
+                        <td>{item.amount}</td>
+                      </tr>
+                    );
+                  }
+
+                  if (item.hardware) {
+                    rows.push(
+                      <tr key={`hardware-${productIndex}`}>
+                        {productIndex === 0 && rows.length === 0 && (
+                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                            {categoryName}
+                          </td>
+                        )}
+                        <td>Hardware</td>
+                        <td>{item.hardware}</td>
+                      </tr>
+                    );
+                  }
+
+                  if (item.installation) {
+                    rows.push(
+                      <tr key={`installation-${productIndex}`}>
+                        {productIndex === 0 && rows.length === 0 && (
+                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                            {categoryName}
+                          </td>
+                        )}
+                        <td>Installation</td>
+                        <td>{item.installation}</td>
+                      </tr>
+                    );
+                  }
+
+                  if (item.accessories) {
+                    rows.push(
+                      <tr key={`accessories-${productIndex}`}>
+                        {productIndex === 0 && rows.length === 0 && (
+                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                            {categoryName}
+                          </td>
+                        )}
+                        <td>Accessories</td>
+                        <td>{item.accessories}</td>
+                      </tr>
+                    );
+                  }
+
+                  return rows;
+                })}
+
+                {categoryData.accessories.length > 0 && (
+                  <React.Fragment>
+                    <tr
+                      style={{
+                        backgroundColor: "#FFFF00",
+                        color: "black",
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: "5px",
+                          fontWeight: "800",
+                          textAlign: "center",
+                        }}
+                      >
+                        SL NO
+                      </td>
+                      <td
+                        style={{
+                          padding: "5px",
+                          fontWeight: "800",
+                          textAlign: "center",
+                        }}
+                      >
+                        SPECIFICATION
+                      </td>
+                      <td
+                        style={{
+                          padding: "5px",
+                          fontWeight: "800",
+                          textAlign: "center",
+                        }}
+                      >
+                        IMAGE
+                      </td>
+                    </tr>
+                    {categoryData.accessories.map(
+                      (accessory, accessoryIndex) => (
+                        <tr key={accessoryIndex}>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "center",
+                            }}
+                          >
+                            {accessoryIndex + 1}
+                          </td>
+                          <td style={{ padding: "5px" }}>
+                            {accessory.name}
+                          </td>
+                          <td
+                            style={{
+                              padding: "5px",
+                              textAlign: "center",
+                              height: "20px"
+                            }}
+                          >
+                            <img
+                              src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/255px-Flag_of_India.svg.png"
+                              alt="image"
+                              width={50}
+                              height={50}
+                            />
+                          </td>
+                        </tr>
+                      )
+                    )}
+                    <tr>
+                      <td colSpan="2" style={{ textAlign: "right", backgroundColor: "#00B050", }}>
+                        Total for {categoryName}:
+                      </td>
+                      <td style={{ backgroundColor: "#00B050", }}>{categoryData.totalAmount}</td>
+                    </tr>
+                  </React.Fragment>
+                )}
+                {categoryData.accessories.length === 0 && (
+                  <tr>
+                    <td colSpan="2" style={{ textAlign: "right", backgroundColor: "#00B050", }}>
+                      Total for {categoryName}:
+                    </td>
+                    <td style={{ backgroundColor: "#00B050", }}>{categoryData.totalAmount}</td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
+          <tr>
+            <td colSpan="2" style={{ textAlign: "right", backgroundColor: "#FF0000", color: "black" }}>
+              Grand Total:
+            </td>
+            <td style={{ backgroundColor: "#FF0000", color: "black" }}>{groupedData.grandTotal}</td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
 
   const getTaxOptionsFormAPI = () => {
     gstOptionsGetAPI()
@@ -880,40 +1098,38 @@ function QuotationGeneratorPage() {
           100, 
           60 
         );
+        
+
         pdf.autoTable({
-          html: pdftable,
-          startY: 100,
+          html: tableRef.current,
           useCss: true,
-          theme: "grid",
+          startY: 30,
+          theme: 'grid',
+          styles: {
+            fontSize: 7, 
+            cellPadding: 1, 
+            valign: 'middle',
+            halign: 'center',
+          },
           headStyles: {
-            fillColor: "yellow",
-            textColor: "black",
-            lineWidth: 2,
-            lineColor: "black",
-            // cellWidth:200
+            fillColor: [255, 255, 0],
+            textColor: [255, 0, 0],
+            fontStyle: 'bold',
           },
           columnStyles: {
-            0: { cellWidth: 100 },
-            1: { cellWidth: 335 },
-            2: { cellWidth: 80 },
+            0: { cellWidth: 150 }, // Adjusted width for the first column
+            1: { cellWidth: 275 }, // Adjusted width for the second column
+            2: { cellWidth: 90 }, // Adjusted width for the third column
           },
-          styles: {
-            lineWidth: 1,
-            lineColor: "black",
-            cellPadding: 5,
-            fontFamily: "Inter",
-            fontSize: 10,
-            // valign: 'middle',
-            // halign: 'center' // Set horizontal alignment to center
-          },
-
           didDrawCell: async function (data) {
             console.log("didDrawCell", data?.cell?.raw);
             if (data.column.index === 2 && data.cell.section === "body") {
-              var td = data.cell.raw;
+    
+              // data.cell.styles.cellPadding = { top: 10, left: 5, right: 5, bottom: 10 };
+                        var td = data.cell.raw;
               console.log("didDrawCell2", td.getElementsByTagName("td"));
               // var img = td.getElementsByTagName("img")[0];
-              var imageSize = 35; // Increase image size here
+              var imageSize = 20; // Increase image size here
               var img = data?.cell.raw.parentElement
                 ?.getElementsByTagName("td")[2]
                 ?.getElementsByTagName("img")[0]?.src;
@@ -921,7 +1137,7 @@ function QuotationGeneratorPage() {
               pdf.addImage(
                 img,
                 data.cell.x + 5,
-                data.cell.y + 5,
+                data.cell.y + 1,
                 imageSize, // Width
                 imageSize // Height
               );
@@ -930,9 +1146,10 @@ function QuotationGeneratorPage() {
         });
 
         if (img) {
-          const imageUrls = img.map((file) => URL.createObjectURL(file));
+          // Directly create the image URL from the single image file
+          const imageUrl = URL.createObjectURL(img);
           pdf.addPage();
-
+        
           const addImageProcess = async (url) => {
             const response = await fetch(url);
             const blob = await response.blob();
@@ -944,29 +1161,26 @@ function QuotationGeneratorPage() {
               reader.readAsDataURL(blob);
             });
           };
-
+        
           const imageWidth = 575;
           const imageHeight = 820; 
           const paddingX = 10; 
           const paddingY = 10; 
           const marginLeft = 0; 
           const marginTop = 0; 
-
-          for (const [i, url] of imageUrls.entries()) {
-            const image = await addImageProcess(url); 
-            pdf.addImage(
-              image,
-              "png",
-              marginLeft + paddingX,
-              marginTop + paddingY,
-              imageWidth,
-              imageHeight
-            );
-            if (i !== imageUrls.length - 1) {
-              pdf.addPage();
-            }
-          }
+        
+          // Process the single image
+          const image = await addImageProcess(imageUrl);
+          pdf.addImage(
+            image,
+            "png",
+            marginLeft + paddingX,
+            marginTop + paddingY,
+            imageWidth,
+            imageHeight
+          );
         }
+        
         console.log(
           "inputsExclusion",
           inputsExclusion[0] !== "",
@@ -1057,18 +1271,19 @@ function QuotationGeneratorPage() {
   };
 
   const hanldeAddDataToApi = () => {
+    setIsDesabled(false);
     console.log(productData);
 
     const quotationData = {
       id: selectedClient?.selectedOptionObject?.value,
-      client: selectedClient?.selectedOptionObject.project,
-      quote_amount: rightIputs.quoteamount,
+      client: selectedClient?.selectedOptionObject?.project,
+      quote_amount: rightIputs?.quoteamount,
       completation_time: rightIputs.completiontime,
       start_date: rightIputs.startdate,
       terms_and_conditions: inputs,
       product_info: productData,
       exclusion: inputsExclusion,
-      image: img[0],
+      image: img,
       approved: false,
     };
 
@@ -1097,9 +1312,14 @@ function QuotationGeneratorPage() {
     quotationCreateAPI(formData)
       .then((data) => {
         console.log(data);
+        notify("Quotation Added");
+
+        setIsDesabled(true);
       })
       .catch((err) => {
         console.log(err);
+        notify("Error in Creating Quotation");
+        setIsDesabled(true);
       });
   };
 
@@ -1867,7 +2087,7 @@ component="label"
           justifyContent: "end",
         }}
       >
-        <Button
+        {/* <Button
           type="submit"
           variant="contained"
           color="primary"
@@ -1885,7 +2105,36 @@ component="label"
           onClick={hanldeAddDataToApi}
         >
           Create
-        </Button>
+        </Button> */}
+         <Button
+            variant="contained"
+            sx={{
+              height: 40,
+              my: 2,
+              marginRight: 2,
+              textTransform: "none",
+              bgcolor: "var(--black-button)",
+              "&:disabled": {
+                bgcolor: "var(--black-button)",
+                color: "white",
+              },
+            }}
+            onClick={hanldeAddDataToApi}
+            disabled={!isDesabled}
+          >
+            {isDesabled ? (
+              "Create"
+            ) : (
+              <CircularProgress
+                style={{
+                  color: "white",
+                  marginBottom: "15px",
+                  marginTop: "15px",
+                }}
+                size={20}
+              />
+            )}
+          </Button>
       </Box>
       <div>
         {/* <Modal
@@ -1921,318 +2170,8 @@ component="label"
           setToggle={setToggle2}
           toggle={toggle2}/>
       </div>
-
-      <table
-        className="offscreen"
-        id="ALLPRODUCTtable"
-        style={{ backgroundColor: "white" }}
-      >
-        <thead></thead>
-        <tbody>
-          {productData.map((item, index) => (
-            <React.Fragment key={index}>
-              <tr style={{ textAlign: "center", backgroundColor: "#FFFF00" }}>
-                <th
-                  style={{
-                    width: "100px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  AREA OF WORK
-                </th>
-                <th style={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  SPECIFICATION
-                </th>
-                <th style={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  AMOUNT
-                </th>
-              </tr>
-              <tr>
-                <td style={{ textAlign: "center" }} rowspan="5">
-                  {item.categoryName}
-                </td>
-                
-                
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {item.productname}
-                </td>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {item.amount}
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {item.description}
-                </td>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {/* {item.hardware} */}
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  hardware
-                </td>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {item.hardware}
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  installation
-                </td>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {item.installation}
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  accessories
-                </td>
-                <td
-                  style={{
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  {item.accessories}
-                </td>
-              </tr>
-
-              <tr>
-                <td
-                  style={{
-                    backgroundColor: "#00B050",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                    paddingRight: "5px",
-                    fontWeight: "800",
-                    textAlign: "right ",
-                  }}
-                  colspan="2"
-                >
-                  {" "}
-                  TOTAL{" "}
-                </td>
-                <th
-                  style={{
-                    backgroundColor: "#00B050",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                    paddingRight: "5px",
-                    fontWeight: "800",
-                    textAlign: "right ",
-                  }}
-                >
-                  {parseInt(item.amount || 0) +
-                    parseInt(item.hardware || 0) +
-                    parseInt(item.installation || 0) +
-                    parseInt(item.accessories || 0)}
-                </th>
-              </tr>
-
-              <tr>
-                <td colSpan="12"> </td>
-              </tr>
-
-              {item.accessorieslist[0] && (
-                <>
-                  <tr>
-                    <td
-                      style={{
-                        backgroundColor: "#00B0F0",
-                        paddingBottom: "5px",
-                        paddingTop: "5px",
-                        fontWeight: "800",
-                        textAlign: "center ",
-                      }}
-                      colSpan="12"
-                    >
-                      {" "}
-                      ACCESSORIES LIST OF {item.categoryName?.toUpperCase()}{" "}
-                    </td>
-                  </tr>
-                  <tr style={{ backgroundColor: "#FFFF00" }}>
-                    <td
-                      style={{
-                        paddingBottom: "5px",
-                        paddingTop: "5px",
-                        fontWeight: "800",
-                        textAlign: "center ",
-                      }}
-                    >
-                      {" "}
-                      SL NO{" "}
-                    </td>
-                    <td
-                      style={{
-                        paddingBottom: "5px",
-                        paddingTop: "5px",
-                        fontWeight: "800",
-                        textAlign: "center ",
-                      }}
-                    >
-                      SPECIFICATION{" "}
-                    </td>
-                    <td
-                      style={{
-                        paddingBottom: "5px",
-                        paddingTop: "5px",
-                        fontWeight: "800",
-                        textAlign: "center ",
-                      }}
-                    >
-                      {" "}
-                      IMAGE{" "}
-                    </td>
-                  </tr>
-                </>
-              )}
-              {item.accessorieslist.map((accessory, i) => {
-                console.log("accessory", accessory);
-                return (
-                  <tr key={`${index}-${i}`}>
-                    <td
-                      style={{
-                        paddingBottom: "5px",
-                        paddingTop: "5px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {index + 1}
-                    </td>
-                    <td
-                      style={{
-                        paddingLeft: "5px",
-                        paddingRight: "5px",
-                        paddingBottom: "5px",
-                        paddingTop: "5px",
-                      }}
-                    >
-                      {accessory.name}
-                    </td>
-                    <td
-                      style={{
-                        paddingLeft: "30px",
-                        paddingRight: "10px",
-                        paddingBottom: "20px",
-                        paddingTop: "20px",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {" "}
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/255px-Flag_of_India.svg.png"
-                        alt="image"
-                        width={50}
-                        height={50}
-                      />{" "}
-                    </td>
-                  </tr>
-                );
-              })}
-            </React.Fragment>
-          ))}
-          <tr>
-            <td
-              style={{
-                backgroundColor: "#FF0000",
-                paddingBottom: "5px",
-                paddingTop: "5px",
-                paddingRight: "10px",
-                fontWeight: "800",
-                textAlign: "right ",
-                color: "white",
-                border: "1px solid black",
-              }}
-              colspan="2"
-            >
-              {" "}
-              GRAND TOTAL{" "}
-            </td>
-            <th
-              style={{
-                backgroundColor: "#FF0000",
-                paddingBottom: "5px",
-                paddingTop: "5px",
-                paddingRight: "10px",
-                fontWeight: "800",
-                textAlign: "right ",
-                color: "white",
-                border: "1px solid black",
-              }}
-            >
-              {grandTotal}
-            </th>
-          </tr>
-        </tbody>
-      </table>
+{/*  */}
+{createTable(groupedData)}
 
       <div>
         <table

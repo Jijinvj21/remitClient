@@ -75,6 +75,7 @@ formData.append('name', projectFormData.project);
 console.log(data)
     })
     .catch((err)=>{
+      
 console.log(err)
     })
 

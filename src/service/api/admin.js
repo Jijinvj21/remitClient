@@ -17,7 +17,7 @@ export const productAddAPI = async (productAdd) => {
     const response = await axios.post(`${BASE_URL}/product/create`, productAdd);
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -29,7 +29,7 @@ export const productGetAPI = async () => {
     console.log("productGetAPI",response)
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -40,7 +40,7 @@ export const productDeleteAPI = async (productId) => {
     const response = await axios.post(`${BASE_URL}/product/delete`,{id:productId});
     return response;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -50,7 +50,7 @@ export const productUpdateAPI = async (productUpdate) => {
     const response = await axios.put(`${BASE_URL}/product/update`,productUpdate);
     return response;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -61,7 +61,7 @@ export const gstOptionsGetAPI = async () => {
     console.log(response)
     return response.data.responseData
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -72,7 +72,7 @@ export const projectCreateAPI = async (projectAdd) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -82,7 +82,7 @@ export const projectGetAPI = async () => {
     const response = await axios.get(`${BASE_URL}/project/getall`,);
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -94,7 +94,7 @@ export const countryOptionsGetAPI = async () => {
     console.log(response)
     return response.data.responseData
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -105,7 +105,7 @@ export const workTypeOptionsGetAPI = async () => {
     console.log(response)
     return response.data.responseData
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -115,7 +115,7 @@ export const clientDataGetAPI = async () => {
     const response = await axios.get(`${BASE_URL}/project/getclient`,);
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -126,7 +126,7 @@ export const createVoucherAPI = async (voucherAdd) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -136,7 +136,7 @@ export const partyDataGetAPI = async () => {
     const response = await axios.get(`${BASE_URL}/party/getall`,);
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -149,7 +149,7 @@ export const createPurchaseAPI = async (purchaseAdd) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -160,7 +160,7 @@ export const createPartyAPI = async (partyAdd) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -171,7 +171,7 @@ export const projectDataByIdAPI = async (id) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -183,7 +183,7 @@ export const paymentInAPI = async (paymentIn) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -193,7 +193,7 @@ export const unitsDataGetAPI = async () => {
     const response = await axios.get(`${BASE_URL}/master/unit/get`,);
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -206,7 +206,7 @@ export const paymentDataGetAPI = async (paymentMode) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -216,7 +216,7 @@ export const categeryGetAPI = async () => {
     const response = await axios.get(`${BASE_URL}/product/category/getall`,);
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -228,7 +228,7 @@ export const stockJournalCreateAPI = async (stockJournalAdd) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -251,7 +251,7 @@ export const quotationGetAPI = async (id) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -266,7 +266,7 @@ export const quotationGetAPI = async (id) => {
 //     console.log(response)
 //     return response
 //   } catch (error) {
-//     console.error(error);
+    console.error(error);
 //     throw error.response.data;
 //   }
 // };
@@ -277,7 +277,7 @@ export const expenceGetAPI = async () => {
     const response = await axios.get(`${BASE_URL}/voucher/journal-voucher/item/getall`,);
     return response.data
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -290,7 +290,7 @@ export const expensesTypeAddAPI = async (expenses) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -301,7 +301,7 @@ export const expensesDataAddAPI = async (expenses) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 };
@@ -313,7 +313,7 @@ export const categoryDataAddAPI = async (catogery) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -324,7 +324,7 @@ export const categoryDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -336,7 +336,7 @@ export const creditDataAddAPI = async (creditData) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -348,7 +348,7 @@ export const debitDataAddAPI = async (debitData) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -360,7 +360,7 @@ export const deliveryChallanAddAPI = async (deliveryChallanData) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -371,7 +371,7 @@ export const stateDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -382,7 +382,7 @@ export const paymentTypeDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -393,7 +393,7 @@ export const creditDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -405,7 +405,7 @@ export const debitDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -416,7 +416,7 @@ export const expensesDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -427,7 +427,7 @@ export const deliveryChallanDataGetAPI = async () => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
@@ -441,7 +441,7 @@ export const paymentTypeDataAddAPI = async (data) => {
     console.log(response)
     return response
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw error.response.data;
   }
 }
