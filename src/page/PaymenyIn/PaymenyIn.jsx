@@ -34,6 +34,7 @@ import PlaylistAddRoundedIcon from "@mui/icons-material/PlaylistAddRounded";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
 import toast from 'react-hot-toast';
+import SelectInput from "../../components/SelectInput/SelectInput";
 
 
 const style = {
@@ -314,6 +315,7 @@ const paymentGet=()=>{
           label: entry.name,
         }));
         console.log(partyData);
+        partyData.unshift({value:"addNew",label:"Add"})
         setPartyOptions(partyData);
       })
       .catch((err) => {
@@ -615,13 +617,22 @@ const paymentGet=()=>{
                 onChange={handleSetParty}
               >
                 <option value="select">Select</option>
-                <option value="addNew">Add New</option>
+                {/* <option value="addNew">Add New</option> */}
                 {partyOptions.map((option, index) => (
                   <option key={index} value={option.value} label={option.label}>
                     {option.label}
                   </option>
                 ))}
               </select>
+             {/* <SelectInput
+              // label="Mode of payment"
+              placeholder="Select mode of payment"
+              name="modeOfPayment"
+              handleChange={handleSetParty}
+              value={partySelect}
+              // setData={setFormData}
+              options={partyOptions}
+              /> */}
             </Box>
 
             {/* <p style={{ color: "red", fontSize: "12px", fontWeight: "600" }}>
