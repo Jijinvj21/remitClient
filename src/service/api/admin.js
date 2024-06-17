@@ -266,7 +266,7 @@ export const quotationGetAPI = async (id) => {
 //     console.log(response)
 //     return response
 //   } catch (error) {
-    console.error(error);
+    // console.error(error);
 //     throw error.response.data;
 //   }
 // };
