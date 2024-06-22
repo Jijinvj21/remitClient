@@ -1,4 +1,16 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Chip, CircularProgress, Grid, IconButton, Modal, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
 import "./QuotationGeneratorPage.scss";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import ProductInputCard from "../../components/ProductInputCard/ProductDataCard";
@@ -7,8 +19,7 @@ import "jspdf-autotable";
 import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import {
   categoryDataAddAPI,
@@ -25,7 +36,7 @@ import {
 import { renderToString } from "react-dom/server";
 import AddClientDrawer from "../../components/AddClientDrawer/AddClientDrawer";
 import AddStockJournalDrawer from "../../components/AddStockJournalDrawer/AddStockJournalDrawer";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const style = {
   position: "absolute",
@@ -39,8 +50,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-import toast from 'react-hot-toast';
-
+import toast from "react-hot-toast";
 
 function QuotationGeneratorPage() {
   const notify = (message) => toast(message);
@@ -58,14 +68,12 @@ function QuotationGeneratorPage() {
   const [drawerImg, setDrawerImg] = useState("");
   const [projectImg, setProjectImg] = useState("");
 
-  const [inputs, setInputs] = useState([""]); 
-    const [inputsExclusion, setInputsExclusion] = useState([""]); 
+  const [inputs, setInputs] = useState([""]);
+  const [inputsExclusion, setInputsExclusion] = useState([""]);
   const [selectedClient, setSelectedClient] = useState({});
   const [selectedProduct, setSelectedProduct] = useState({});
   // const [productSelectData, setProductSelectData] = useState({});
   const [isDesabled, setIsDesabled] = useState(true);
-
-  
 
   const [leftInputs, setLeftInputs] = useState({
     quantity: "",
@@ -128,7 +136,7 @@ function QuotationGeneratorPage() {
   const [img, setImg] = useState(null);
   const [taxOptions, setTaxOptions] = useState([]);
   const [isCategoryDesabled, setIsCategoryDesabled] = useState(true);
-  const [imagePreview,setImagePreview]=useState(null)
+  const [imagePreview, setImagePreview] = useState(null);
 
   const groupByCategory = (data) => {
     return data.reduce(
@@ -168,10 +176,15 @@ function QuotationGeneratorPage() {
 
     return (
       <table
-      className="offscreen"
+        className="offscreen"
         ref={tableRef}
         border="1"
-        style={{ color: "black", width: "100%", borderCollapse: "collapse", background: "white" }}
+        style={{
+          color: "black",
+          width: "100%",
+          borderCollapse: "collapse",
+          background: "white",
+        }}
       >
         <thead>
           <tr
@@ -198,7 +211,17 @@ function QuotationGeneratorPage() {
                     rows.push(
                       <tr key={`description-${productIndex}`}>
                         {productIndex === 0 && (
-                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                          <td
+                            rowSpan={categoryData.products.reduce(
+                              (acc, cur) =>
+                                acc +
+                                (cur.description ? 1 : 0) +
+                                (cur.hardware ? 1 : 0) +
+                                (cur.installation ? 1 : 0) +
+                                (cur.accessories ? 1 : 0),
+                              0
+                            )}
+                          >
                             {categoryName}
                           </td>
                         )}
@@ -212,7 +235,17 @@ function QuotationGeneratorPage() {
                     rows.push(
                       <tr key={`hardware-${productIndex}`}>
                         {productIndex === 0 && rows.length === 0 && (
-                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                          <td
+                            rowSpan={categoryData.products.reduce(
+                              (acc, cur) =>
+                                acc +
+                                (cur.description ? 1 : 0) +
+                                (cur.hardware ? 1 : 0) +
+                                (cur.installation ? 1 : 0) +
+                                (cur.accessories ? 1 : 0),
+                              0
+                            )}
+                          >
                             {categoryName}
                           </td>
                         )}
@@ -226,7 +259,17 @@ function QuotationGeneratorPage() {
                     rows.push(
                       <tr key={`installation-${productIndex}`}>
                         {productIndex === 0 && rows.length === 0 && (
-                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                          <td
+                            rowSpan={categoryData.products.reduce(
+                              (acc, cur) =>
+                                acc +
+                                (cur.description ? 1 : 0) +
+                                (cur.hardware ? 1 : 0) +
+                                (cur.installation ? 1 : 0) +
+                                (cur.accessories ? 1 : 0),
+                              0
+                            )}
+                          >
                             {categoryName}
                           </td>
                         )}
@@ -240,7 +283,17 @@ function QuotationGeneratorPage() {
                     rows.push(
                       <tr key={`accessories-${productIndex}`}>
                         {productIndex === 0 && rows.length === 0 && (
-                          <td rowSpan={categoryData.products.reduce((acc, cur) => acc + (cur.description ? 1 : 0) + (cur.hardware ? 1 : 0) + (cur.installation ? 1 : 0) + (cur.accessories ? 1 : 0), 0)}>
+                          <td
+                            rowSpan={categoryData.products.reduce(
+                              (acc, cur) =>
+                                acc +
+                                (cur.description ? 1 : 0) +
+                                (cur.hardware ? 1 : 0) +
+                                (cur.installation ? 1 : 0) +
+                                (cur.accessories ? 1 : 0),
+                              0
+                            )}
+                          >
                             {categoryName}
                           </td>
                         )}
@@ -300,14 +353,13 @@ function QuotationGeneratorPage() {
                           >
                             {accessoryIndex + 1}
                           </td>
-                          <td style={{ padding: "5px" }}>
-                            {accessory.name}
-                          </td>
+                          <td style={{ padding: "5px" }}>{accessory.name}</td>
                           <td
                             style={{
-                              padding: "5px",
+                              padding: "17px",
                               textAlign: "center",
-                              height: "20px"
+                              height: "20px",
+                              borderRadius:"30px"
                             }}
                           >
                             <img
@@ -321,29 +373,51 @@ function QuotationGeneratorPage() {
                       )
                     )}
                     <tr>
-                      <td colSpan="2" style={{ textAlign: "right", backgroundColor: "#00B050", }}>
+                      <td
+                        colSpan="2"
+                        style={{
+                          textAlign: "right",
+                          backgroundColor: "#00B050",
+                        }}
+                      >
                         Total for {categoryName}:
                       </td>
-                      <td style={{ backgroundColor: "#00B050", }}>{categoryData.totalAmount}</td>
+                      <td style={{ backgroundColor: "#00B050" }}>
+                        {categoryData.totalAmount}
+                      </td>
                     </tr>
                   </React.Fragment>
                 )}
                 {categoryData.accessories.length === 0 && (
                   <tr>
-                    <td colSpan="2" style={{ textAlign: "right", backgroundColor: "#00B050", }}>
+                    <td
+                      colSpan="2"
+                      style={{ textAlign: "right", backgroundColor: "#00B050" }}
+                    >
                       Total for {categoryName}:
                     </td>
-                    <td style={{ backgroundColor: "#00B050", }}>{categoryData.totalAmount}</td>
+                    <td style={{ backgroundColor: "#00B050" }}>
+                      {categoryData.totalAmount}
+                    </td>
                   </tr>
                 )}
               </React.Fragment>
             );
           })}
           <tr>
-            <td colSpan="2" style={{ textAlign: "right", backgroundColor: "#FF0000", color: "black" }}>
+            <td
+              colSpan="2"
+              style={{
+                textAlign: "right",
+                backgroundColor: "#FF0000",
+                color: "black",
+              }}
+            >
               Grand Total:
             </td>
-            <td style={{ backgroundColor: "#FF0000", color: "black" }}>{groupedData.grandTotal}</td>
+            <td style={{ backgroundColor: "#FF0000", color: "black" }}>
+              {groupedData.grandTotal}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -454,7 +528,7 @@ function QuotationGeneratorPage() {
     setState2({ ...state2, [anchor]: open });
   };
   const handleAccessoryChange = (event) => {
-    console.log("event.target",productsOptions)
+    console.log("event.target", productsOptions);
     const selectedOptionObject = accessoriesProductsOptions.find(
       (option) => option.value == event.target.value
     );
@@ -589,7 +663,7 @@ function QuotationGeneratorPage() {
         const filteredData = data.responseData.filter(
           (entry) => entry.is_master_product === true
         );
-        const productsData =filteredData.map((entry) => ({
+        const productsData = filteredData.map((entry) => ({
           value: entry.id,
           label: entry.name,
           unit: entry.unit,
@@ -616,7 +690,7 @@ function QuotationGeneratorPage() {
     categoryDataGetAPI()
       .then((data) => {
         console.log("CatogarytGetAPI:", data);
-       
+
         const productsData = data.responseData.map((entry) => ({
           value: entry.id,
           label: entry.name,
@@ -653,7 +727,6 @@ function QuotationGeneratorPage() {
           image: entry.Image,
           unit_id: entry.unit_id,
           is_master_product: entry.is_master_product,
-          
         }));
         // productsData.unshift({ value: -2, label: "Add" });
         productsData.unshift({ value: -1, label: "Select" });
@@ -695,9 +768,9 @@ function QuotationGeneratorPage() {
       product: `${selectedProduct.selectedOptionObject?.value}`,
       productname: selectedProduct.selectedOptionObject?.label,
       productunit: selectedProduct.selectedOptionObject?.unit,
-      image:selectedProduct.selectedOptionObject?.image,
+      image: selectedProduct.selectedOptionObject?.image,
       category: `${areaOfWorkCategorySelected?.value}`,
-      categoryName: areaOfWorkCategorySelected?.label
+      categoryName: areaOfWorkCategorySelected?.label,
     };
     console.log("handleAddData", selectedProduct);
     setProductData([...productData, productDatas]);
@@ -713,9 +786,6 @@ function QuotationGeneratorPage() {
       accessories: "",
     });
   };
-  
-
-
 
   const handlerightIputsChange = (e) => {
     const { name, value } = e.target;
@@ -779,8 +849,8 @@ function QuotationGeneratorPage() {
   // };
   const handleImageChange = (e) => {
     // console.log("e.target.files", e.target.files);
-    // const files = e.target.files; 
-    // const fileList = Array.from(files); 
+    // const files = e.target.files;
+    // const fileList = Array.from(files);
     const file = e.target.files[0];
 
     if (file) {
@@ -791,11 +861,11 @@ function QuotationGeneratorPage() {
       };
       reader.readAsDataURL(file); // Read the file as a data URL
     }
-    setImg(file); 
+    setImg(file);
   };
 
   const handleAddAccessory = async () => {
-    console.log(selectedAccessory)
+    console.log(selectedAccessory);
     if (selectedAccessory.selectedOptionObject?.value !== "") {
       const accessory = {
         accessories: `${selectedAccessory.selectedOptionObject?.value}`,
@@ -811,24 +881,23 @@ function QuotationGeneratorPage() {
       setQuantity(1);
     }
   };
-  
+
   useEffect(() => {
     console.log("selectedAccessory after updating:", selectedAccessory);
   }, [selectedAccessory]);
-  
+
   const handleProductNameChange = (event) => {
     const selectedOptionObject = productsOptions.find(
       (option) => option.value == event.target.value
     );
     if (selectedOptionObject.value == -2) {
-      
       console.log(selectedOptionObject.value == -2);
       toggleDrawer2("right", true)();
     } else {
       // const { value, label } = selectedOptionObject;
       // { "value":value,"label":label }
       // setProductSelectData({ "value":value,"label":label })
-      console.log("firstevent",selectedOptionObject)
+      console.log("firstevent", selectedOptionObject);
       setSelectedProduct({ selectedOptionObject });
     }
   };
@@ -842,8 +911,8 @@ function QuotationGeneratorPage() {
       const selectedOptionObject = categoryOptions.find(
         (option) => option.value == event.target.value
       );
-      console.log("firstselectedOptionObject",selectedOptionObject)
-      
+      console.log("firstselectedOptionObject", selectedOptionObject);
+
       setAreaOfWorkCategorySelected(selectedOptionObject);
     }
   };
@@ -853,7 +922,7 @@ function QuotationGeneratorPage() {
   };
 
   const handleAddAreaOfWorkCategory = () => {
-    setIsCategoryDesabled(false)
+    setIsCategoryDesabled(false);
     const createData = {
       project_id: selectedClient?.selectedOptionObject?.value,
       name: areaOfWorkCategoryInput,
@@ -862,19 +931,19 @@ function QuotationGeneratorPage() {
       ? categoryDataAddAPI(createData)
           .then((data) => {
             console.log(data);
-            setIsCategoryDesabled(true)
-            handleClose()
-            setAreaOfWorkCategoryInput("")
-            getCategeryOptionsFormAPI()
+            setIsCategoryDesabled(true);
+            handleClose();
+            setAreaOfWorkCategoryInput("");
+            getCategeryOptionsFormAPI();
             notify("Category Added");
           })
           .catch((err) => {
             console.log(err);
-            setIsCategoryDesabled(true)
+            setIsCategoryDesabled(true);
             notify("Problem Category Adding");
           })
       : notify("Client not Selected");
-      setIsCategoryDesabled(true)
+    setIsCategoryDesabled(true);
   };
 
   const leftArrOfInputs = [
@@ -891,38 +960,38 @@ function QuotationGeneratorPage() {
       inputName: "productname",
       label: " Product Name",
       inputOrSelect: "select",
-      // value: productSelectData.data, 
+      // value: productSelectData.data,
       options: productsOptions,
     },
     {
       inputName: "amount",
       label: " Amount",
       type: "number",
-      value: leftInputs.amount, 
+      value: leftInputs.amount,
     },
     {
       inputName: "description",
       label: "Description",
       type: "text",
-      value: leftInputs.description, 
+      value: leftInputs.description,
     },
     {
       inputName: "hardware",
       label: " Hardware",
       type: "number",
-      value: leftInputs.hardware, 
+      value: leftInputs.hardware,
     },
     {
       inputName: "installation",
       label: " Installation",
       type: "number",
-      value: leftInputs.installation, 
+      value: leftInputs.installation,
     },
     {
       inputName: "accessories",
       label: " Accessories",
       type: "number",
-      value: leftInputs.accessories, 
+      value: leftInputs.accessories,
     },
     {
       handleChange: handleAccessoryChange,
@@ -932,7 +1001,7 @@ function QuotationGeneratorPage() {
       options: accessoriesProductsOptions,
     },
   ];
-    const RightArrOfInputs = [
+  const RightArrOfInputs = [
     {
       handleChange: handleClientname,
       intputName: "clientname",
@@ -976,7 +1045,9 @@ function QuotationGeneratorPage() {
 
   const handleDeleteAccessories = (productIndex, accessoryIndex) => {
     const productToUpdate = productData[productIndex];
-    const updatedAccessories = productToUpdate.accessorieslist.filter((accessory, index) => index !== accessoryIndex);
+    const updatedAccessories = productToUpdate.accessorieslist.filter(
+      (accessory, index) => index !== accessoryIndex
+    );
     const updatedProduct = {
       ...productToUpdate,
       accessorieslist: updatedAccessories,
@@ -987,10 +1058,10 @@ function QuotationGeneratorPage() {
       }
       return product;
     });
-  
+
     setProductData(updatedProductData);
   };
-  
+
   const handleDeleteAccessoriesChip = (index) => {
     const updatedArray = accessoriesList.filter((item, i) => i !== index);
     setAccessoriesList(updatedArray);
@@ -1002,7 +1073,7 @@ function QuotationGeneratorPage() {
       id="quatationgenerator"
       style={{
         fontSize: "13px",
-        fontFamily: "'Roboto'", 
+        fontFamily: "'Roboto'",
         fontWeight: 400,
         textAlign: "justify",
       }}
@@ -1033,7 +1104,7 @@ function QuotationGeneratorPage() {
             paddingBottom: "5px",
             lineHeight: "22px",
             textAlign: "justify",
-            fontFamily: "'Roboto'", 
+            fontFamily: "'Roboto'",
             fontWeight: 400,
           }}
         >
@@ -1046,7 +1117,7 @@ function QuotationGeneratorPage() {
           style={{
             paddingBottom: "5px",
             lineHeight: "22px",
-            fontFamily: "'Roboto'", 
+            fontFamily: "'Roboto'",
             fontWeight: 400,
           }}
         >
@@ -1082,8 +1153,8 @@ function QuotationGeneratorPage() {
     );
 
     const pdf = new jsPDF("p", "pt", "a4", true);
-    const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf"; 
-    pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman); 
+    const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf";
+    pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman);
     pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
 
     pdf.setFont("OPTITimesRomanfont");
@@ -1095,26 +1166,25 @@ function QuotationGeneratorPage() {
           "https://res.cloudinary.com/dczou8g32/image/upload/v1714668042/DEV/jw8j76cgw2ogtokyoisi.png",
           30,
           30,
-          100, 
-          60 
+          100,
+          60
         );
-        
 
         pdf.autoTable({
           html: tableRef.current,
           useCss: true,
           startY: 30,
-          theme: 'grid',
+          theme: "grid",
           styles: {
-            fontSize: 7, 
-            cellPadding: 1, 
-            valign: 'middle',
-            halign: 'center',
+            fontSize: 7,
+            cellPadding: 1,
+            valign: "middle",
+            halign: "center",
           },
           headStyles: {
             fillColor: [255, 255, 0],
             textColor: [255, 0, 0],
-            fontStyle: 'bold',
+            fontStyle: "bold",
           },
           columnStyles: {
             0: { cellWidth: 150 }, // Adjusted width for the first column
@@ -1124,20 +1194,19 @@ function QuotationGeneratorPage() {
           didDrawCell: async function (data) {
             console.log("didDrawCell", data?.cell?.raw);
             if (data.column.index === 2 && data.cell.section === "body") {
-    
               // data.cell.styles.cellPadding = { top: 10, left: 5, right: 5, bottom: 10 };
-                        var td = data.cell.raw;
+              var td = data.cell.raw;
               console.log("didDrawCell2", td.getElementsByTagName("td"));
               // var img = td.getElementsByTagName("img")[0];
-              var imageSize = 20; // Increase image size here
+              var imageSize = 30; // Increase image size here
               var img = data?.cell.raw.parentElement
                 ?.getElementsByTagName("td")[2]
                 ?.getElementsByTagName("img")[0]?.src;
               console.log("img.src", img);
               pdf.addImage(
                 img,
-                data.cell.x + 5,
-                data.cell.y + 1,
+                data.cell.x + 35,
+                data.cell.y + 4,
                 imageSize, // Width
                 imageSize // Height
               );
@@ -1149,7 +1218,7 @@ function QuotationGeneratorPage() {
           // Directly create the image URL from the single image file
           const imageUrl = URL.createObjectURL(img);
           pdf.addPage();
-        
+
           const addImageProcess = async (url) => {
             const response = await fetch(url);
             const blob = await response.blob();
@@ -1161,14 +1230,14 @@ function QuotationGeneratorPage() {
               reader.readAsDataURL(blob);
             });
           };
-        
+
           const imageWidth = 575;
-          const imageHeight = 820; 
-          const paddingX = 10; 
-          const paddingY = 10; 
-          const marginLeft = 0; 
-          const marginTop = 0; 
-        
+          const imageHeight = 820;
+          const paddingX = 10;
+          const paddingY = 10;
+          const marginLeft = 0;
+          const marginTop = 0;
+
           // Process the single image
           const image = await addImageProcess(imageUrl);
           pdf.addImage(
@@ -1180,7 +1249,7 @@ function QuotationGeneratorPage() {
             imageHeight
           );
         }
-        
+
         console.log(
           "inputsExclusion",
           inputsExclusion[0] !== "",
@@ -1213,7 +1282,7 @@ function QuotationGeneratorPage() {
           });
         pdf.setFontSize(12);
         console.log("inputsExclusion", inputsExclusion.length);
-        const inputText1 = inputsExclusion.join("\n"); 
+        const inputText1 = inputsExclusion.join("\n");
         pdf.text(`${inputText1}`, 50, 100, {
           maxWidth,
           lineHeightFactor: 1.5,
@@ -1234,7 +1303,7 @@ function QuotationGeneratorPage() {
             }
           );
         pdf.setFontSize(12);
-        const inputText = inputs.join("\n"); 
+        const inputText = inputs.join("\n");
         pdf.text(
           `${inputText}`,
           50,
@@ -1531,37 +1600,46 @@ function QuotationGeneratorPage() {
                 );
               })}
 
-{imagePreview? <Chip onDelete={()=>{setImagePreview(null);setImg(null);}} avatar={<img src={imagePreview}  width={100} height={100}  />} style={{marginTop:"15px",marginLeft:"10px"}} size="medium" />:
-
-<Button
-disableRipple
-sx={{
-  mt: 3,
-  textTransform: "none",
-  color: "var(--black-button)",
-  "&:hover": {
-    background: "transparent",
-  },
-}}
-component="label"
->
-<img src={ImageAdd} alt="add img" />
-<Typography
-  variant="string"
-  sx={{
-    pl: 1,
-  }}
->
-  Add plan
-</Typography>
-<input
-  type="file"
-  // multiple
-  hidden
-  onChange={handleImageChange}
-/>
-</Button> 
-}
+              {imagePreview ? (
+                <Chip
+                  onDelete={() => {
+                    setImagePreview(null);
+                    setImg(null);
+                  }}
+                  avatar={<img src={imagePreview} width={100} height={100} />}
+                  style={{ marginTop: "15px", marginLeft: "10px" }}
+                  size="medium"
+                />
+              ) : (
+                <Button
+                  disableRipple
+                  sx={{
+                    mt: 3,
+                    textTransform: "none",
+                    color: "var(--black-button)",
+                    "&:hover": {
+                      background: "transparent",
+                    },
+                  }}
+                  component="label"
+                >
+                  <img src={ImageAdd} alt="add img" />
+                  <Typography
+                    variant="string"
+                    sx={{
+                      pl: 1,
+                    }}
+                  >
+                    Add plan
+                  </Typography>
+                  <input
+                    type="file"
+                    // multiple
+                    hidden
+                    onChange={handleImageChange}
+                  />
+                </Button>
+              )}
               {/* <Button
                 disableRipple
                 sx={{
@@ -1722,7 +1800,7 @@ component="label"
         </Box>
 
         <Box className="input-box" sx={{ gap: 2 }}>
-        <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{ display: "flex", gap: 2 }}>
             {leftArrOfInputs.slice(0, 1).map((input, index) => (
               <InputComponent
                 key={index}
@@ -1739,36 +1817,39 @@ component="label"
 
           <Box sx={{ display: "flex", gap: 2 }}>
             {leftArrOfInputs.slice(1, 2).map((input, index) => {
-            console.log("input.inputName",input.options,input.value)
+              console.log("input.inputName", input.options, input.value);
 
-              return(
-              <InputComponent
-                key={index}
-                handleChange={handleProductNameChange}
-                label={input.label}
-                type={input.type}
-                value={input.value} 
-                inputName={input.inputName} 
-                inputOrSelect={input.inputOrSelect}
-                options={input.options}
-              />
-            )})}
+              return (
+                <InputComponent
+                  key={index}
+                  handleChange={handleProductNameChange}
+                  label={input.label}
+                  type={input.type}
+                  value={input.value}
+                  inputName={input.inputName}
+                  inputOrSelect={input.inputOrSelect}
+                  options={input.options}
+                />
+              );
+            })}
 
-{leftArrOfInputs.slice(2, 3).map((input, index) => {
-        console.log("input.value", input);
-        return (
-          <InputComponent
-            key={index}
-            handleChange={(e) => handleleftIputsChange(e, input.inputName)} 
-            label={input.label}
-            type={input.type}
-            value={input.value}
-            inputName={input.inputName} 
-            inputOrSelect={input.inputOrSelect}
-            options={input.options}
-          />
-        );
-      })}
+            {leftArrOfInputs.slice(2, 3).map((input, index) => {
+              console.log("input.value", input);
+              return (
+                <InputComponent
+                  key={index}
+                  handleChange={(e) =>
+                    handleleftIputsChange(e, input.inputName)
+                  }
+                  label={input.label}
+                  type={input.type}
+                  value={input.value}
+                  inputName={input.inputName}
+                  inputOrSelect={input.inputOrSelect}
+                  options={input.options}
+                />
+              );
+            })}
           </Box>
 
           <Box sx={{ display: "flex", gap: 2 }}>
@@ -1778,7 +1859,7 @@ component="label"
                 handleChange={(e) => handleleftIputsChange(e, input.inputName)}
                 label={input.label}
                 type={input.type}
-                value={input.value} 
+                value={input.value}
                 inputName={input.inputName}
                 inputOrSelect={input.inputOrSelect}
                 options={input.options}
@@ -1793,7 +1874,7 @@ component="label"
                 handleChange={(e) => handleleftIputsChange(e, input.inputName)}
                 label={input.label}
                 type={input.type}
-                value={input.value} 
+                value={input.value}
                 inputName={input.inputName}
                 inputOrSelect={input.inputOrSelect}
                 options={input.options}
@@ -1802,20 +1883,20 @@ component="label"
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {leftArrOfInputs.slice(7, 9).map((input, index) => {
-    return (
-      <InputComponent
-        key={index}
-        handleChange={input.handleChange}
-        label={input.label}
-        type={input.type}
-        value={input.value} 
-        inputName={input.inputName}
-        inputOrSelect={input.inputOrSelect}
-        options={input.options}
-      />
-    );
-  })}
+            {leftArrOfInputs.slice(7, 9).map((input, index) => {
+              return (
+                <InputComponent
+                  key={index}
+                  handleChange={input.handleChange}
+                  label={input.label}
+                  type={input.type}
+                  value={input.value}
+                  inputName={input.inputName}
+                  inputOrSelect={input.inputOrSelect}
+                  options={input.options}
+                />
+              );
+            })}
 
             <Button
               type="submit"
@@ -1834,20 +1915,22 @@ component="label"
               // onClick={() => {
               //   toggleDrawer("right", true)();
               // }}
-              onClick={()=>{handleAddAccessory()}}
+              onClick={() => {
+                handleAddAccessory();
+              }}
             >
               Add
             </Button>
           </Box>
-          <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
-  {accessoriesList?.map((product, productIndex) => (
-    <Chip
-      key={productIndex}
-      onDelete={() => handleDeleteAccessoriesChip(productIndex)}
-      label={product.name}
-    />
-  ))}
-</div>
+          <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
+            {accessoriesList?.map((product, productIndex) => (
+              <Chip
+                key={productIndex}
+                onDelete={() => handleDeleteAccessoriesChip(productIndex)}
+                label={product.name}
+              />
+            ))}
+          </div>
 
           <Box
             sx={{
@@ -1926,12 +2009,8 @@ component="label"
             })}
           </Box> */}
 
-
-
-          
-
-{/* { productData.length!==0 ? */}
-<Box
+          {/* { productData.length!==0 ? */}
+          <Box
             sx={{
               height: "57vh", // Height of the inner container, larger than the outer container
               overflowY: "auto", // Enable scrolling
@@ -1956,49 +2035,62 @@ component="label"
                   >
                     {/* <Chip label={product.productname} onDelete={() => handleDelete(productIndex)} /> */}
                     <Accordion>
-                    <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel2-content"
-        id="panel2-header"
-      >
-        <div style={{display:"flex",flexDirection:"column"}}>
-
-          <Typography>{product.categoryName}</Typography>
-        <Typography>{product.productname}</Typography>
-        </div>
-        <IconButton
-          aria-label="delete"
-          onClick={() => handleDelete(productIndex)}
-          style={{ marginLeft: 'auto' }} // Adjust the button to the right
-        >
-          <DeleteIcon />
-        </IconButton>
-      </AccordionSummary>
-        <AccordionDetails  sx={{
-            "&.css-1086bdv-MuiPaper-root-MuiAccordion-root.Mui-expanded": {
-             margin:"0px !important"
-            },
-          }}>
-          {/* <Typography>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel2-content"
+                        id="panel2-header"
+                      >
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography>{product.categoryName}</Typography>
+                          <Typography>{product.productname}</Typography>
+                        </div>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => handleDelete(productIndex)}
+                          style={{ marginLeft: "auto" }} // Adjust the button to the right
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </AccordionSummary>
+                      <AccordionDetails
+                        sx={{
+                          "&.css-1086bdv-MuiPaper-root-MuiAccordion-root.Mui-expanded":
+                            {
+                              margin: "0px !important",
+                            },
+                        }}
+                      >
+                        {/* <Typography>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             malesuada lacus ex, sit amet blandit leo lobortis eget.
           </Typography> */}
-                  {product.accessorieslist.map((accessory, accessoryIndex) => {
-                    console.log("accessorydatas",accessory)
-                    return(
-                    <Grid
-                      md={12}
-                      item
-                      key={`${productIndex}-${accessoryIndex}`} // Use a unique key combining productIndex and accessoryIndex
-                      sx={{
-                        mx: "auto",
-                        px: "10px",
-                        py: 1,
-                      }}
-                    >
-                                          <Chip label={accessory.name} onDelete={() => handleDeleteAccessories(productIndex, accessoryIndex)} />
+                        {product.accessorieslist.map(
+                          (accessory, accessoryIndex) => {
+                            console.log("accessorydatas", accessory);
+                            return (
+                              <Grid
+                                md={12}
+                                item
+                                key={`${productIndex}-${accessoryIndex}`} // Use a unique key combining productIndex and accessoryIndex
+                                sx={{
+                                  mx: "auto",
+                                  px: "10px",
+                                  py: 1,
+                                }}
+                              >
+                                <Chip
+                                  label={accessory.name}
+                                  onDelete={() =>
+                                    handleDeleteAccessories(
+                                      productIndex,
+                                      accessoryIndex
+                                    )
+                                  }
+                                />
 
-                      {/* <ProductInputCard
+                                {/* <ProductInputCard
                        handleDelete={() => handleDeleteAccessories(productIndex, accessoryIndex)}
                         heading={accessory.name}
                         image={accessory.image} // Assuming you have an image property in accessorieslist
@@ -2007,10 +2099,12 @@ component="label"
                         rate={accessory.price}
                         amount={accessory.amount}
                       /> */}
-                    </Grid>
-                  )})}
-        </AccordionDetails>
-      </Accordion>
+                              </Grid>
+                            );
+                          }
+                        )}
+                      </AccordionDetails>
+                    </Accordion>
 
                     {/* <ProductInputCard
                       handleDelete={() => handleDelete(productIndex)}
@@ -2024,7 +2118,6 @@ component="label"
                   </Grid>
 
                   {/* Map over accessorieslist of the current product */}
-              
                 </div>
               );
             })}
@@ -2066,7 +2159,6 @@ component="label"
               );
             })}
           </Box>} */}
-          
         </Box>
       </Box>
       {/* <p className="added-item"> Added Items</p> */}
@@ -2106,35 +2198,35 @@ component="label"
         >
           Create
         </Button> */}
-         <Button
-            variant="contained"
-            sx={{
-              height: 40,
-              my: 2,
-              marginRight: 2,
-              textTransform: "none",
+        <Button
+          variant="contained"
+          sx={{
+            height: 40,
+            my: 2,
+            marginRight: 2,
+            textTransform: "none",
+            bgcolor: "var(--black-button)",
+            "&:disabled": {
               bgcolor: "var(--black-button)",
-              "&:disabled": {
-                bgcolor: "var(--black-button)",
+              color: "white",
+            },
+          }}
+          onClick={hanldeAddDataToApi}
+          disabled={!isDesabled}
+        >
+          {isDesabled ? (
+            "Create"
+          ) : (
+            <CircularProgress
+              style={{
                 color: "white",
-              },
-            }}
-            onClick={hanldeAddDataToApi}
-            disabled={!isDesabled}
-          >
-            {isDesabled ? (
-              "Create"
-            ) : (
-              <CircularProgress
-                style={{
-                  color: "white",
-                  marginBottom: "15px",
-                  marginTop: "15px",
-                }}
-                size={20}
-              />
-            )}
-          </Button>
+                marginBottom: "15px",
+                marginTop: "15px",
+              }}
+              size={20}
+            />
+          )}
+        </Button>
       </Box>
       <div>
         {/* <Modal
@@ -2159,8 +2251,9 @@ component="label"
           state={state}
           toggleDrawer={toggleDrawer}
         />
-        
-        <AddStockJournalDrawer handleSelectChange={handleDrawerSelectChange}
+
+        <AddStockJournalDrawer
+          handleSelectChange={handleDrawerSelectChange}
           arrOfInputs={arrOfDrawerInputs}
           toggleDrawer={toggleDrawer2}
           state={state2}
@@ -2168,10 +2261,11 @@ component="label"
           handleImageChange={handleDrawerImageChange}
           handleAdd={handleDrawerAddProducts}
           setToggle={setToggle2}
-          toggle={toggle2}/>
+          toggle={toggle2}
+        />
       </div>
-{/*  */}
-{createTable(groupedData)}
+      {/*  */}
+      {createTable(groupedData)}
 
       <div>
         <table
@@ -2295,17 +2389,27 @@ component="label"
                   "&:hover": {
                     background: "var(--button-hover)",
                   },
-                  '&:disabled': {
+                  "&:disabled": {
                     bgcolor: "var(--black-button)",
-                    color: 'white', },
-
+                    color: "white",
+                  },
                 }}
                 onClick={handleAddAreaOfWorkCategory}
                 disabled={!isCategoryDesabled}
               >
-               {isCategoryDesabled? "Save":
-            <CircularProgress style={{color:"white",marginBottom:"15px",marginTop:"15px"}} size={20} />
-          }</Button>
+                {isCategoryDesabled ? (
+                  "Save"
+                ) : (
+                  <CircularProgress
+                    style={{
+                      color: "white",
+                      marginBottom: "15px",
+                      marginTop: "15px",
+                    }}
+                    size={20}
+                  />
+                )}
+              </Button>
             </Box>
           </Box>
         </Modal>
