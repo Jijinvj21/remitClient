@@ -51,6 +51,8 @@ const style = {
   p: 4,
 };
 import toast from "react-hot-toast";
+import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
+
 
 function QuotationGeneratorPage() {
   const notify = (message) => toast(message);
@@ -225,8 +227,8 @@ function QuotationGeneratorPage() {
                             {categoryName}
                           </td>
                         )}
-                        <td>{`${item.productname} ${item.description}`}</td>
-                        <td>{item.amount}</td>
+                        <td style={{padding:"5px"}}>{`${item.productname} ${item.description}`}</td>
+                        <td style={{padding:"5px"}}>{item.amount}</td>
                       </tr>
                     );
                   }
@@ -236,6 +238,7 @@ function QuotationGeneratorPage() {
                       <tr key={`hardware-${productIndex}`}>
                         {productIndex === 0 && rows.length === 0 && (
                           <td
+                          style={{padding:"5px"}}
                             rowSpan={categoryData.products.reduce(
                               (acc, cur) =>
                                 acc +
@@ -250,7 +253,7 @@ function QuotationGeneratorPage() {
                           </td>
                         )}
                         <td>Hardware</td>
-                        <td>{item.hardware}</td>
+                        <td style={{padding:"5px"}}>{item.hardware}</td>
                       </tr>
                     );
                   }
@@ -260,6 +263,7 @@ function QuotationGeneratorPage() {
                       <tr key={`installation-${productIndex}`}>
                         {productIndex === 0 && rows.length === 0 && (
                           <td
+                          style={{padding:"5px"}}
                             rowSpan={categoryData.products.reduce(
                               (acc, cur) =>
                                 acc +
@@ -273,8 +277,8 @@ function QuotationGeneratorPage() {
                             {categoryName}
                           </td>
                         )}
-                        <td>Installation</td>
-                        <td>{item.installation}</td>
+                        <td style={{padding:"5px"}}>Installation</td>
+                        <td style={{padding:"5px"}}>{item.installation}</td>
                       </tr>
                     );
                   }
@@ -284,6 +288,7 @@ function QuotationGeneratorPage() {
                       <tr key={`accessories-${productIndex}`}>
                         {productIndex === 0 && rows.length === 0 && (
                           <td
+                          style={{padding:"5px"}}
                             rowSpan={categoryData.products.reduce(
                               (acc, cur) =>
                                 acc +
@@ -297,8 +302,8 @@ function QuotationGeneratorPage() {
                             {categoryName}
                           </td>
                         )}
-                        <td>Accessories</td>
-                        <td>{item.accessories}</td>
+                        <td style={{padding:"5px"}}>Accessories</td>
+                        <td style={{padding:"5px"}}>{item.accessories}</td>
                       </tr>
                     );
                   }
@@ -378,6 +383,7 @@ function QuotationGeneratorPage() {
                         style={{
                           textAlign: "right",
                           backgroundColor: "#00B050",
+                          padding:"5px"
                         }}
                       >
                         Total for {categoryName}:
@@ -392,11 +398,11 @@ function QuotationGeneratorPage() {
                   <tr>
                     <td
                       colSpan="2"
-                      style={{ textAlign: "right", backgroundColor: "#00B050" }}
+                      style={{ textAlign: "right", backgroundColor: "#00B050", padding:"5px" }}
                     >
                       Total for {categoryName}:
                     </td>
-                    <td style={{ backgroundColor: "#00B050" }}>
+                    <td style={{ backgroundColor: "#00B050", padding:"5px" }}>
                       {categoryData.totalAmount}
                     </td>
                   </tr>
@@ -411,11 +417,12 @@ function QuotationGeneratorPage() {
                 textAlign: "right",
                 backgroundColor: "#FF0000",
                 color: "black",
+                padding:"5px"
               }}
             >
               Grand Total:
             </td>
-            <td style={{ backgroundColor: "#FF0000", color: "black" }}>
+            <td style={{ backgroundColor: "#FF0000", color: "black",padding:"5px" }}>
               {groupedData.grandTotal}
             </td>
           </tr>
@@ -1153,12 +1160,13 @@ function QuotationGeneratorPage() {
     );
 
     const pdf = new jsPDF("p", "pt", "a4", true);
-    const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf";
-    pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman);
-    pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
-
-    pdf.setFont("OPTITimesRomanfont");
-
+    // const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf";
+    // pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman);
+    // pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
+    // pdf.setFont("OPTITimesRomanfont");
+    pdf.addFileToVFS('Inter-Regular.ttf', interBase);
+    pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+    pdf.setFont('Inter');
     pdf.html(pageone, {
       callback: async () => {
         pdf.addPage();
