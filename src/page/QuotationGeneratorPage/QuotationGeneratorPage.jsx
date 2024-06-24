@@ -51,8 +51,8 @@ const style = {
   p: 4,
 };
 import toast from "react-hot-toast";
-import {interFont as interBase} from "../../assets/Fonts/inter-medium-font"
-
+import {interThin as interBase} from "../../assets/Fonts/inter-thin-font"
+// import js from "../../assets/"
 
 function QuotationGeneratorPage() {
   const notify = (message) => toast(message);
@@ -1080,8 +1080,9 @@ function QuotationGeneratorPage() {
       id="quatationgenerator"
       style={{
         fontSize: "13px",
-        fontFamily: "'Roboto'",
-        fontWeight: 400,
+        // fontFamily: "'Roboto'",
+        // fontFamily: "Inter !important" ,
+        fontWeight: 100,
         textAlign: "justify",
       }}
     >
@@ -1111,8 +1112,10 @@ function QuotationGeneratorPage() {
             paddingBottom: "5px",
             lineHeight: "22px",
             textAlign: "justify",
-            fontFamily: "'Roboto'",
-            fontWeight: 400,
+            // fontFamily: "'Roboto'",
+            // fontFamily: "Inter !important" ,
+
+            fontWeight: 100,
           }}
         >
           {" "}
@@ -1124,8 +1127,8 @@ function QuotationGeneratorPage() {
           style={{
             paddingBottom: "5px",
             lineHeight: "22px",
-            fontFamily: "'Roboto'",
-            fontWeight: 400,
+          
+
           }}
         >
           Biltree was founded on the principle of providing quality work with an
@@ -1160,13 +1163,15 @@ function QuotationGeneratorPage() {
     );
 
     const pdf = new jsPDF("p", "pt", "a4", true);
-    // const OPTITimesRoman = "../../assets/Fonts/OPTITimes-Roman.otf";
-    // pdf.addFileToVFS("OPTITimes-Roman.otf", OPTITimesRoman);
-    // pdf.addFont("OPTITimes-Roman.otf", "OPTITimesRomanfont", "normal");
-    // pdf.setFont("OPTITimesRomanfont");
-    pdf.addFileToVFS('Inter-Regular.ttf', interBase);
-    pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+    
+    pdf.addFileToVFS('Inter-thin.ttf', interBase);
+    pdf.addFont('Inter-thin.ttf', 'Inter', 'normal');
     pdf.setFont('Inter');
+    pdf.setFontSize(5);
+
+
+
+
     pdf.html(pageone, {
       callback: async () => {
         pdf.addPage();
@@ -1181,7 +1186,7 @@ function QuotationGeneratorPage() {
         pdf.autoTable({
           html: tableRef.current,
           useCss: true,
-          startY: 30,
+          startY: 100,
           theme: "grid",
           styles: {
             fontSize: 7,
@@ -1322,7 +1327,7 @@ function QuotationGeneratorPage() {
             align: "left",
           }
         );
-        pdf.setFont("Inter", "bold");
+        // pdf.setFont("Inter", "bold");
         pdf.setFontSize(10);
 
         pdf.text(
