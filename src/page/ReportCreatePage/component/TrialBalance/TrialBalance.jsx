@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import DateRangePicker from "../../../../components/DateRangePicker/DateRangePicker";
 import "./TrialBalance.scss";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper  } from "@mui/material";
+import SimCardDownloadOutlinedIcon from '@mui/icons-material/SimCardDownloadOutlined';
+
 function TrialBalance({
   setReport,
   report,
@@ -28,9 +30,33 @@ function TrialBalance({
     setSelectedToDate(dayjs());
   }, []);
   console.log(report?.trial_balance,"reportData")
+  const generateCSV = () => {
+    const headers = ["Particular", "Debit", "Credit"];
+    const rows = report?.trial_balance?.map(row => [row.particular, row.debit, row.credit]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(e => e.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "trial_balance.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <div className="trial-balance-container">
+      <div className="head-with-icon">
       <h4>TRIAL BALANCE REPORT</h4>
+      <div className="icon-with-text">
+      <SimCardDownloadOutlinedIcon onClick={generateCSV} />
+      <h5>Download CSV</h5>
+      </div>
+      </div>
       <div className="from-to-date">
         <DateRangePicker
           lable="From"

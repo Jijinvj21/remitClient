@@ -7,9 +7,10 @@ import {
 } from "@mui/material";
 import DateRangePicker from "../../../../components/DateRangePicker/DateRangePicker";
 import "./ProfitAndLose.scss";
-import { partyDataGetAPI,  profitLossDataGetByIdAPI, projectGetAPI } from "../../../../service/api/admin";
+import {   profitLossDataGetByIdAPI, projectGetAPI } from "../../../../service/api/admin";
 import dayjs from "dayjs";
 import { formatter } from "../../../../utils/moneyFormatter";
+import SimCardDownloadOutlinedIcon from '@mui/icons-material/SimCardDownloadOutlined';
 
 
 function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,selectedFromDate,setSelectedFromDate}) {
@@ -106,8 +107,13 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
 
   return (
     <div className="profit-and-lose-container">
-      <button onClick={generateCSV}> generate csv</button>
+      <div className="head-with-icon">
       <h4>PROFIT AND LOSS REPORT</h4>
+      <div className="icon-with-text">
+      <SimCardDownloadOutlinedIcon onClick={generateCSV} />
+      <h5>Download CSV</h5>
+      </div>
+      </div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div className="from-to-date">
           <DateRangePicker

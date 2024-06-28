@@ -1,5 +1,14 @@
 .profit-and-lose-container {
   padding-top: 15px;
+  .head-with-icon{
+    display: flex;
+    justify-content: space-between;
+    .icon-with-text{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
   .from-to-date {
     padding-top: 15px;
     padding-bottom: 15px;

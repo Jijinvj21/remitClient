@@ -12,6 +12,8 @@ import {
   CircularProgress,
   TextField,
   Modal,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import "./PaymenyIn.scss";
 import { useEffect, useState } from "react";
@@ -53,6 +55,8 @@ function PaymenyIn() {
   const notify = (message) => toast(message);
 
   const location = useLocation();
+  const [toggle, setToggle] = useState(true);
+
   const [textValue, setTextValue] = useState("");
   const [img, setImg] = useState(null);
   const [partyOptions, setPartyOptions] = useState([]);
@@ -661,6 +665,55 @@ const paymentGet=()=>{
                 cols={50} // Set the number of visible columns
               />
             </div>
+            {/* <div className="toggle_button " style={{display: "flex",flexDirection:"column",marginTop:"10px"}}>
+            
+<label htmlFor="textarea">Is Product</label>
+            <ToggleButtonGroup
+              value={toggle ? "true" : "false"}
+              exclusive
+              onChange={(e, value) => setToggle(value === "true")}
+              aria-label="text alignment"
+            >
+              <ToggleButton
+                value="true"
+                aria-label="left aligned"
+                sx={{
+                  fontSize: "12px",
+                  borderRadius: "35px",
+                  width: "90px",
+                  height: "35px",
+                  textAlign: "center",
+                  marginTop: "5px",
+                  marginLeft: "10px",
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#8cdb7e",
+                  },
+                }}
+              >
+                <p>yes</p>
+              </ToggleButton>
+              <ToggleButton
+                value="false"
+                aria-label="centered"
+                sx={{
+                  fontSize: "12px",
+                  borderRadius: "35px",
+                  width: "90px",
+                  height: "35px",
+                  textAlign: "center",
+                  marginTop: "5px",
+                  marginLeft: "10px",
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#8cdb7e",
+                  },
+                }}
+              >
+                <p>no</p>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div> */}
             <Button
               disableRipple
               sx={{
