@@ -624,15 +624,7 @@ const paymentGet=()=>{
                   </option>
                 ))}
               </select>
-             {/* <SelectInput
-              // label="Mode of payment"
-              placeholder="Select mode of payment"
-              name="modeOfPayment"
-              handleChange={handleSetParty}
-              value={partySelect}
-              // setData={setFormData}
-              options={partyOptions}
-              /> */}
+           
             </Box>
 
             {/* <p style={{ color: "red", fontSize: "12px", fontWeight: "600" }}>

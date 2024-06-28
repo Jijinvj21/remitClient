@@ -1,0 +1,30 @@
+.date-pocker-reusable-component{
+   
+display: flex;
+flex-direction: column;
+    .datepickerlable{
+        
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 1.4375em;
+        letter-spacing: 0.00938em;
+        padding: 0;
+        white-space: nowrap;
+        
+    }
+   
+}
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper 
+{
+    max-height: calc(100% - 437px) !important;
+    
+}
+.css-z3c6am-MuiFormControl-root-MuiTextField-root{
+    background-color:#f3f6f9 ;
+    border: none;
+border-radius: 30px;}
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+    height: 45px !important;
+    // outline: none;
+}

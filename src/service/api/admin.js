@@ -6,7 +6,7 @@ import axios from "axios";
 // };
 
 
-// const BASE_URL = 'http://192.168.0.110:80';
+// const BASE_URL = 'http://192.168.0.117:80';
 // const MASRE_TABLE_BASE_URL = 'http://192.168.0.103:8088';
 const BASE_URL = 'https://teqbae-accounts-rkkzm.ondigitalocean.app';
 
@@ -69,6 +69,8 @@ export const gstOptionsGetAPI = async () => {
 export const projectCreateAPI = async (projectAdd) => {
   try {
     const response = await axios.post(`${BASE_URL}/project/create`,projectAdd);
+    // const response = await axios.post(`${BASE_URL}/voucher/bulk-upload`,projectAdd);
+
     console.log(response)
     return response
   } catch (error) {
@@ -432,12 +434,42 @@ export const deliveryChallanDataGetAPI = async () => {
   }
 }
 
-
-
-
 export const paymentTypeDataAddAPI = async (data) => {
   try {
     const response = await axios.post(`${BASE_URL}/paymenttype/add`,data);
+    console.log(response)
+    return response
+  } catch (error) {
+    // console.error(error);
+    throw error.response.data;
+  }
+}
+
+export const profitLossDataGetAPI = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/reports/ledger`,data);
+    console.log(response)
+    return response
+  } catch (error) {
+    // console.error(error);
+    throw error.response.data;
+  }
+}
+
+export const profitLossDataGetByIdAPI = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/project/ledgerReport`,data);
+    console.log(response)
+    return response
+  } catch (error) {
+    // console.error(error);
+    throw error.response.data;
+  }
+}
+
+export const projectTransactionAPI = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/voucher/bulk-upload`,data);
     console.log(response)
     return response
   } catch (error) {

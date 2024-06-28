@@ -1,0 +1,57 @@
+.trial-balance-container{
+    padding-top: 15px;
+    .from-to-date {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      display: flex;
+      gap: 20px;
+    }
+    .table-container{
+      .css-11xur9t-MuiPaper-root-MuiTableContainer-root{
+        margin: 0px;
+        thead{
+          background-color: #f3f6f9;
+        }
+      }
+      // .table-heading{
+      //   display: flex;
+      //   border-bottom: 1px solid #e1e5eb;
+      //   border-left: 1px solid #e1e5eb;
+      //   border-top: 1px solid #e1e5eb;
+
+
+      //   p{
+
+      //     padding: 5px;
+      //   }
+      //   .account-section{
+
+      //     width: 60%;
+      //     border-right: 1px solid #e1e5eb;
+      //     .account{
+      //       background-color: #f3f6f9;
+      //       padding: 12px;
+      //     }
+      //   }
+      //   .debit-section{
+
+      //     width: 20%;
+      //     text-align: end;
+      //     border-right: 1px solid #e1e5eb;
+      //     .debit{
+      //       background-color: #f3f6f9;
+      //       padding: 12px;
+      //     }
+      //   }
+      //   .credit-section{
+      //     border-right: 1px solid #e1e5eb;
+      //     width: 20%;
+      //     text-align: end;
+      //     .credit{
+      //       background-color: #f3f6f9;
+      //       padding: 12px;
+      //     }
+      //   }
+      // }
+    }
+}

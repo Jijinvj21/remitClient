@@ -134,7 +134,7 @@ Delivery Challan
           Vouchers
           </MenuItem>
         </NavLink>
-        <NavLink className="navelink" to="/admin/leaderboard">
+        <NavLink className="navelink" to="/admin/reports">
           <MenuItem icon={<GridViewRoundedIcon style={{ fontSize: "20px" }} />}>
           Reports
           </MenuItem>

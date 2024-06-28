@@ -1,0 +1,153 @@
+.profit-and-lose-container {
+  padding-top: 15px;
+  .from-to-date {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    gap: 20px;
+    width: 50%;
+  }
+  .party-name{
+    color: rgba(0, 0, 0, 0.6);
+font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+font-weight: 800;
+font-size: 12px;
+line-height: 1.4375em;
+letter-spacing: 0.00938em;
+
+}
+.party-details-select{
+  background-color: var(--inputbg-color);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 12px 12px;
+  outline: none;
+  margin-top: 4px;
+  }
+  .tax-payable-accordion {
+      p{
+        color: red;
+      }
+    .gst-payable {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .tcs-payable {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .tax-payable-accordion-receivable{
+    p{
+        color: #1cd6c9;
+    }
+    .gst-payable {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .tcs-payable {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+  }
+  .stock-with-fixed {
+    p{
+        margin-right: 16px;
+    }
+    .opening-stock {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 15px;
+      p{
+        color: red;
+      }
+    }
+    .closing-stock {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 15px;
+      p{
+        color: #1cd6c9;
+    }
+    }
+    .opening-stock-fa {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 15px;
+      p{
+        color: red;
+      }
+    }
+    .closing-stock-fa {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 15px;
+      p{
+        color: #1cd6c9;
+    }
+    }
+  }
+  .total-amount{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    p{
+        color: #1cd6c9;
+        margin-right: 16px;
+    }
+    
+    .gross-profit{
+        display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        
+    }
+    .other-income{
+        display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+    }
+  }
+  .indirect-expenses{
+    p{
+        color: red;
+    }
+    .indirect{
+        display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+  }
+  .total-net-profit{
+    display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        p{
+            color: #1cd6c9;
+            margin-right: 16px;
+        }
+  }
+}

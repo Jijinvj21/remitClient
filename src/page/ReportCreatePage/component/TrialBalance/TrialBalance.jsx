@@ -1,0 +1,76 @@
+import { useEffect } from "react";
+import dayjs from "dayjs";
+import DateRangePicker from "../../../../components/DateRangePicker/DateRangePicker";
+import "./TrialBalance.scss";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper  } from "@mui/material";
+function TrialBalance({
+  setReport,
+  report,
+  selectedToDate,
+  setSelectedToDate,
+  selectedFromDate,
+  setSelectedFromDate,
+}) {
+  useEffect(() => {
+    const currentMonth = dayjs().month();
+    const currentYear = dayjs().year();
+    let startOfFinancialYear;
+
+    if (currentMonth >= 3) {
+      // April to December: current financial year starts on April 1st
+      startOfFinancialYear = dayjs(`${currentYear}-04-01`);
+    } else {
+      // January to March: previous financial year starts on April 1st
+      startOfFinancialYear = dayjs(`${currentYear - 1}-04-01`);
+    }
+
+    setSelectedFromDate(startOfFinancialYear); // Corrected this line
+    setSelectedToDate(dayjs());
+  }, []);
+  console.log(report?.trial_balance,"reportData")
+  return (
+    <div className="trial-balance-container">
+      <h4>TRIAL BALANCE REPORT</h4>
+      <div className="from-to-date">
+        <DateRangePicker
+          lable="From"
+          selectedDate={selectedFromDate}
+          setSelectedDate={setSelectedFromDate}
+        />
+        <DateRangePicker
+          lable="To"
+          selectedDate={selectedToDate}
+          setSelectedDate={setSelectedToDate}
+        />
+      </div>
+
+      <div className="table-container">
+   
+
+<TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>AMOUNT</TableCell>
+            <TableCell align="right">DEBIT</TableCell>
+            <TableCell align="right">CREDIT</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {report?.trial_balance?.map((row,index) => (
+            <TableRow key={index}>
+              <TableCell>{row.particular}</TableCell>
+              <TableCell align="right">{row.debit}</TableCell>
+              <TableCell align="right">{row.credit}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+
+      </div>
+    </div>
+  );
+}
+
+export default TrialBalance;

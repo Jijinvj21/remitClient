@@ -409,6 +409,7 @@ function ManageProductsPage() {
 
     productAddAPI(formData)
       .then((data) => {
+        console.log(data,"addproductapi")
         if (data.status === 200) {
           setProductFormData((prevData) => ({
             ...prevData,

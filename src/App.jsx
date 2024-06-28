@@ -25,6 +25,7 @@ import DebitNoteView from "./page/DebitNoteView/DebitNoteView";
 import CreaditNoteView from "./page/CreaditNoteView/CreaditNoteView";
 import SignUpPage from "./page/SignUpPage/SignUpPage";
 import OtpPage from "./page/OtpPage/OtpPage";
+import ReportCreatePage from "./page/ReportCreatePage/ReportCreatePage";
 
 
 function App() {
@@ -55,6 +56,8 @@ function App() {
             <Route path="stocks" element={<ManageProductsPage />} />
             <Route path="quotation-generator" element={<QuotationGeneratorPage />}/>
             <Route path="stocks/stock-journal" element={<StockJournalPage />} />
+            <Route path="reports" element={<ReportCreatePage />} />
+
           </Route>
         </Route>
             <Route path="sign-up" element={<SignUpPage />} />
