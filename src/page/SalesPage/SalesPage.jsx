@@ -336,7 +336,7 @@ const transformedData = groupByHSN(rows);
        
         const clientData = data.responseData.map((entry) => ({
           value: entry.id,
-          label: `${entry.project_name} ( ${entry.name} )`,
+          label: entry.name,
           address1:entry.entry,
           phonenumber:entry.phonenumber
         }));
@@ -495,7 +495,7 @@ const transformedData = groupByHSN(rows);
     }));
     const salesVoucher = {
       credit_sale: false,
-      payment_type: selectedOption === "cash" ? 5 : 10,
+      payment_type: parseInt(selectedOption),
       billing_address: "",
       customer: parseInt(selectedCustomer),
       total: parseFloat(totalValues),

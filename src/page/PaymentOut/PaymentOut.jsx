@@ -11,6 +11,8 @@ import {
   Paper,
   CircularProgress,
   Modal,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import "./PaymentOut.scss";
 import { useEffect, useState } from "react";
@@ -18,6 +20,7 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 // import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import { useLocation } from "react-router-dom";
 import {
+  clientDataGetAPI,
   countryOptionsGetAPI,
   createPartyAPI,
   partyDataGetAPI,
@@ -49,6 +52,11 @@ function PaymentOut() {
   const notify = (message) => toast(message);
 
   const location = useLocation();
+  const [toggle, setToggle] = useState(true);
+  const [projectOptions, setProjectOptions] = useState([]);
+  const [projectSelect, setProjectSelect] = useState(0);
+
+
   const [textValue, setTextValue] = useState("");
   const [img, setImg] = useState(null);
   const [partyOptions, setPartyOptions] = useState([]);
@@ -245,7 +253,7 @@ partyDataGet()
   };
 
   const getpaymentDataGetAPI = () => {
-    paymentDataGetAPI({ payment_mode: "OUT", project_id: 1 })
+    paymentDataGetAPI({ payment_mode: "OUT",  })
       .then((data) => {
         console.log("data.data.responseData",data.data.responseData);
         setPaymenData(data.data.responseData);
@@ -275,6 +283,22 @@ const paymentdataget=()=>{
   });
 }
   useEffect(() => {
+    clientDataGetAPI()
+    .then((data) => {
+     
+      const clientData = data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+        address1:entry.entry,
+        phonenumber:entry.phonenumber
+      }));
+      console.log("clientData:", clientData);
+      console.log(clientData);
+      setProjectOptions(clientData);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
     paymentdataget()
     countryOptionsGetAPI()
     .then((data) => {
@@ -394,11 +418,12 @@ const paymentdataget=()=>{
       date: date,
       payment_type: parseInt(paymentSelect),
       party_id: parseInt(partySelect),
-      project_id: 1,
+      project_id: parseInt(projectSelect),
       amount: parseInt(recived),
       payment_mode: "OUT",
       description: textValue,
       ref_no: ReceptNo,
+      is_project:toggle,
     };
     console.log(data);
     paymentInAPI(data)
@@ -424,7 +449,17 @@ const paymentdataget=()=>{
         setIsDesabled(true)
       });
   };
+  const handleSetProject = (e) => {
+    console.log("handleSetProject", e.target.value);
+    const selectedOption = e.target.value;
 
+    if (selectedOption === "addNew") {
+      setOpen(true);
+    } else {
+      // setOpen(false);
+      setProjectSelect(e.target.value);
+    }
+  };
   const handleCreateReceipt = (row) => {
     const string = renderToString(
       <div id="recept-pdf">
@@ -729,6 +764,82 @@ const paymentdataget=()=>{
                 cols={50} // Set the number of visible columns
               />
             </div>
+            <div className="toggle_button " style={{display: "flex",flexDirection:"column",marginTop:"10px"}}>
+            
+<label htmlFor="textarea">Is Project</label>
+            <ToggleButtonGroup
+              value={toggle ? "true" : "false"}
+              exclusive
+              onChange={(e, value) => setToggle(value === "true")}
+              aria-label="text alignment"
+            >
+              <ToggleButton
+                value="true"
+                aria-label="left aligned"
+                sx={{
+                  fontSize: "12px",
+                  borderRadius: "35px",
+                  width: "90px",
+                  height: "35px",
+                  textAlign: "center",
+                  marginTop: "5px",
+                  marginLeft: "10px",
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#8cdb7e",
+                  },
+                }}
+              >
+                <p>yes</p>
+              </ToggleButton>
+              <ToggleButton
+                value="false"
+                aria-label="centered"
+                sx={{
+                  fontSize: "12px",
+                  borderRadius: "35px",
+                  width: "90px",
+                  height: "35px",
+                  textAlign: "center",
+                  marginTop: "5px",
+                  marginLeft: "10px",
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#8cdb7e",
+                  },
+                }}
+              >
+                <p>no</p>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          {toggle&&
+          <Box
+          sx={{
+            margin: "2px",
+            p: "3px",
+            borderRadius: 1,
+            // border: "1px solid #bbbdbf",
+          }}
+        >
+          <p className="party-name">Project</p>
+          <select
+            className="party-details-select"
+            // value={partySelect}
+            style={{ width: "100%" }}
+            onChange={handleSetProject}
+          >
+            <option value="select">Select</option>
+            {/* <option value="addNew">Add New</option> */}
+            {projectOptions.map((option, index) => (
+              <option key={index} value={option.value} label={option.label}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+       
+        </Box>
+          }
             <Button
               disableRipple
               sx={{

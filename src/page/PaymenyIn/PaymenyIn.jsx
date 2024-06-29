@@ -21,6 +21,7 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 // import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import { useLocation } from "react-router-dom";
 import {
+  clientDataGetAPI,
   countryOptionsGetAPI,
   createPartyAPI,
   partyDataGetAPI,
@@ -60,7 +61,11 @@ function PaymenyIn() {
   const [textValue, setTextValue] = useState("");
   const [img, setImg] = useState(null);
   const [partyOptions, setPartyOptions] = useState([]);
+  const [projectOptions, setProjectOptions] = useState([]);
+
   const [partySelect, setPartySelect] = useState(0);
+  const [projectSelect, setProjectSelect] = useState(0);
+
   const [paymentSelect, setPaymentSelect] = useState(0);
   const [date, setDate] = useState("");
   const [recived, setRecived] = useState("");
@@ -253,7 +258,7 @@ function PaymenyIn() {
 
   const getpaymentDataGetAPI = () => {
     setLoader(true);
-    paymentDataGetAPI({ payment_mode: "IN", project_id: 1 })
+    paymentDataGetAPI({ payment_mode: "IN",  })
       .then((data) => {
         setLoader(false);
 
@@ -284,6 +289,22 @@ const paymentGet=()=>{
   });
 }
   useEffect(() => {
+    clientDataGetAPI()
+    .then((data) => {
+     
+      const clientData = data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+        address1:entry.entry,
+        phonenumber:entry.phonenumber
+      }));
+      console.log("clientData:", clientData);
+      console.log(clientData);
+      setProjectOptions(clientData);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
     paymentGet()
     countryOptionsGetAPI()
       .then((data) => {
@@ -351,6 +372,18 @@ const paymentGet=()=>{
       setPartySelect(e.target.value);
     }
   };
+
+  const handleSetProject = (e) => {
+    console.log("handleSetProject", e.target.value);
+    const selectedOption = e.target.value;
+
+    if (selectedOption === "addNew") {
+      setOpen(true);
+    } else {
+      // setOpen(false);
+      setProjectSelect(e.target.value);
+    }
+  };
   const handlepaymenttype = (e) => {
     const selectedOption = e.target.value;
 
@@ -399,11 +432,14 @@ const paymentGet=()=>{
       date: date,
       payment_type: parseInt(paymentSelect),
       party_id: parseInt(partySelect),
-      project_id: 1,
+      project_id: parseInt(projectSelect),
       amount: parseInt(recived),
       payment_mode: "IN",
       description: textValue,
       ref_no: ReceptNo,
+      is_project:toggle,
+
+      
     };
     paymentInAPI(data)
       .then((data) => {
@@ -613,7 +649,7 @@ const paymentGet=()=>{
                 // border: "1px solid #bbbdbf",
               }}
             >
-              <p className="party-name">party Details</p>
+              <p className="party-name">Party Details</p>
               <select
                 className="party-details-select"
                 value={partySelect}
@@ -665,9 +701,9 @@ const paymentGet=()=>{
                 cols={50} // Set the number of visible columns
               />
             </div>
-            {/* <div className="toggle_button " style={{display: "flex",flexDirection:"column",marginTop:"10px"}}>
+            <div className="toggle_button " style={{display: "flex",flexDirection:"column",marginTop:"10px"}}>
             
-<label htmlFor="textarea">Is Product</label>
+<label htmlFor="textarea">Is Project</label>
             <ToggleButtonGroup
               value={toggle ? "true" : "false"}
               exclusive
@@ -713,7 +749,34 @@ const paymentGet=()=>{
                 <p>no</p>
               </ToggleButton>
             </ToggleButtonGroup>
-          </div> */}
+          </div>
+          {toggle&&
+          <Box
+          sx={{
+            margin: "2px",
+            p: "3px",
+            borderRadius: 1,
+            // border: "1px solid #bbbdbf",
+          }}
+        >
+          <p className="party-name">Project</p>
+          <select
+            className="party-details-select"
+            // value={partySelect}
+            style={{ width: "100%" }}
+            onChange={handleSetProject}
+          >
+            <option value="select">Select</option>
+            {/* <option value="addNew">Add New</option> */}
+            {projectOptions.map((option, index) => (
+              <option key={index} value={option.value} label={option.label}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+       
+        </Box>
+          }
             <Button
               disableRipple
               sx={{

@@ -31,14 +31,17 @@ function ReportCreatePage() {
     setActiveTab(tabName);
   };
   useEffect(() => {
-    profitLossDataGetAPI({ from: selectedFromDate, to: selectedToDate })
-      .then((response) => {
-        setReport(response.data.responseData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [selectedFromDate, selectedToDate,selectedOfBalanceToDate,selectedOfBalanceFromDate ]);
+    if (selectedFromDate && selectedToDate && selectedOfBalanceFromDate && selectedOfBalanceToDate) {
+      profitLossDataGetAPI({ from: selectedFromDate || selectedOfBalanceFromDate, to: selectedToDate || selectedOfBalanceToDate })
+        .then((response) => {
+          setReport(response.data.responseData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [selectedFromDate, selectedToDate, selectedOfBalanceFromDate, selectedOfBalanceToDate,activeTab]);
+
   return (
     <div className="report-cteate-section">
       <h2>Report</h2>

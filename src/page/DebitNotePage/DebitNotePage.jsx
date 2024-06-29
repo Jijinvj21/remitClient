@@ -4,6 +4,8 @@ import {
   Button,
   CircularProgress,
   Modal,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import "./DebitNotePage.scss";
@@ -14,6 +16,7 @@ import ImageAdd from "../../assets/sideBar/ImageAdd.svg";
 import TransactionTable from "../../components/TransactionTable/TransactionTable";
 import {
   categeryGetAPI,
+  clientDataGetAPI,
   debitDataAddAPI,
   gstOptionsGetAPI,
   partyDataGetAPI,
@@ -47,6 +50,9 @@ import toast from 'react-hot-toast';
 
 function DebitNotePage() {
   const notify = (message) => toast(message);
+  const [toggleProject, setToggleProject] = useState(true);
+  const [projectOptionsSelect, setProjectOptionsSelect] = useState([]);
+  const [projectSelect, setProjectSelect] = useState(0);
 
   const [partyOptions, setPartytOptions] = useState([]);
   const [textValue, setTextValue] = useState("");
@@ -97,6 +103,35 @@ function DebitNotePage() {
     account_no: "",
     upi_id: "",
   });
+  useEffect(() => {
+    clientDataGetAPI()
+    .then((data) => {
+     
+      const clientData = data.responseData.map((entry) => ({
+        value: entry.id,
+        label: entry.name,
+        address1:entry.entry,
+        phonenumber:entry.phonenumber
+      }));
+      console.log("clientData:", clientData);
+      console.log(clientData);
+      setProjectOptionsSelect(clientData);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }, [])
+  const handleSetProject = (e) => {
+    console.log("handleSetProject", e.target.value);
+    const selectedOption = e.target.value;
+
+    if (selectedOption === "addNew") {
+      // setOpen(true);
+    } else {
+      // setOpen(false);
+      setProjectSelect(e.target.value);
+    }
+  };
 
   const handlePaymentClose = () => setPaymentOpen(false);
 
@@ -385,6 +420,7 @@ pdf.setFont('Inter');
     // formData.append('gst', ((parseInt(ProductDrawerFormData.rate) * parseInt(ProductFormData.quantity)) * (taxRateValue.value?.replace("%", ""))) / 100);
     formData.append("tax_rate", taxRateValue.id);
     formData.append("image", img);
+    
 
     productAddAPI(formData)
       .then((data) => {
@@ -742,7 +778,8 @@ pdf.setFont('Inter');
     formData.append("date", datatopass.date);
     formData.append("phone", datatopass.phone);
     formData.append("image", imgDebit);
-
+    formData.append("is_project", toggleProject);
+    formData.append("project_id", projectSelect);
     // Append product details
     formData.append(
       `product_details`,
@@ -1137,6 +1174,82 @@ pdf.setFont('Inter');
                 <p>Balance:</p>
                 <p>5284</p>
               </div> */}
+              <div className="toggle_button " style={{display: "flex",flexDirection:"column",marginTop:"10px"}}>
+            
+            <label htmlFor="textarea" style={{fontSize:"14px"}}>Is Project</label>
+                        <ToggleButtonGroup
+                          value={toggle ? "true" : "false"}
+                          exclusive
+                          onChange={(e, value) => setToggleProject(value === "true")}
+                          aria-label="text alignment"
+                        >
+                          <ToggleButton
+                            value="true"
+                            aria-label="left aligned"
+                            sx={{
+                              fontSize: "12px",
+                              borderRadius: "35px",
+                              width: "90px",
+                              height: "35px",
+                              textAlign: "center",
+                              marginTop: "5px",
+                              marginLeft: "10px",
+                              "&.Mui-selected, &.Mui-selected:hover": {
+                                color: "white",
+                                backgroundColor: "#8cdb7e",
+                              },
+                            }}
+                          >
+                            <p>yes</p>
+                          </ToggleButton>
+                          <ToggleButton
+                            value="false"
+                            aria-label="centered"
+                            sx={{
+                              fontSize: "12px",
+                              borderRadius: "35px",
+                              width: "90px",
+                              height: "35px",
+                              textAlign: "center",
+                              marginTop: "5px",
+                              marginLeft: "10px",
+                              "&.Mui-selected, &.Mui-selected:hover": {
+                                color: "white",
+                                backgroundColor: "#8cdb7e",
+                              },
+                            }}
+                          >
+                            <p>no</p>
+                          </ToggleButton>
+                        </ToggleButtonGroup>
+                      </div>
+                      {toggleProject&&
+                      <Box
+                      sx={{
+                        margin: "2px",
+                        p: "3px",
+                        borderRadius: 1,
+                        // border: "1px solid #bbbdbf",
+                      }}
+                    >
+                      <p className="party-name" style={{fontSize:"14px"}}>Project</p>
+                      <select
+                        className="party-details-select"
+                        // value={partySelect}
+                        style={{ width: "100%" }}
+                        onChange={handleSetProject}
+                      >
+                        <option value="select">Select</option>
+                        {/* <option value="addNew">Add New</option> */}
+                        {projectOptionsSelect.map((option, index) => (
+                          <option key={index} value={option.value} label={option.label}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                   
+                    </Box>}
+            
             </div>
           </div>
         </div>

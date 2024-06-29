@@ -37,7 +37,7 @@ function ExpenseView() {
   }, [])
   return (
     <div className="delivery_challan_view">
-       <h2>Delivery Challan</h2>
+       <h2>Journal Voucher</h2>
       <div className="inner-section">
       <TableContainer component={Paper} sx={{margin:"0px !important"}}>
       <Table aria-label="simple table">

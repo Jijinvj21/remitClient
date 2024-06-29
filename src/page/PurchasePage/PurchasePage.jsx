@@ -652,7 +652,7 @@ function PurchasePage() {
     }));
     const salesVoucher = {
       credit_sale: false,
-      payment_type: selectedOption === "cash" ? 5 : 10,
+      payment_type: parseInt(selectedOption),
       billing_address: "",
       client: parseInt(selectedCustomer),
       party: parseInt(selectedParty),
@@ -935,7 +935,9 @@ pdf.setFont('Inter');
             border: "1px solid #bbbdbf",
           }}
         >
-          <p className="head-p-tag">Clinet Details</p>
+          <p className="head-p-tag">Project
+            
+          </p>
           <select
             value={selectedCustomer}
             style={{ width: "100%" }}

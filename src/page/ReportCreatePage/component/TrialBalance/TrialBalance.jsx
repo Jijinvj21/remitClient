@@ -77,7 +77,7 @@ function TrialBalance({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>AMOUNT</TableCell>
+            <TableCell>ACCOUNT</TableCell>
             <TableCell align="right">DEBIT</TableCell>
             <TableCell align="right">CREDIT</TableCell>
           </TableRow>
@@ -85,7 +85,7 @@ function TrialBalance({
         <TableBody>
           {report?.trial_balance?.map((row,index) => (
             <TableRow key={index}>
-              <TableCell>{row.particular}</TableCell>
+              <TableCell>{row.account}</TableCell>
               <TableCell align="right">{row.debit}</TableCell>
               <TableCell align="right">{row.credit}</TableCell>
             </TableRow>

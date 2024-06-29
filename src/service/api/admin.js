@@ -6,9 +6,9 @@ import axios from "axios";
 // };
 
 
-// const BASE_URL = 'http://192.168.0.117:80';
+const BASE_URL = 'http://192.168.0.102:80';
 // const MASRE_TABLE_BASE_URL = 'http://192.168.0.103:8088';
-const BASE_URL = 'https://teqbae-accounts-rkkzm.ondigitalocean.app';
+// const BASE_URL = 'https://teqbae-accounts-rkkzm.ondigitalocean.app';
 
 
 
@@ -114,7 +114,9 @@ export const workTypeOptionsGetAPI = async () => {
 
 export const clientDataGetAPI = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/project/getclient`,);
+    // const response = await axios.get(`${BASE_URL}/project/getclient`,);
+        const response = await axios.get(`${BASE_URL}/project/getall`,);
+
     return response.data
   } catch (error) {
     // console.error(error);

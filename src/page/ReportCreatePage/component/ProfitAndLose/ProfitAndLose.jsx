@@ -4,6 +4,13 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
 } from "@mui/material";
 import DateRangePicker from "../../../../components/DateRangePicker/DateRangePicker";
 import "./ProfitAndLose.scss";
@@ -20,7 +27,7 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
 
   const handleSetParty = (e) => {
     setPartySelect(e.target.value);
-    profitLossDataGetByIdAPI({id:parseInt(e.target.value)}).then((response)=>{
+    profitLossDataGetByIdAPI({project_id:parseInt(e.target.value), date_range:{from: selectedFromDate, to: selectedToDate}}).then((response)=>{
       console.log(response.data.responseData
         , "profitLossDataGetAPI");
       setReport(response.data.responseData);
@@ -69,41 +76,66 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
 
   const generateCSV = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
-
+  
+    // Adding headers
     csvContent += "Section,Particular,Amount\n";
-
-    csvContent += "Tax Payable,GST Payable,-" + formatter.format(report?.tax_payable?.gst_payable) + "\n";
-    csvContent += "Tax Payable,TCS Payable,-" + formatter.format(report?.tax_payable?.tcs_payable) + "\n";
-
-    csvContent += "Tax Receivable,GST Receivable,+" + formatter.format(report?.tax_receivable?.gst_receivable) + "\n";
-    csvContent += "Tax Receivable,TCS Receivable,+" + formatter.format(report?.tax_receivable?.tcs_receivable) + "\n";
-
-    csvContent += "Stocks,Opening Stock,-" + formatter.format(report?.stocks?.opening_stock) + "\n";
-    csvContent += "Stocks,Closing Stock,+" + formatter.format(report?.stocks?.closing_stock) + "\n";
-    csvContent += "Stocks,Opening Stock FA,-" + formatter.format(report?.stocks?.opening_stock_fa) + "\n";
-    csvContent += "Stocks,Closing Stock FA,+" + formatter.format(report?.stocks?.closing_stock_fa) + "\n";
-
-    csvContent += "Trade Account,Gross Profit," + formatter.format(report?.trade_account?.gross_profit) + "\n";
-    csvContent += "Trade Account,Gross Loss," + formatter.format(report?.trade_account?.gross_loss) + "\n";
-
-    csvContent += "Other Income,Other Income,+0.00\n";
-
-    report?.profit_and_loss_account?.debit.forEach((item) => {
-      csvContent += `Indirect Expenses,${item.particular},-${formatter.format(item.amount)}\n`;
-    });
-
-    csvContent += "Net Profit/Net Loss,Net Profit," + formatter.format(report?.profit_and_loss_account?.net_profit) + "\n";
-    csvContent += "Net Profit/Net Loss,Net Loss," + formatter.format(report?.profit_and_loss_account?.net_loss) + "\n";
-
+  
+    // Adding tax payable section
+    csvContent += "Tax Payable,GST Payable,-" + formatter.format(report?.tax_payable?.gst_payable || 0) + "\n";
+    csvContent += "Tax Payable,TCS Payable,-" + formatter.format(report?.tax_payable?.tcs_payable || 0) + "\n";
+  
+    // Adding tax receivable section
+    csvContent += "Tax Receivable,GST Receivable,+" + formatter.format(report?.tax_receivable?.gst_receivable || 0) + "\n";
+    csvContent += "Tax Receivable,TCS Receivable,+" + formatter.format(report?.tax_receivable?.tcs_receivable || 0) + "\n";
+  
+    // Adding stocks section
+    csvContent += "Stocks,Opening Stock,-" + formatter.format(report?.stocks?.opening_stock || 0) + "\n";
+    csvContent += "Stocks,Closing Stock,+" + formatter.format(report?.stocks?.closing_stock || 0) + "\n";
+    csvContent += "Stocks,Opening Stock FA,-" + formatter.format(report?.stocks?.opening_stock_fa || 0) + "\n";
+    csvContent += "Stocks,Closing Stock FA,+" + formatter.format(report?.stocks?.closing_stock_fa || 0) + "\n";
+  
+    // Adding trade account section
+    csvContent += "Trade Account,Gross Profit," + formatter.format(report?.trade_account?.gross_profit || 0) + "\n";
+    csvContent += "Trade Account,Gross Loss," + formatter.format(report?.trade_account?.gross_loss || 0) + "\n";
+  
+    // Adding other income section
+    if (report?.profit_and_loss_account?.credit.length > 0) {
+      report.profit_and_loss_account.credit.forEach((item) => {
+        csvContent += `Other Income,${item.particular},+${formatter.format(item.amount + item.tax)}\n`;
+      });
+    } else {
+      csvContent += "Other Income,No Data,0.00\n";
+    }
+  
+    // Adding indirect expenses section
+    if (report?.profit_and_loss_account?.debit.length > 0) {
+      report.profit_and_loss_account.debit.forEach((item) => {
+        csvContent += `Indirect Expenses,${item.particular},-${formatter.format(item.amount + item.tax)}\n`;
+      });
+    } else {
+      csvContent += "Indirect Expenses,No Data,0.00\n";
+    }
+  
+    // Adding net profit/net loss section
+    const netProfit = report?.profit_and_loss_account?.net_profit || 0;
+    const netLoss = report?.profit_and_loss_account?.net_loss || 0;
+  
+    if (netLoss > netProfit) {
+      csvContent += `Net Profit/Net Loss,Net Loss,-${formatter.format(netLoss)}\n`;
+    } else {
+      csvContent += `Net Profit/Net Loss,Net Profit,+${formatter.format(netProfit)}\n`;
+    }
+  
+    // Creating the CSV file
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "profit_and_loss_report.csv");
     document.body.appendChild(link);
-
     link.click();
     document.body.removeChild(link);
   };
+  
 
   return (
     <div className="profit-and-lose-container">
@@ -134,7 +166,7 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
             borderRadius: 1,
           }}
         >
-          <p className="party-name">party Details</p>
+          <p className="party-name">Project</p>
           <select
             className="party-details-select"
             value={partySelect}
@@ -160,11 +192,11 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
             <div className="tax-payable-accordion">
               <div className="gst-payable">
                 <h5>Gst payable(-)</h5>
-                <p>{formatter.format(report?.tax_payable?.tcs_payable)}</p>
+                <p>{formatter.format((report?.tax_payable?.gst_payable||0))}</p>
               </div>
               <div className="tcs-payable">
                 <h5>TCS payable(-)</h5>
-                <p>{formatter.format(report?.tax_payable?.gst_payable)}</p>
+                <p>{formatter.format((report?.tax_payable?.tcs_payable||0))}</p>
                 
 
               </div>
@@ -180,11 +212,11 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
             <div className="tax-payable-accordion-receivable">
               <div className="gst-payable">
                 <h5>Gst Receivable(+)</h5>
-                <p>{formatter.format(report?.tax_receivable?.gst_receivable)}</p>
+                <p>{formatter.format((report?.tax_receivable?.gst_receivable||0))}</p>
               </div>
               <div className="tcs-payable">
                 <h5>TCS Receivable(+)</h5>
-                <p>{formatter.format(report?.tax_receivable?.gst_receivable)}</p>
+                <p>{formatter.format((report?.tax_receivable?.tcs_receivable||0))}</p>
               </div>
             </div>
           </AccordionDetails>
@@ -193,19 +225,19 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
       <div className="stock-with-fixed">
         <div className="opening-stock">
           <h5>Opening Stock(-)</h5>
-          <p>{formatter.format(report?.stocks?.opening_stock)}</p>
+          <p>{formatter.format((report?.stocks?.opening_stock||0))}</p>
         </div>
         <div className="closing-stock">
           <h5>Closing Stock(+)</h5>
-          <p>{formatter.format(report?.stocks?.closing_stock)}</p>
+          <p>{formatter.format((report?.stocks?.closing_stock||0))}</p>
         </div>
         <div className="opening-stock-fa">
           <h5>Opening Stock FA(-)</h5>
-          <p>{formatter.format(report?.stocks?.opening_stock_fa)}</p>
+          <p>{formatter.format((report?.stocks?.opening_stock_fa||0))}</p>
         </div>
         <div className="closing-stock-fa">
           <h5>Closing Stock FA(+)</h5>
-          <p>{formatter.format(report?.stocks?.closing_stock_fa)}</p>
+          <p>{formatter.format((report?.stocks?.closing_stock_fa||0))}</p>
         </div>
       </div>
 
@@ -215,20 +247,50 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
   {report?.trade_account?.gross_loss > report?.trade_account?.gross_profit ? (
     <>
       <h5>Gross loss</h5>
-      <p>{formatter.format(report?.trade_account?.gross_loss)}</p>
+      <p>{formatter.format((report?.trade_account?.gross_loss||0))}</p>
     </>
   ) : (
     <>
       <h5>Gross profit</h5>
-      <p>{formatter.format(report?.trade_account?.gross_profit)}</p>
+      <p>{formatter.format((report?.trade_account?.gross_profit||0))}</p>
     </>
   )}
 </div>
 
         <hr />
-        <div className="other-income">
-          <h5>Other Income(+)</h5>
-          <p>0.00</p>
+        <div className="">
+          
+          <Accordion sx={{ margin: "0px" }}>
+          <AccordionSummary aria-controls="panel2-content" id="panel2-header">
+            <h5>Other income(+)</h5>
+          </AccordionSummary>
+          <AccordionDetails sx={{ background: "#f3f6f9" }}>
+            
+                  <div className="table-container">
+
+    {   report?.profit_and_loss_account?.credit.length>0?    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ACCOUNT</TableCell>
+            <TableCell align="right">AMOUNT</TableCell>
+            {/* <TableCell align="right">CREDIT</TableCell> */}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {report?.profit_and_loss_account?.credit?.map((row,index) => (
+            <TableRow key={index}>
+            <TableCell>{row.particular}</TableCell>
+            <TableCell align="right">{formatter.format(row.amount+row.tax)}</TableCell>
+            {/* <TableCell align="right">0</TableCell> */}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>:<p style={{textAlign:"center"}}>No Data</p>}
+            </div>
+          </AccordionDetails>
+        </Accordion>
         </div>
       </div>
 
@@ -238,14 +300,29 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
             <h5>Indirect Expenses(-)</h5>
           </AccordionSummary>
           <AccordionDetails sx={{ background: "#f3f6f9" }}>
-            <div className="indirect-expenses">
-             { report?.profit_and_loss_account?.debit.map((data,index)=>(
-              <div key={index} className="indirect">
-                <h5>{data.particular}</h5>
-                <p>{formatter.format(data.amount)}</p>
-              </div>
-             ))}
-             
+            
+                  <div className="table-container">
+
+         {report?.profit_and_loss_account?.debit.length >0 ?   <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ACCOUNT</TableCell>
+            <TableCell align="right">AMOUNT</TableCell>
+            {/* <TableCell align="right">CREDIT</TableCell> */}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {report?.profit_and_loss_account?.debit?.map((row,index) => (
+            <TableRow key={index}>
+            <TableCell>{row.particular}</TableCell>
+            <TableCell align="right">{formatter.format(row.amount+row.tax)}</TableCell>
+            {/* <TableCell align="right">0</TableCell> */}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>:<p style={{textAlign:"center"}}>No Data</p>}
             </div>
           </AccordionDetails>
         </Accordion>
@@ -255,12 +332,12 @@ function ProfitAndLose({report,setReport,selectedToDate,setSelectedToDate,select
         {report?.profit_and_loss_account?.net_loss > report?.profit_and_loss_account?.net_profit ? (
     <>
       <h5>Net loss</h5>
-      <p>{formatter.format(report?.profit_and_loss_account?.net_loss)}</p>
+      <p>{formatter.format((report?.profit_and_loss_account?.net_loss||0))}</p>
     </>
   ) : (
     <>
       <h5>Net Profit</h5>
-      <p>{formatter.format(report?.profit_and_loss_account?.net_profit)}</p>
+      <p>{formatter.format((report?.profit_and_loss_account?.net_profit||0))}</p>
     </>
   )}
       </div>
