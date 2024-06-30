@@ -28,7 +28,7 @@ import OtpPage from "./page/OtpPage/OtpPage";
 import ReportCreatePage from "./page/ReportCreatePage/ReportCreatePage";
 
 
-function App() {stock-journal
+function App() {
   return (
     <BrowserRouter>
       <Routes>
